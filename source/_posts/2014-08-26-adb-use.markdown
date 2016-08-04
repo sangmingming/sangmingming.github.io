@@ -1,0 +1,56 @@
+---
+layout: post
+title: "常用有用的android adb命令"
+date: 2014-08-26 22:50:07 +0800
+comments: true
+tags: ['android']
+---
+
+adb在开发中真的是时时都会用到，熟练使用可以帮助我们提高开发效率。前段时间看到一个外国程序员分享了一篇文章，觉得写的很好，介绍了一些很有意思的adb的命令，我就寻思着有空也写一篇，对于自己是一个总结，同时方便自己或者其他人以后查阅。
+
+> 想要能够在命令行里面敲adb能够使用，先要保证你的adb所在的目录，一般是sdk/platform-tools目录，要在环境变量中，想要怎么配环境变量，自己google去。
+
+
+首先要学会使用帮助，遇到不会用的命令可以直接敲`adb` 或者`adb --help`看帮助，帮助文档基本的命令都有。
+
+<!--more-->
+
+adb devices 查看adb已经连接上的手机列表
+
+adb install -r /path/to/apk  安装apk到手机，　带参数-r的话就卸载手机中已有的程序
+
+adb uninstall package_name 卸载手机中的程序
+
+adb push -p local remote  复制电脑中的文件到手机，－ｐ显示进度
+
+adb pull -p -a remote local 复制手机中的文件或者文件夹到电脑
+
+adb shell 进入手机的shell命令行环境，可以进去后执行手机中支持的命令，也可以在本句之后加命令
+
+adb shell pm uninstall package_name 卸载手机中的程序
+
+adb shell pm install /path/of/apk/in/phone 安装手机sd卡中的程序
+
+adb shell am start package_name/activity_in_package
+
+adb shell am start package_name/activity_flly_qualified 启动activity 
+
+adb shell screencap -p | perl -pe 's/\x0D\x0A/\x0A/g' > screen.png  截屏保存到screen.png
+
+adb logcat 查看log
+
+adb logcat -s TAG_NAME
+
+adb logcat -s TAG_NAME_1 TAG_NAME_2
+
+adb logcat "*:PRIORITY"  eg:adb logcat "*:D"
+
+adb logcat -s TAG_NAME:PRIORITY
+
+adb logcat -c 清空log
+
+
+ok。我能想到，和参考的别的文章上面，目前使用最多的一些命令就是这些了。更加详细的adb介绍，请参看谷歌官方文档.[http://developer.android.com/tools/help/adb.html](http://developer.android.com/tools/help/adb.html)
+
+
+#### PS:最新因为项目的需要，因此研究了一下滤镜，在gpuimage的基础上模仿instargram做了一套滤镜，放在github。上面了，欢迎取阅。[https://github.com/sangmingming/android-instagram-filter](https://github.com/sangmingming/android-instagram-filter)
