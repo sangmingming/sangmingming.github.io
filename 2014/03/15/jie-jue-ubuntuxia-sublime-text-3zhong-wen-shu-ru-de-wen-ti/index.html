@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="theme-color" content="#778899">
+  
+  <title>解决Ubuntu下Sublime text 3中文输入的问题 | 码农明明桑</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="好久之前便听朋友说起Sublime Text这款软件很好用，终于这几天有空折腾，把软件给装起来了。用起来确实很不错，写代码很爽。但是用了一段时间之后，我需要输入中文了，无论怎么切换输入法，都无法切换到中文。网上搜索了一下，原来这是Bug。找解决方法吧。下面介绍我的解决方案，是大神cjacker解决成功的啦，我只是copy一下，方便大家在遇到这个问题的时候可以方便解决。">
+<meta name="keywords" content="linux,ubuntu">
+<meta property="og:type" content="article">
+<meta property="og:title" content="解决Ubuntu下Sublime text 3中文输入的问题">
+<meta property="og:url" content="http://blog.isming.me/2014/03/15/jie-jue-ubuntuxia-sublime-text-3zhong-wen-shu-ru-de-wen-ti/index.html">
+<meta property="og:site_name" content="码农明明桑">
+<meta property="og:description" content="好久之前便听朋友说起Sublime Text这款软件很好用，终于这几天有空折腾，把软件给装起来了。用起来确实很不错，写代码很爽。但是用了一段时间之后，我需要输入中文了，无论怎么切换输入法，都无法切换到中文。网上搜索了一下，原来这是Bug。找解决方法吧。下面介绍我的解决方案，是大神cjacker解决成功的啦，我只是copy一下，方便大家在遇到这个问题的时候可以方便解决。">
+<meta property="og:updated_time" content="2017-05-16T02:31:11.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="解决Ubuntu下Sublime text 3中文输入的问题">
+<meta name="twitter:description" content="好久之前便听朋友说起Sublime Text这款软件很好用，终于这几天有空折腾，把软件给装起来了。用起来确实很不错，写代码很爽。但是用了一段时间之后，我需要输入中文了，无论怎么切换输入法，都无法切换到中文。网上搜索了一下，原来这是Bug。找解决方法吧。下面介绍我的解决方案，是大神cjacker解决成功的啦，我只是copy一下，方便大家在遇到这个问题的时候可以方便解决。">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="http://apps.bdimg.com/libs/jquery/1.9.0/jquery.min.js"></script>
+</head>
+
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			<img src="http://isming.qiniudn.com/my_avatar.jpg">
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">Sam</a></h1>
+		</hgroup>
+
+		
+		<p class="header-subtitle">技术路上的一些记录</p>
+		
+
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+							<li><a href="/links">朋友</a></li>
+				        
+							<li><a href="/about">关于</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="github" target="_blank" href="https://github.com/sangmingming" title="github">github</a>
+					        
+								<a class="weibo" target="_blank" href="http://weibo.com/mingmingsang" title="weibo">weibo</a>
+					        
+								<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				
+				
+
+				
+			</div>
+		</div>
+	</header>				
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">Sam</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+				<img src="http://isming.qiniudn.com/my_avatar.jpg">
+				<hgroup>
+				  <h1 class="header-author">Sam</h1>
+				</hgroup>
+			</div>
+			
+			<p class="header-subtitle">技术路上的一些记录</p>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+					<li><a href="/links">朋友</a></li>
+		        
+					<li><a href="/about">关于</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="https://github.com/sangmingming" title="github">github</a>
+			        
+						<a class="weibo" target="_blank" href="http://weibo.com/mingmingsang" title="weibo">weibo</a>
+			        
+						<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+      <div class="body-wrap"><article id="post-jie-jue-ubuntuxia-sublime-text-3zhong-wen-shu-ru-de-wen-ti" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2014/03/15/jie-jue-ubuntuxia-sublime-text-3zhong-wen-shu-ru-de-wen-ti/" class="article-date">
+  	<time datetime="2014-03-14T16:24:45.000Z" itemprop="datePublished">2014年3月15日</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      解决Ubuntu下Sublime text 3中文输入的问题
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/">linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ubuntu/">ubuntu</a></li></ul>
+	</div>
+
+        
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>好久之前便听朋友说起Sublime Text这款软件很好用，终于这几天有空折腾，把软件给装起来了。用起来确实很不错，写代码很爽。<br>但是用了一段时间之后，我需要输入中文了，无论怎么切换输入法，都无法切换到中文。<br>网上搜索了一下，原来这是Bug。找解决方法吧。下面介绍我的解决方案，是大神cjacker解决成功的啦，我只是copy一下，方便大家在遇到这个问题的时候可以方便解决。<br><a id="more"></a></p>
+<pre><code>我的系统：ubuntu 13.04  
+我的输入法：fcitx   
+sublime版本：3059    
+</code></pre><p>理论上支持 <code>sublime text2/3</code></p>
+<p>1.保存代码sublime-imfix.c</p>
+<pre><code>/*
+sublime-imfix.c
+Use LD_PRELOAD to interpose some function to fix sublime input method support for linux.
+By Cjacker Huang &lt;jianzhong.huang at i-soft.com.cn&gt;
+
+gcc -shared -o libsublime-imfix.so sublime_imfix.c  `pkg-config --libs --cflags gtk+-2.0` -fPIC
+LD_PRELOAD=./libsublime-imfix.so sublime_text
+*/
+#include &lt;gtk/gtk.h&gt;
+#include &lt;gdk/gdkx.h&gt;
+typedef GdkSegment GdkRegionBox;
+
+struct _GdkRegion
+{
+      long size;
+      long numRects;
+      GdkRegionBox *rects;
+      GdkRegionBox extents;
+};
+
+GtkIMContext *local_context;
+
+void
+gdk_region_get_clipbox (const GdkRegion *region,
+        GdkRectangle    *rectangle)
+{    
+      g_return_if_fail (region != NULL);
+      g_return_if_fail (rectangle != NULL);
+
+      rectangle-&gt;x = region-&gt;extents.x1;
+      rectangle-&gt;y = region-&gt;extents.y1;
+      rectangle-&gt;width = region-&gt;extents.x2 - region-&gt;extents.x1;
+      rectangle-&gt;height = region-&gt;extents.y2 - region-&gt;extents.y1;
+      GdkRectangle rect;
+      rect.x = rectangle-&gt;x;
+      rect.y = rectangle-&gt;y;
+      rect.width = 0;
+      rect.height = rectangle-&gt;height; 
+      //The caret width is 2; 
+      //Maybe sometimes we will make a mistake, but for most of the time, it should be the caret.
+      if(rectangle-&gt;width == 2 &amp;&amp; GTK_IS_IM_CONTEXT(local_context)) {
+        gtk_im_context_set_cursor_location(local_context, rectangle);
+      }
+}
+
+//this is needed, for example, if you input something in file dialog and return back the edit area
+//context will lost, so here we set it again.
+
+static GdkFilterReturn event_filter (GdkXEvent *xevent, GdkEvent *event, gpointer im_context)
+{
+    XEvent *xev = (XEvent *)xevent;
+    if(xev-&gt;type == KeyRelease &amp;&amp; GTK_IS_IM_CONTEXT(im_context)) {
+           GdkWindow * win = g_object_get_data(G_OBJECT(im_context),&quot;window&quot;);
+           if(GDK_IS_WINDOW(win))
+             gtk_im_context_set_client_window(im_context, win);
+    }
+    return GDK_FILTER_CONTINUE;
+}
+
+void gtk_im_context_set_client_window (GtkIMContext *context,
+      GdkWindow    *window)
+{
+      GtkIMContextClass *klass;
+      g_return_if_fail (GTK_IS_IM_CONTEXT (context));
+      klass = GTK_IM_CONTEXT_GET_CLASS (context);
+      if (klass-&gt;set_client_window)
+    klass-&gt;set_client_window (context, window);
+
+      if(!GDK_IS_WINDOW (window))
+    return;
+      g_object_set_data(G_OBJECT(context),&quot;window&quot;,window);
+      int width = gdk_window_get_width(window);
+      int height = gdk_window_get_height(window);
+      if(width != 0 &amp;&amp; height !=0) {
+        gtk_im_context_focus_in(context);
+        local_context = context;
+      }
+      gdk_window_add_filter (window, event_filter, context); 
+}
+</code></pre><p>2.安装C/C++的编译环境和gtk libgtk2.0-dev</p>
+<pre><code>sudo    apt-get install build-essential
+sudo apt-get install libgtk2.0-dev
+</code></pre><p>3.编译共享内存</p>
+<pre><code>gcc -shared -o libsublime-imfix.so sublime_imfix.c  `pkg-config --libs --cflags gtk+-2.0` -fPIC
+</code></pre><p>4.启动测试</p>
+<pre><code>LD_PRELOAD = ./libsublime-imfix.so sublime_text
+</code></pre><p>正常的话这样是没有问题的。</p>
+<p>然后我们在修改我们的desktop文件，使图标也可以使用</p>
+<pre><code>sudo vi /usr/share/applications/sublime-text.desktop
+</code></pre><p>先将so文件移动到sublime text的目录</p>
+<p>然后按照如下替换（主要是每次执行之前，去预加载我们的libsublime-imfix.so库）</p>
+<pre><code>[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Sublime Text
+GenericName=Text Editor
+Comment=Sophisticated text editor for code, markup and prose
+Exec=bash -c &apos;LD_PRELOAD=/opt/sublime_text/libsublime-imfix.so /opt/sublime_text/sublime_text&apos; %F
+Terminal=false
+MimeType=text/plain;
+Icon=sublime-text
+Categories=TextEditor;Development;
+StartupNotify=true
+Actions=Window;Document;
+
+[Desktop Action Window]
+Name=New Window
+Exec=bash -c &apos;LD_PRELOAD=/opt/sublime_text/libsublime-imfix.so /opt/sublime_text/sublime_text&apos; -n
+OnlyShowIn=Unity;
+
+[Desktop Action Document]
+Name=New File
+Exec=bash -c &apos;LD_PRELOAD=/opt/sublime_text/libsublime-imfix.so /opt/sublime_text/sublime_text&apos; --command new_file
+OnlyShowIn=Unity;
+</code></pre>
+        
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2014/03/16/androidyi-bu-cao-zuo-zong-jie/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption"><</strong>
+      <div class="article-nav-title">
+        
+          android异步操作总结
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2013/11/18/git-use-skill/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">git使用技巧</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share">
+
+<div class="bdsharebuttonbox">
+    <i>分享到：</i>
+    <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+    <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间"></a>
+    <a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博"></a>
+    <a href="#" class="bds_sqq" data-cmd="sqq" title="分享到QQ好友"></a>
+    <a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网"></a>
+    <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+    <a href="#" class="bds_more" data-cmd="more"></a>
+</div>
+
+    <script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"1","bdSize":"32"},"share":{"bdCustomStyle":"bdshare:"}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
+
+</div>
+
+
+
+
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" ></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"isming"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2017 Sam
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    <script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3Fc22f102f5fbaa79cf43b93add1805f4f' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/mobile.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+
+<! -- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+
+  </div>
+</body>
+</html>

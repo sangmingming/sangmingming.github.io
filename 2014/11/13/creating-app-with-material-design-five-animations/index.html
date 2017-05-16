@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="theme-color" content="#778899">
+  
+  <title>创建Material Design风格的Android应用--使用自定义动画 | 码农明明桑</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="动画在Material Design设计中给用户反馈放用户点击时，并且在程序用户界面中提供连贯的视觉。Material主题为按钮（Button）和activity的转换提供了一些默认的动画，在android5.0（api 21）和更高的版本，你可以自定义这些动画和创建一个新动画：  Touch feedback（触摸反馈） Circular Reveal（循环揭露效果） Activity tran">
+<meta name="keywords" content="android,material design">
+<meta property="og:type" content="article">
+<meta property="og:title" content="创建Material Design风格的Android应用--使用自定义动画">
+<meta property="og:url" content="http://blog.isming.me/2014/11/13/creating-app-with-material-design-five-animations/index.html">
+<meta property="og:site_name" content="码农明明桑">
+<meta property="og:description" content="动画在Material Design设计中给用户反馈放用户点击时，并且在程序用户界面中提供连贯的视觉。Material主题为按钮（Button）和activity的转换提供了一些默认的动画，在android5.0（api 21）和更高的版本，你可以自定义这些动画和创建一个新动画：  Touch feedback（触摸反馈） Circular Reveal（循环揭露效果） Activity tran">
+<meta property="og:image" content="http://isming.qiniudn.com/SceneTransition.png">
+<meta property="og:updated_time" content="2017-05-16T02:31:11.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="创建Material Design风格的Android应用--使用自定义动画">
+<meta name="twitter:description" content="动画在Material Design设计中给用户反馈放用户点击时，并且在程序用户界面中提供连贯的视觉。Material主题为按钮（Button）和activity的转换提供了一些默认的动画，在android5.0（api 21）和更高的版本，你可以自定义这些动画和创建一个新动画：  Touch feedback（触摸反馈） Circular Reveal（循环揭露效果） Activity tran">
+<meta name="twitter:image" content="http://isming.qiniudn.com/SceneTransition.png">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="http://apps.bdimg.com/libs/jquery/1.9.0/jquery.min.js"></script>
+</head>
+
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			<img src="http://isming.qiniudn.com/my_avatar.jpg">
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">Sam</a></h1>
+		</hgroup>
+
+		
+		<p class="header-subtitle">技术路上的一些记录</p>
+		
+
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+							<li><a href="/links">朋友</a></li>
+				        
+							<li><a href="/about">关于</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="github" target="_blank" href="https://github.com/sangmingming" title="github">github</a>
+					        
+								<a class="weibo" target="_blank" href="http://weibo.com/mingmingsang" title="weibo">weibo</a>
+					        
+								<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				
+				
+
+				
+			</div>
+		</div>
+	</header>				
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">Sam</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+				<img src="http://isming.qiniudn.com/my_avatar.jpg">
+				<hgroup>
+				  <h1 class="header-author">Sam</h1>
+				</hgroup>
+			</div>
+			
+			<p class="header-subtitle">技术路上的一些记录</p>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+					<li><a href="/links">朋友</a></li>
+		        
+					<li><a href="/about">关于</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="https://github.com/sangmingming" title="github">github</a>
+			        
+						<a class="weibo" target="_blank" href="http://weibo.com/mingmingsang" title="weibo">weibo</a>
+			        
+						<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+      <div class="body-wrap"><article id="post-creating-app-with-material-design-five-animations" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2014/11/13/creating-app-with-material-design-five-animations/" class="article-date">
+  	<time datetime="2014-11-13T14:59:44.000Z" itemprop="datePublished">2014年11月13日</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      创建Material Design风格的Android应用--使用自定义动画
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android/">android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/material-design/">material design</a></li></ul>
+	</div>
+
+        
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>动画在Material Design设计中给用户反馈放用户点击时，并且在程序用户界面中提供连贯的视觉。Material主题为按钮（Button）和activity的转换提供了一些默认的动画，在android5.0（api 21）和更高的版本，你可以自定义这些动画和创建一个新动画：</p>
+<ul>
+<li>Touch feedback（触摸反馈）</li>
+<li>Circular Reveal（循环揭露效果）</li>
+<li>Activity transitions（Activity转换效果）</li>
+<li>Curved motion（曲线运动）</li>
+<li>View state changes （视图状态改变）<a id="more"></a>
+</li>
+</ul>
+<h3 id="自定义触摸反馈"><a href="#自定义触摸反馈" class="headerlink" title="自定义触摸反馈"></a>自定义触摸反馈</h3><p>触摸反馈在Material Design中在触摸点提供了一个即时视觉确认当用户作用在UI元素。按钮的默认触摸反馈动画是使用了新的RippleDrawable类，它会是波纹效果在不同状态间变换。</p>
+<p>大多数情况下，我们可以使用这个功能通过在xml文件中定义背景：</p>
+<blockquote>
+<p>?android:attr/selectableItemBackground  有界限的波纹<br>?android:attr/selectableItemBackgroundBorderless 可以超出视图区域的波纹<br>?android:attr/selectableItemBackgroundBorderless 是21新添加的api</p>
+</blockquote>
+<p>另外，还以使用<code>ripple</code>元素定义<code>RippleDrawable</code>作为一个xml资源。</p>
+<p>你可以给RippleDrawable对象分配一个颜色。使用主题的<code>android:colorControlHighlight</code>属性可以改变默认的触摸反馈颜色。</p>
+<p>更多信息，查看RippleDrawable类的api指南。</p>
+<h3 id="使用揭露效果"><a href="#使用揭露效果" class="headerlink" title="使用揭露效果"></a>使用揭露效果</h3><p>揭露动画为用户提供视觉上的持续性挡显示或者隐藏一组界面元素。<code>ViewAnimationUtils.createCircularReveal()</code>方法使你可以使用动画效果来揭露或者隐藏一个视图。</p>
+<p>这样揭露一个先前隐藏的视图：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// previously invisible view</span></div><div class="line">View myView = findViewById(R.id.my_view);</div><div class="line"></div><div class="line"><span class="comment">// get the center for the clipping circle</span></div><div class="line"><span class="keyword">int</span> cx = (myView.getLeft() + myView.getRight()) / <span class="number">2</span>;</div><div class="line"><span class="keyword">int</span> cy = (myView.getTop() + myView.getBottom()) / <span class="number">2</span>;</div><div class="line"></div><div class="line"><span class="comment">// get the final radius for the clipping circle</span></div><div class="line"><span class="keyword">int</span> finalRadius = Math.max(myView.getWidth(), myView.getHeight());</div><div class="line"></div><div class="line"><span class="comment">// create the animator for this view (the start radius is zero)</span></div><div class="line">Animator anim =</div><div class="line">    ViewAnimationUtils.createCircularReveal(myView, cx, cy, <span class="number">0</span>, finalRadius);</div><div class="line"></div><div class="line"><span class="comment">// make the view visible and start the animation</span></div><div class="line">myView.setVisibility(View.VISIBLE);</div><div class="line">anim.start();</div></pre></td></tr></table></figure></p>
+<p>这样隐藏一个先前显示的视图：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// previously visible view</span></div><div class="line"><span class="keyword">final</span> View myView = findViewById(R.id.my_view);</div><div class="line"></div><div class="line"><span class="comment">// get the center for the clipping circle</span></div><div class="line"><span class="keyword">int</span> cx = (myView.getLeft() + myView.getRight()) / <span class="number">2</span>;</div><div class="line"><span class="keyword">int</span> cy = (myView.getTop() + myView.getBottom()) / <span class="number">2</span>;</div><div class="line"></div><div class="line"><span class="comment">// get the initial radius for the clipping circle</span></div><div class="line"><span class="keyword">int</span> initialRadius = myView.getWidth();</div><div class="line"></div><div class="line"><span class="comment">// create the animation (the final radius is zero)</span></div><div class="line">Animator anim =</div><div class="line">    ViewAnimationUtils.createCircularReveal(myView, cx, cy, initialRadius, <span class="number">0</span>);</div><div class="line"></div><div class="line"><span class="comment">// make the view invisible when the animation is done</span></div><div class="line">anim.addListener(<span class="keyword">new</span> AnimatorListenerAdapter() &#123;</div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onAnimationEnd</span><span class="params">(Animator animation)</span> </span>&#123;</div><div class="line">        <span class="keyword">super</span>.onAnimationEnd(animation);</div><div class="line">        myView.setVisibility(View.INVISIBLE);</div><div class="line">    &#125;</div><div class="line">&#125;);</div><div class="line"></div><div class="line"><span class="comment">// start the animation</span></div><div class="line">anim.start();</div></pre></td></tr></table></figure></p>
+<h3 id="自定义activity转换效果"><a href="#自定义activity转换效果" class="headerlink" title="自定义activity转换效果"></a>自定义activity转换效果</h3><p>activity间转换在Material Design程序中提供不同状态间的视觉连接通过在公用元素上动作或者转换。你可以为进入或退出的转换自定义动画，共享元素在不同的activity之间的转换效果。<br>进入过渡决定activity中的视图怎样进入场景。比如在爆裂进入过渡效果中，视图从屏幕外面飞向屏幕中间进入场景。</p>
+<p>退出过渡决定activity中的视图怎样退出场景。比如，在爆裂退出过渡效果中，视图从中间向远处退出场景。<br>共享元素过渡决定两个activity之间共享的视图怎么在两个activity之间过渡。比如，两个activity有一个相同的图片，在不同的位置和不同的大小，changeImageTransform(图片变换变化)让共享元素平滑的平移和缩放图片在两个activity之间。</p>
+<p>android 5.0(api 21)提供以下进入和退出效果：</p>
+<ul>
+<li>explode(爆裂) - 从场景中间移动视图进入或者退出</li>
+<li>slide(滑动) - 视图从场景的一个边缘进入或者退出</li>
+<li>fade(淡入淡出) - 从场景添加或者移除一个视图通过改变他的透明</li>
+</ul>
+<p>所有过渡效果都继承<code>Visibility</code>类，因此支持作为一个进入或者退出过渡效果。</p>
+<p>更多细节，看<code>Transition</code>类的api指南。</p>
+<p>Android5.0(api 21)也支持共享元素过渡效果：</p>
+<ul>
+<li>changeBounds -  改变目标视图的布局边界</li>
+<li>changeClipBounds - 裁剪目标视图边界</li>
+<li>changeTransform - 改变目标视图的缩放比例和旋转角度</li>
+<li>changeImageTransform - 改变目标图片的大小和缩放比例</li>
+</ul>
+<p>当你在程序中开启activity间的过渡动画时，默认的交叉淡入淡出效果会在两个activity之间激活。</p>
+<p><img src="http://isming.qiniudn.com/SceneTransition.png" alt="共享元素动画"></p>
+<p>一个共享元素过渡效果</p>
+<h5 id="指定过渡效果"><a href="#指定过渡效果" class="headerlink" title="指定过渡效果"></a>指定过渡效果</h5><p>首先，使用在从material theme继承的样式中，使用<code>android:windowContentTransitions</code>属性开启窗口内内容过渡效果。也可以在样式定义中第一进入，退出，共享元素的效果：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">style</span> <span class="attr">name</span>=<span class="string">"BaseAppTheme"</span> <span class="attr">parent</span>=<span class="string">"android:Theme.Material"</span>&gt;</span><span class="xml"></span></div><div class="line">  <span class="comment">&lt;!-- enable window content transitions --&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">item</span> <span class="attr">name</span>=<span class="string">"android:windowContentTransitions"</span>&gt;</span>true<span class="tag">&lt;/<span class="name">item</span>&gt;</span></div><div class="line"></div><div class="line">  <span class="comment">&lt;!-- specify enter and exit transitions --&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">item</span> <span class="attr">name</span>=<span class="string">"android:windowEnterTransition"</span>&gt;</span>@transition/explode<span class="tag">&lt;/<span class="name">item</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">item</span> <span class="attr">name</span>=<span class="string">"android:windowExitTransition"</span>&gt;</span>@transition/explode<span class="tag">&lt;/<span class="name">item</span>&gt;</span></div><div class="line"></div><div class="line">  <span class="comment">&lt;!-- specify shared element transitions --&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">item</span> <span class="attr">name</span>=<span class="string">"android:windowSharedElementEnterTransition"</span>&gt;</span></div><div class="line">    @transition/change_image_transform<span class="tag">&lt;/<span class="name">item</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">item</span> <span class="attr">name</span>=<span class="string">"android:windowSharedElementExitTransition"</span>&gt;</span></div><div class="line">    @transition/change_image_transform<span class="tag">&lt;/<span class="name">item</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">style</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>示例中的过渡<code>change_image_transform</code>定义如下：<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment">&lt;!-- res/transition/change_image_transform.xml --&gt;</span></div><div class="line"><span class="comment">&lt;!-- (see also Shared Transitions below) --&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">transitionSet</span> <span class="attr">xmlns:android</span>=<span class="string">"http://schemas.android.com/apk/res/android"</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">changeImageTransform</span>/&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">transitionSet</span>&gt;</span></div></pre></td></tr></table></figure></p>
+<p><code>changeImageTransform</code>元素对应<code>ChangeImageTransform</code>类。更多信息，查看<code>Transition</code>的api指南。</p>
+<p>在代码中启用窗口内容过渡效果，使用<code>Window.requestFeature()</code>方法：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// inside your activity (if you did not enable transitions in your theme)</span></div><div class="line">getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);</div><div class="line"></div><div class="line"><span class="comment">// set an exit transition</span></div><div class="line">getWindow().setExitTransition(<span class="keyword">new</span> Explode());</div></pre></td></tr></table></figure></p>
+<p>在代码中定义过渡效果，使用下面的方法，并传一个<code>Transition</code>对象：</p>
+<ul>
+<li>Window.setEnterTransition()</li>
+<li>Window.setExitTransition()</li>
+<li>Window.setSharedElementEnterTransition()</li>
+<li>Window.setSharedElementExitTransition()</li>
+</ul>
+<p><code>setExitTransition()</code>和<code>setSharedElementExitTransition()</code>方法为调用的activity定义退出过渡效果，<code>setEnterTransition()</code>和<code>setSharedElementEnterTransition()</code>方法为调用的activity定义进入过渡效果。</p>
+<p>为了达到完整的过渡效果，必须在进入的和退出的两个activity上都启用window内容过渡。否则，正调用的activity会开始退出过渡，你就会看到窗口过渡效果（比如缩放，或者淡出）。</p>
+<p>更快的开始一个进入过渡，使用<code>Window.setAllowEnterTransitionOverlap()</code>方法在被调用的activity。这让你有更加激动人心的进入过渡效果。</p>
+<h4 id="打开activity使用过渡"><a href="#打开activity使用过渡" class="headerlink" title="打开activity使用过渡"></a>打开activity使用过渡</h4><p>如果你为一个activity开启过渡并且设置了一个退出过渡效果，过渡效果会在你打开其他activity的时候激活，像这样：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">startActivity(intent,</div><div class="line">        ActivityOptions.makeSceneTransitionAnimation(<span class="keyword">this</span>).toBundle());</div></pre></td></tr></table></figure>
+<p>如果你给第二个activity设置了进入过渡动画，过渡也会在第二个activity启动的时候激活。当你启动其他的activity时，如果需要禁用过渡效果，提供一个为<code>null</code>的bundle选项。</p>
+<h4 id="打开一个activity包含一个共享元素"><a href="#打开一个activity包含一个共享元素" class="headerlink" title="打开一个activity包含一个共享元素"></a>打开一个activity包含一个共享元素</h4><p>使用一个场景过渡动画在两个activity之间包括一个共享元素：</p>
+<ol>
+<li>在theme中开启窗口内容过渡效果 </li>
+<li>在style中指定一个共享元素过渡效果 </li>
+<li>在xml中定义过渡样式 </li>
+<li>在两个activity的样式文件中给共享元素分配一个相同的名字使用<code>android:transitionName</code>属性 </li>
+<li>使用<code>ActivityOptions.makeSceneTransitionAnimation()</code>方法。 </li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// get the element that receives the click event</span></div><div class="line"><span class="keyword">final</span> View imgContainerView = findViewById(R.id.img_container);</div><div class="line"></div><div class="line"><span class="comment">// get the common element for the transition in this activity</span></div><div class="line"><span class="keyword">final</span> View androidRobotView = findViewById(R.id.image_small);</div><div class="line"></div><div class="line"><span class="comment">// define a click listener</span></div><div class="line">imgContainerView.setOnClickListener(<span class="keyword">new</span> View.OnClickListener() &#123;</div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onClick</span><span class="params">(View view)</span> </span>&#123;</div><div class="line">        Intent intent = <span class="keyword">new</span> Intent(<span class="keyword">this</span>, Activity2.class);</div><div class="line">        <span class="comment">// create the transition animation - the images in the layouts</span></div><div class="line">        <span class="comment">// of both activities are defined with android:transitionName="robot"</span></div><div class="line">        ActivityOptions options = ActivityOptions</div><div class="line">            .makeSceneTransitionAnimation(<span class="keyword">this</span>, androidRobotView, <span class="string">"robot"</span>);</div><div class="line">        <span class="comment">// start the new activity</span></div><div class="line">        startActivity(intent, options.toBundle());</div><div class="line">    &#125;</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>对于在代码中生成的动态共享视图，使用`View.setTransitionName()方法在两个activity中给指定相同的名字。</p>
+<p>当完成第二个activity的时候，如果需要逆转该过渡动画，使用Activity.finishAfterTransition()方法代替Activity.finish()</p>
+<h4 id="打开一个activity包含多个共享元素"><a href="#打开一个activity包含多个共享元素" class="headerlink" title="打开一个activity包含多个共享元素"></a>打开一个activity包含多个共享元素</h4><p>使用一个场景过渡动画在两个activity之间包括多于一个共享元素，在两个activity中定义所有的的共享元素使用<code>android:transitionName</code>属性（或使用View.setTransitionName()方法在所有的activity中）,并且创建一个像下面这样的ActivityOptions对象：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(<span class="keyword">this</span>,</div><div class="line">        Pair.create(view1, <span class="string">"agreedName1"</span>),</div><div class="line">        Pair.create(view2, <span class="string">"agreedName2"</span>));</div></pre></td></tr></table></figure></p>
+<h3 id="使用曲线运动"><a href="#使用曲线运动" class="headerlink" title="使用曲线运动"></a>使用曲线运动</h3><p>Material Design中，动画依赖时间插值和空间移动模式曲线。在android5.0(api 21)和更高版本，你可以为动画自定义时间曲线和移动曲线。</p>
+<p><code>PathInterpolator</code>类是一个新的基于贝塞尔曲线或Path对象的插值器。这个插值器在1*1的正方形上定义了曲线运动，以（0，0）和（1，1）点作为锚点，根据够照参数控制点。你也可以使用xml文件的定义一个路径插值器，如：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">pathInterpolator</span> <span class="attr">xmlns:android</span>=<span class="string">"http://schemas.android.com/apk/res/android"</span></span></div><div class="line">    <span class="attr">android:controlX1</span>=<span class="string">"0.4"</span></div><div class="line">    <span class="attr">android:controlY1</span>=<span class="string">"0"</span></div><div class="line">    <span class="attr">android:controlX2</span>=<span class="string">"1"</span></div><div class="line">    <span class="attr">android:controlY2</span>=<span class="string">"1"</span>/&gt;</div></pre></td></tr></table></figure>
+<p>Material Design设计规范中，系统提供了三个基本曲线的xml资源:</p>
+<ul>
+<li>@interpolator/fast_out_linear_in.xml</li>
+<li>@interpolator/fast_out_slow_in.xml</li>
+<li>@interpolator/linear_out_slow_in.xml</li>
+</ul>
+<p>我们可以给<code>Animator.setInterpolator()</code>传一个<code>PathInterpolator</code>对象来设置。</p>
+<p><code>ObjectAnimator</code>类有新的构造方法，你可以一次使用两个或者属性使用path独立于坐标动画。比如，下面的动画使用一个Path对象去动作一个视图的x和y属性：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">ObjectAnimator mAnimator;</div><div class="line">mAnimator = ObjectAnimator.ofFloat(view, View.X, View.Y, path);</div><div class="line">...</div><div class="line">mAnimator.start();</div></pre></td></tr></table></figure></p>
+<h3 id="视图状态改变动画"><a href="#视图状态改变动画" class="headerlink" title="视图状态改变动画"></a>视图状态改变动画</h3><p><code>StateListAnimator</code>定义动画当视图的状态改变的时候运行，下面的例子是怎么在xml中定义一个StateListAnimator动画：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"><span class="comment">&lt;!-- animate the translationZ property of a view when pressed --&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">selector</span> <span class="attr">xmlns:android</span>=<span class="string">"http://schemas.android.com/apk/res/android"</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">item</span> <span class="attr">android:state_pressed</span>=<span class="string">"true"</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">set</span>&gt;</span></div><div class="line">      <span class="tag">&lt;<span class="name">objectAnimator</span> <span class="attr">android:propertyName</span>=<span class="string">"translationZ"</span></span></div><div class="line">        <span class="attr">android:duration</span>=<span class="string">"@android:integer/config_shortAnimTime"</span></div><div class="line">        <span class="attr">android:valueTo</span>=<span class="string">"2dp"</span></div><div class="line">        <span class="attr">android:valueType</span>=<span class="string">"floatType"</span>/&gt;</div><div class="line">        <span class="comment">&lt;!-- you could have other objectAnimator elements</span></div><div class="line">             here for "x" and "y", or other properties --&gt;</div><div class="line">    <span class="tag">&lt;/<span class="name">set</span>&gt;</span></div><div class="line">  <span class="tag">&lt;/<span class="name">item</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">item</span> <span class="attr">android:state_enabled</span>=<span class="string">"true"</span></span></div><div class="line">    <span class="attr">android:state_pressed</span>=<span class="string">"false"</span></div><div class="line">    <span class="attr">android:state_focused</span>=<span class="string">"true"</span>&gt;</div><div class="line">    <span class="tag">&lt;<span class="name">set</span>&gt;</span></div><div class="line">      <span class="tag">&lt;<span class="name">objectAnimator</span> <span class="attr">android:propertyName</span>=<span class="string">"translationZ"</span></span></div><div class="line">        <span class="attr">android:duration</span>=<span class="string">"100"</span></div><div class="line">        <span class="attr">android:valueTo</span>=<span class="string">"0"</span></div><div class="line">        <span class="attr">android:valueType</span>=<span class="string">"floatType"</span>/&gt;</div><div class="line">    <span class="tag">&lt;/<span class="name">set</span>&gt;</span></div><div class="line">  <span class="tag">&lt;/<span class="name">item</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">selector</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>给视图附加自定义的视图状态动画，使用<code>selector</code>元素在xml文件中定义一个动画祥例子中这样，给视图分配动画使用<code>android:stateListAnimator</code>属性。在代码中使用，使用<code>AnimationInflater.loadStateListAnimator()</code>方法，并且使用<code>View.setStateListAnimator()</code>方法。</p>
+<p>当你的主题是继承的Material主题，按钮默认有一个Z动画。如果需要避免这个动画，设置<code>android:stateListAnimator</code>属性为<code>@null</code>即可。</p>
+<p><code>AnimatedStateListDrawable</code>类让你创建可绘制图在相关联的视图状态改变。android5.0的一些系统组件默认使用这些动画。下面的例子是如何在xml文件中定义一个<code>AnimatedStateListDrawable</code>:<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="comment">&lt;!-- res/drawable/myanimstatedrawable.xml --&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">animated-selector</span></span></div><div class="line">    <span class="attr">xmlns:android</span>=<span class="string">"http://schemas.android.com/apk/res/android"</span>&gt;</div><div class="line"></div><div class="line">    <span class="comment">&lt;!-- provide a different drawable for each state--&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">item</span> <span class="attr">android:id</span>=<span class="string">"@+id/pressed"</span> <span class="attr">android:drawable</span>=<span class="string">"@drawable/drawableP"</span></span></div><div class="line">        <span class="attr">android:state_pressed</span>=<span class="string">"true"</span>/&gt;</div><div class="line">    <span class="tag">&lt;<span class="name">item</span> <span class="attr">android:id</span>=<span class="string">"@+id/focused"</span> <span class="attr">android:drawable</span>=<span class="string">"@drawable/drawableF"</span></span></div><div class="line">        <span class="attr">android:state_focused</span>=<span class="string">"true"</span>/&gt;</div><div class="line">    <span class="tag">&lt;<span class="name">item</span> <span class="attr">android:id</span>=<span class="string">"@id/default"</span></span></div><div class="line">        <span class="attr">android:drawable</span>=<span class="string">"@drawable/drawableD"</span>/&gt;</div><div class="line"></div><div class="line">    <span class="comment">&lt;!-- specify a transition --&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">transition</span> <span class="attr">android:fromId</span>=<span class="string">"@+id/default"</span> <span class="attr">android:toId</span>=<span class="string">"@+id/pressed"</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">animation-list</span>&gt;</span></div><div class="line">            <span class="tag">&lt;<span class="name">item</span> <span class="attr">android:duration</span>=<span class="string">"15"</span> <span class="attr">android:drawable</span>=<span class="string">"@drawable/dt1"</span>/&gt;</span></div><div class="line">            <span class="tag">&lt;<span class="name">item</span> <span class="attr">android:duration</span>=<span class="string">"15"</span> <span class="attr">android:drawable</span>=<span class="string">"@drawable/dt2"</span>/&gt;</span></div><div class="line">            ...</div><div class="line">        <span class="tag">&lt;/<span class="name">animation-list</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">transition</span>&gt;</span></div><div class="line">    ...</div><div class="line"><span class="tag">&lt;/<span class="name">animated-selector</span>&gt;</span></div></pre></td></tr></table></figure></p>
+<h3 id="可绘矢量动画"><a href="#可绘矢量动画" class="headerlink" title="可绘矢量动画"></a>可绘矢量动画</h3><p>可绘制矢量图在拉伸时不会失真。<code>AnimatedVectorDrawable</code>类让你可以在可绘制矢量图上面作用动画。</p>
+<p>通常需要在三个xml文件中定义可动的矢量图：</p>
+<p>一个矢量图使用<code>&lt;vector&gt;</code>元素,放在<code>res/drawable/</code>下。<br>一个可动的矢量图使用<code>&lt;animated-vector&gt;</code>元素，放在<code>res/drawable/</code>下。<br>一个或更多个动画对象使用<code>&lt;objectAnimator&gt;</code>元素，放在<code>res/anim/</code>下。</p>
+<p>可动矢量图可以使用<code>&lt;group&gt;</code>和<code>&lt;path&gt;</code>元素。<code>&lt;group&gt;</code>元素定义一系列路径或者子组，<code>&lt;path&gt;</code>元素定义可绘图的路径。</p>
+<p>当你定义了一个想要作用动画的矢量可绘制图，使用<code>android:name</code>属性给每个group和path指定一个唯一的名字，这样你可以从动画的定义中找到他们。比如：<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="comment">&lt;!-- res/drawable/vectordrawable.xml --&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">vector</span> <span class="attr">xmlns:android</span>=<span class="string">"http://schemas.android.com/apk/res/android"</span></span></div><div class="line">    <span class="attr">android:height</span>=<span class="string">"64dp"</span></div><div class="line">    <span class="attr">android:width</span>=<span class="string">"64dp"</span></div><div class="line">    <span class="attr">android:viewportHeight</span>=<span class="string">"600"</span></div><div class="line">    <span class="attr">android:viewportWidth</span>=<span class="string">"600"</span>&gt;</div><div class="line">    <span class="tag">&lt;<span class="name">group</span></span></div><div class="line">        <span class="attr">android:name</span>=<span class="string">"rotationGroup"</span></div><div class="line">        <span class="attr">android:pivotX</span>=<span class="string">"300.0"</span></div><div class="line">        <span class="attr">android:pivotY</span>=<span class="string">"300.0"</span></div><div class="line">        <span class="attr">android:rotation</span>=<span class="string">"45.0"</span> &gt;</div><div class="line">        <span class="tag">&lt;<span class="name">path</span></span></div><div class="line">            <span class="attr">android:name</span>=<span class="string">"v"</span></div><div class="line">            <span class="attr">android:fillColor</span>=<span class="string">"#000000"</span></div><div class="line">            <span class="attr">android:pathData</span>=<span class="string">"M300,70 l 0,-70 70,70 0,0 -70,70z"</span> /&gt;</div><div class="line">    <span class="tag">&lt;/<span class="name">group</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">vector</span>&gt;</span></div></pre></td></tr></table></figure></p>
+<p>可动的矢量绘制通过刚刚说到定义的名字，来找到这些path和group：<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="comment">&lt;!-- res/drawable/animvectordrawable.xml --&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">animated-vector</span> <span class="attr">xmlns:android</span>=<span class="string">"http://schemas.android.com/apk/res/android"</span></span></div><div class="line">  <span class="attr">android:drawable</span>=<span class="string">"@drawable/vectordrawable"</span> &gt;</div><div class="line">    <span class="tag">&lt;<span class="name">target</span></span></div><div class="line">        <span class="attr">android:name</span>=<span class="string">"rotationGroup"</span></div><div class="line">        <span class="attr">android:animation</span>=<span class="string">"@anim/rotation"</span> /&gt;</div><div class="line">    <span class="tag">&lt;<span class="name">target</span></span></div><div class="line">        <span class="attr">android:name</span>=<span class="string">"v"</span></div><div class="line">        <span class="attr">android:animation</span>=<span class="string">"@anim/path_morph"</span> /&gt;</div><div class="line"><span class="tag">&lt;/<span class="name">animated-vector</span>&gt;</span></div></pre></td></tr></table></figure></p>
+<p>动画的定义表现在ObjectAnimator和AnimatorSet对象中。第一个动画在这个例子中是让目标组旋转360度：<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment">&lt;!-- res/anim/rotation.xml --&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">objectAnimator</span></span></div><div class="line">    <span class="attr">android:duration</span>=<span class="string">"6000"</span></div><div class="line">    <span class="attr">android:propertyName</span>=<span class="string">"rotation"</span></div><div class="line">    <span class="attr">android:valueFrom</span>=<span class="string">"0"</span></div><div class="line">    <span class="attr">android:valueTo</span>=<span class="string">"360"</span> /&gt;</div></pre></td></tr></table></figure></p>
+<p>第二个动画例子是把矢量可绘图从一个形状变成另一种。所有的路径必须兼容变换：他们必须有相同数量的命令，每个命令要有相同的参数。<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="comment">&lt;!-- res/anim/path_morph.xml --&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">set</span> <span class="attr">xmlns:android</span>=<span class="string">"http://schemas.android.com/apk/res/android"</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">objectAnimator</span></span></div><div class="line">        <span class="attr">android:duration</span>=<span class="string">"3000"</span></div><div class="line">        <span class="attr">android:propertyName</span>=<span class="string">"pathData"</span></div><div class="line">        <span class="attr">android:valueFrom</span>=<span class="string">"M300,70 l 0,-70 70,70 0,0   -70,70z"</span></div><div class="line">        <span class="attr">android:valueTo</span>=<span class="string">"M300,70 l 0,-70 70,0  0,140 -70,0 z"</span></div><div class="line">        <span class="attr">android:valueType</span>=<span class="string">"pathType"</span> /&gt;</div><div class="line"><span class="tag">&lt;/<span class="name">set</span>&gt;</span></div></pre></td></tr></table></figure></p>
+<p>更多的信息，看<code>AnimatedVectorDrawable</code>的api指南。</p>
+<h4 id="PS后记"><a href="#PS后记" class="headerlink" title="PS后记"></a>PS后记</h4><p>这个系列终于写完了，说实话基本上大部分都是翻译的谷歌的官方文档。因为时间问题，再加上自己的英语够烂，最近越来慢。不过，这样一下来，加上自己的一些代码练习，对于Material设计算是能够基本使用了。可惜，大部分的style还都不能向下兼容，只好等５了。</p>
+<p>网上有一些大神进来已经开源了一些开源组件，大家可以借此曲线救国，下次有空在专门整理一下。</p>
+<p>本文参考： <a href="http://developer.android.com/training/material/animations.html" target="_blank" rel="external">http://developer.android.com/training/material/animations.html</a></p>
+<blockquote>
+<p>原文地址：<a href="http://blog.isming.me/2014/11/13/creating-app-with-material-design-five-animations/">http://blog.isming.me/2014/11/13/creating-app-with-material-design-five-animations/</a>，转载请注明出处。</p>
+</blockquote>
+
+        
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2014/11/17/material-design-for-pre-lollipop-android/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption"><</strong>
+      <div class="article-nav-title">
+        
+          在低版本android系统上实现Material设计应用
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2014/11/03/creating-app-with-material-design-four-drawables/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">创建Material Design风格的Android应用--使用Drawable</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share">
+
+<div class="bdsharebuttonbox">
+    <i>分享到：</i>
+    <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+    <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间"></a>
+    <a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博"></a>
+    <a href="#" class="bds_sqq" data-cmd="sqq" title="分享到QQ好友"></a>
+    <a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网"></a>
+    <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+    <a href="#" class="bds_more" data-cmd="more"></a>
+</div>
+
+    <script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"1","bdSize":"32"},"share":{"bdCustomStyle":"bdshare:"}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
+
+</div>
+
+
+
+
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" ></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"isming"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2017 Sam
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    <script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3Fc22f102f5fbaa79cf43b93add1805f4f' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/mobile.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+
+<! -- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+
+  </div>
+</body>
+</html>

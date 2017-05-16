@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="theme-color" content="#778899">
+  
+  <title>Android WebView 上传文件支持全解析 | 码农明明桑</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="默认情况下情况下，使用Android的WebView是不能够支持上传文件的。而这个，也是在我们的前端工程师告知之后才了解的。因为Android的每个版本WebView的实现有差异，因此需要对不同版本去适配。花了一点时间，参考别人的代码，这个问题已经解决，这里把我踩过的坑分享出来。 主要思路是重写WebChromeClient，然后在WebViewActivity中接收选择到的文件Uri，传给页面去">
+<meta name="keywords" content="android">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android WebView 上传文件支持全解析">
+<meta property="og:url" content="http://blog.isming.me/2015/12/21/android-webview-upload-file/index.html">
+<meta property="og:site_name" content="码农明明桑">
+<meta property="og:description" content="默认情况下情况下，使用Android的WebView是不能够支持上传文件的。而这个，也是在我们的前端工程师告知之后才了解的。因为Android的每个版本WebView的实现有差异，因此需要对不同版本去适配。花了一点时间，参考别人的代码，这个问题已经解决，这里把我踩过的坑分享出来。 主要思路是重写WebChromeClient，然后在WebViewActivity中接收选择到的文件Uri，传给页面去">
+<meta property="og:updated_time" content="2017-05-16T02:31:11.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android WebView 上传文件支持全解析">
+<meta name="twitter:description" content="默认情况下情况下，使用Android的WebView是不能够支持上传文件的。而这个，也是在我们的前端工程师告知之后才了解的。因为Android的每个版本WebView的实现有差异，因此需要对不同版本去适配。花了一点时间，参考别人的代码，这个问题已经解决，这里把我踩过的坑分享出来。 主要思路是重写WebChromeClient，然后在WebViewActivity中接收选择到的文件Uri，传给页面去">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="http://apps.bdimg.com/libs/jquery/1.9.0/jquery.min.js"></script>
+</head>
+
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			<img src="http://isming.qiniudn.com/my_avatar.jpg">
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">Sam</a></h1>
+		</hgroup>
+
+		
+		<p class="header-subtitle">技术路上的一些记录</p>
+		
+
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+							<li><a href="/links">朋友</a></li>
+				        
+							<li><a href="/about">关于</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="github" target="_blank" href="https://github.com/sangmingming" title="github">github</a>
+					        
+								<a class="weibo" target="_blank" href="http://weibo.com/mingmingsang" title="weibo">weibo</a>
+					        
+								<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				
+				
+
+				
+			</div>
+		</div>
+	</header>				
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">Sam</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+				<img src="http://isming.qiniudn.com/my_avatar.jpg">
+				<hgroup>
+				  <h1 class="header-author">Sam</h1>
+				</hgroup>
+			</div>
+			
+			<p class="header-subtitle">技术路上的一些记录</p>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+					<li><a href="/links">朋友</a></li>
+		        
+					<li><a href="/about">关于</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="https://github.com/sangmingming" title="github">github</a>
+			        
+						<a class="weibo" target="_blank" href="http://weibo.com/mingmingsang" title="weibo">weibo</a>
+			        
+						<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+      <div class="body-wrap"><article id="post-android-webview-upload-file" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/12/21/android-webview-upload-file/" class="article-date">
+  	<time datetime="2015-12-21T12:02:30.000Z" itemprop="datePublished">2015年12月21日</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Android WebView 上传文件支持全解析
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android/">android</a></li></ul>
+	</div>
+
+        
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>默认情况下情况下，使用Android的WebView是不能够支持上传文件的。而这个，也是在我们的前端工程师告知之后才了解的。因为Android的每个版本WebView的实现有差异，因此需要对不同版本去适配。花了一点时间，参考别人的代码，这个问题已经解决，这里把我踩过的坑分享出来。</p>
+<p>主要思路是重写WebChromeClient，然后在WebViewActivity中接收选择到的文件Uri，传给页面去上传就可以了。</p>
+<a id="more"></a>
+<h3 id="创建一个WebViewActivity的内部类"><a href="#创建一个WebViewActivity的内部类" class="headerlink" title="创建一个WebViewActivity的内部类"></a>创建一个WebViewActivity的内部类</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">XHSWebChromeClient</span> <span class="keyword">extends</span> <span class="title">WebChromeClient</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="comment">// For Android 3.0+</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">openFileChooser</span><span class="params">(ValueCallback&lt;Uri&gt; uploadMsg)</span> </span>&#123;</div><div class="line">        CLog.i(<span class="string">"UPFILE"</span>, <span class="string">"in openFile Uri Callback"</span>);</div><div class="line">        <span class="keyword">if</span> (mUploadMessage != <span class="keyword">null</span>) &#123;</div><div class="line">            mUploadMessage.onReceiveValue(<span class="keyword">null</span>);</div><div class="line">        &#125;</div><div class="line">        mUploadMessage = uploadMsg;</div><div class="line">        Intent i = <span class="keyword">new</span> Intent(Intent.ACTION_GET_CONTENT);</div><div class="line">        i.addCategory(Intent.CATEGORY_OPENABLE);</div><div class="line">        i.setType(<span class="string">"*/*"</span>);</div><div class="line">        startActivityForResult(Intent.createChooser(i, <span class="string">"File Chooser"</span>), FILECHOOSER_RESULTCODE);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">// For Android 3.0+</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">openFileChooser</span><span class="params">(ValueCallback uploadMsg, String acceptType)</span> </span>&#123;</div><div class="line">        CLog.i(<span class="string">"UPFILE"</span>, <span class="string">"in openFile Uri Callback has accept Type"</span> + acceptType);</div><div class="line">        <span class="keyword">if</span> (mUploadMessage != <span class="keyword">null</span>) &#123;</div><div class="line">            mUploadMessage.onReceiveValue(<span class="keyword">null</span>);</div><div class="line">        &#125;</div><div class="line">        mUploadMessage = uploadMsg;</div><div class="line">        Intent i = <span class="keyword">new</span> Intent(Intent.ACTION_GET_CONTENT);</div><div class="line">        i.addCategory(Intent.CATEGORY_OPENABLE);</div><div class="line">        String type = TextUtils.isEmpty(acceptType) ? <span class="string">"*/*"</span> : acceptType;</div><div class="line">        i.setType(type);</div><div class="line">        startActivityForResult(Intent.createChooser(i, <span class="string">"File Chooser"</span>),</div><div class="line">                FILECHOOSER_RESULTCODE);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">// For Android 4.1</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">openFileChooser</span><span class="params">(ValueCallback&lt;Uri&gt; uploadMsg, String acceptType, String capture)</span> </span>&#123;</div><div class="line">        CLog.i(<span class="string">"UPFILE"</span>, <span class="string">"in openFile Uri Callback has accept Type"</span> + acceptType + <span class="string">"has capture"</span> + capture);</div><div class="line">        <span class="keyword">if</span> (mUploadMessage != <span class="keyword">null</span>) &#123;</div><div class="line">            mUploadMessage.onReceiveValue(<span class="keyword">null</span>);</div><div class="line">        &#125;</div><div class="line">        mUploadMessage = uploadMsg;</div><div class="line">        Intent i = <span class="keyword">new</span> Intent(Intent.ACTION_GET_CONTENT);</div><div class="line">        i.addCategory(Intent.CATEGORY_OPENABLE);</div><div class="line">        String type = TextUtils.isEmpty(acceptType) ? <span class="string">"*/*"</span> : acceptType;</div><div class="line">        i.setType(type);</div><div class="line">        startActivityForResult(Intent.createChooser(i, <span class="string">"File Chooser"</span>), FILECHOOSER_RESULTCODE);</div><div class="line">    &#125;</div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">//Android 5.0+</span></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="meta">@SuppressLint</span>(<span class="string">"NewApi"</span>)</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">onShowFileChooser</span><span class="params">(WebView webView, ValueCallback&lt;Uri[]&gt; filePathCallback, FileChooserParams fileChooserParams)</span> </span>&#123;</div><div class="line">        <span class="keyword">if</span> (mUploadMessage != <span class="keyword">null</span>) &#123;</div><div class="line">            mUploadMessage.onReceiveValue(<span class="keyword">null</span>);</div><div class="line">        &#125;</div><div class="line">        CLog.i(<span class="string">"UPFILE"</span>, <span class="string">"file chooser params："</span> + fileChooserParams.toString());</div><div class="line">        mUploadMessage = filePathCallback;</div><div class="line">        Intent i = <span class="keyword">new</span> Intent(Intent.ACTION_GET_CONTENT);</div><div class="line">        i.addCategory(Intent.CATEGORY_OPENABLE);</div><div class="line">        <span class="keyword">if</span> (fileChooserParams != <span class="keyword">null</span> &amp;&amp; fileChooserParams.getAcceptTypes() != <span class="keyword">null</span></div><div class="line">                &amp;&amp; fileChooserParams.getAcceptTypes().length &gt; <span class="number">0</span>) &#123;</div><div class="line">            i.setType(fileChooserParams.getAcceptTypes()[<span class="number">0</span>]);</div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line">            i.setType(<span class="string">"*/*"</span>);</div><div class="line">        &#125;</div><div class="line">        startActivityForResult(Intent.createChooser(i, <span class="string">"File Chooser"</span>), FILECHOOSER_RESULTCODE);</div><div class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>上面openFileChooser是系统未暴露的接口，因此不需要加Override的注解，同时不同版本有不同的参数，其中的参数，第一个ValueCallback用于我们在选择完文件后，接收文件回调到网页内处理，acceptType为接受的文件mime type。在Android 5.0之后，系统提供了onShowFileChooser来让我们实现选择文件的方法，仍然有ValueCallback，在FileChooserParams参数中，同样包括acceptType。我们可以根据acceptType，来打开系统的或者我们自己创建文件选择器。当然如果需要打开相机拍照，也可以自己去使用打开相机拍照的Intent去打开即可。</p>
+<h3 id="处理选择的文件"><a href="#处理选择的文件" class="headerlink" title="处理选择的文件"></a>处理选择的文件</h3><p>以上是打开响应的选择文件的界面，我们还需要处理接收到文件之后，传给网页来响应。因为我们前面是使用startActivityForResult来打开的选择页面，我们会在onActivityResult中接收到选择的结果。Show code：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Override</span></div><div class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onActivityResult</span><span class="params">(<span class="keyword">int</span> requestCode, <span class="keyword">int</span> resultCode, Intent data)</span> </span>&#123;</div><div class="line">    <span class="keyword">super</span>.onActivityResult(requestCode, resultCode, data);</div><div class="line">    <span class="keyword">if</span> (requestCode == FILECHOOSER_RESULTCODE) &#123;</div><div class="line">        <span class="keyword">if</span> (<span class="keyword">null</span> == mUploadMessage) <span class="keyword">return</span>;</div><div class="line">        Uri result = data == <span class="keyword">null</span> || resultCode != RESULT_OK ? <span class="keyword">null</span> : data.getData();</div><div class="line">        <span class="keyword">if</span> (result == <span class="keyword">null</span>) &#123;</div><div class="line">            mUploadMessage.onReceiveValue(<span class="keyword">null</span>);</div><div class="line">            mUploadMessage = <span class="keyword">null</span>;</div><div class="line">            <span class="keyword">return</span>;</div><div class="line">        &#125;</div><div class="line">        CLog.i(<span class="string">"UPFILE"</span>, <span class="string">"onActivityResult"</span> + result.toString());</div><div class="line">        String path =  FileUtils.getPath(<span class="keyword">this</span>, result);</div><div class="line">        <span class="keyword">if</span> (TextUtils.isEmpty(path)) &#123;</div><div class="line">            mUploadMessage.onReceiveValue(<span class="keyword">null</span>);</div><div class="line">            mUploadMessage = <span class="keyword">null</span>;</div><div class="line">            <span class="keyword">return</span>;</div><div class="line">        &#125;</div><div class="line">        Uri uri = Uri.fromFile(<span class="keyword">new</span> File(path));</div><div class="line">        CLog.i(<span class="string">"UPFILE"</span>, <span class="string">"onActivityResult after parser uri:"</span> + uri.toString());</div><div class="line">        <span class="keyword">if</span> (Build.VERSION.SDK_INT &gt;= Build.VERSION_CODES.LOLLIPOP) &#123;</div><div class="line">            mUploadMessage.onReceiveValue(<span class="keyword">new</span> Uri[]&#123;uri&#125;);</div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line">            mUploadMessage.onReceiveValue(uri);</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        mUploadMessage = <span class="keyword">null</span>;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>以上代码主要就是调用ValueCallback的onReceiveValue方法，将结果传回web。</p>
+<h3 id="注意，其他要说的，重要"><a href="#注意，其他要说的，重要" class="headerlink" title="注意，其他要说的，重要"></a>注意，其他要说的，重要</h3><p>由于不同版本的差别，Android 5.0以下的版本，ValueCallback 的onReceiveValue接收的参数类型是Uri, 5.0及以上版本接收的是Uri数组，在传值的时候需要注意。</p>
+<p>选择文件会使用系统提供的组件或者其他支持的app，返回的uri有的直接是文件的url，有的是contentprovider的uri，因此我们需要统一处理一下，转成文件的uri，可参考以下代码（获取文件的路径）。</p>
+<p>调用getPath可以将Uri转成真实文件的Path，然后可以自己生成文件的Uri</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">FileUtils</span> </span>&#123;</div><div class="line">    <span class="comment">/**</span></div><div class="line">     * <span class="doctag">@param</span> uri The Uri to check.</div><div class="line">     * <span class="doctag">@return</span> Whether the Uri authority is ExternalStorageProvider.</div><div class="line">     */</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">boolean</span> <span class="title">isExternalStorageDocument</span><span class="params">(Uri uri)</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> <span class="string">"com.android.externalstorage.documents"</span>.equals(uri.getAuthority());</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">/**</span></div><div class="line">     * <span class="doctag">@param</span> uri The Uri to check.</div><div class="line">     * <span class="doctag">@return</span> Whether the Uri authority is DownloadsProvider.</div><div class="line">     */</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">boolean</span> <span class="title">isDownloadsDocument</span><span class="params">(Uri uri)</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> <span class="string">"com.android.providers.downloads.documents"</span>.equals(uri.getAuthority());</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">/**</span></div><div class="line">     * <span class="doctag">@param</span> uri The Uri to check.</div><div class="line">     * <span class="doctag">@return</span> Whether the Uri authority is MediaProvider.</div><div class="line">     */</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">boolean</span> <span class="title">isMediaDocument</span><span class="params">(Uri uri)</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> <span class="string">"com.android.providers.media.documents"</span>.equals(uri.getAuthority());</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">/**</span></div><div class="line">     * Get the value of the data column for this Uri. This is useful for</div><div class="line">     * MediaStore Uris, and other file-based ContentProviders.</div><div class="line">     *</div><div class="line">     * <span class="doctag">@param</span> context The context.</div><div class="line">     * <span class="doctag">@param</span> uri The Uri to query.</div><div class="line">     * <span class="doctag">@param</span> selection (Optional) Filter used in the query.</div><div class="line">     * <span class="doctag">@param</span> selectionArgs (Optional) Selection arguments used in the query.</div><div class="line">     * <span class="doctag">@return</span> The value of the _data column, which is typically a file path.</div><div class="line">     */</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">getDataColumn</span><span class="params">(Context context, Uri uri, String selection,</span></span></div><div class="line">                                       String[] selectionArgs) &#123;</div><div class="line"></div><div class="line">        Cursor cursor = <span class="keyword">null</span>;</div><div class="line">        <span class="keyword">final</span> String column = <span class="string">"_data"</span>;</div><div class="line">        <span class="keyword">final</span> String[] projection = &#123;</div><div class="line">                column</div><div class="line">        &#125;;</div><div class="line"></div><div class="line">        <span class="keyword">try</span> &#123;</div><div class="line">            cursor = context.getContentResolver().query(uri, projection, selection, selectionArgs,</div><div class="line">                    <span class="keyword">null</span>);</div><div class="line">            <span class="keyword">if</span> (cursor != <span class="keyword">null</span> &amp;&amp; cursor.moveToFirst()) &#123;</div><div class="line">                <span class="keyword">final</span> <span class="keyword">int</span> column_index = cursor.getColumnIndexOrThrow(column);</div><div class="line">                <span class="keyword">return</span> cursor.getString(column_index);</div><div class="line">            &#125;</div><div class="line">        &#125; <span class="keyword">finally</span> &#123;</div><div class="line">            <span class="keyword">if</span> (cursor != <span class="keyword">null</span>)</div><div class="line">                cursor.close();</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">/**</span></div><div class="line">     * Get a file path from a Uri. This will get the the path for Storage Access</div><div class="line">     * Framework Documents, as well as the _data field for the MediaStore and</div><div class="line">     * other file-based ContentProviders.</div><div class="line">     *</div><div class="line">     * <span class="doctag">@param</span> context The context.</div><div class="line">     * <span class="doctag">@param</span> uri The Uri to query.</div><div class="line">     * <span class="doctag">@author</span> paulburke</div><div class="line">     */</div><div class="line">    <span class="meta">@SuppressLint</span>(<span class="string">"NewApi"</span>)</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">getPath</span><span class="params">(<span class="keyword">final</span> Context context, <span class="keyword">final</span> Uri uri)</span> </span>&#123;</div><div class="line"></div><div class="line">        <span class="keyword">final</span> <span class="keyword">boolean</span> isKitKat = Build.VERSION.SDK_INT &gt;= Build.VERSION_CODES.KITKAT;</div><div class="line"></div><div class="line">        <span class="comment">// DocumentProvider</span></div><div class="line">        <span class="keyword">if</span> (isKitKat &amp;&amp; DocumentsContract.isDocumentUri(context, uri)) &#123;</div><div class="line">            <span class="comment">// ExternalStorageProvider</span></div><div class="line">            <span class="keyword">if</span> (isExternalStorageDocument(uri)) &#123;</div><div class="line">                <span class="keyword">final</span> String docId = DocumentsContract.getDocumentId(uri);</div><div class="line">                <span class="keyword">final</span> String[] split = docId.split(<span class="string">":"</span>);</div><div class="line">                <span class="keyword">final</span> String type = split[<span class="number">0</span>];</div><div class="line"></div><div class="line">                <span class="keyword">if</span> (<span class="string">"primary"</span>.equalsIgnoreCase(type)) &#123;</div><div class="line">                    <span class="keyword">return</span> Environment.getExternalStorageDirectory() + <span class="string">"/"</span> + split[<span class="number">1</span>];</div><div class="line">                &#125;</div><div class="line"></div><div class="line">                <span class="comment">// TODO handle non-primary volumes</span></div><div class="line">            &#125;</div><div class="line">            <span class="comment">// DownloadsProvider</span></div><div class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (isDownloadsDocument(uri)) &#123;</div><div class="line"></div><div class="line">                <span class="keyword">final</span> String id = DocumentsContract.getDocumentId(uri);</div><div class="line">                <span class="keyword">final</span> Uri contentUri = ContentUris.withAppendedId(</div><div class="line">                        Uri.parse(<span class="string">"content://downloads/public_downloads"</span>), Long.valueOf(id));</div><div class="line"></div><div class="line">                <span class="keyword">return</span> getDataColumn(context, contentUri, <span class="keyword">null</span>, <span class="keyword">null</span>);</div><div class="line">            &#125;</div><div class="line">            <span class="comment">// MediaProvider</span></div><div class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (isMediaDocument(uri)) &#123;</div><div class="line">                <span class="keyword">final</span> String docId = DocumentsContract.getDocumentId(uri);</div><div class="line">                <span class="keyword">final</span> String[] split = docId.split(<span class="string">":"</span>);</div><div class="line">                <span class="keyword">final</span> String type = split[<span class="number">0</span>];</div><div class="line"></div><div class="line">                Uri contentUri = <span class="keyword">null</span>;</div><div class="line">                <span class="keyword">if</span> (<span class="string">"image"</span>.equals(type)) &#123;</div><div class="line">                    contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;</div><div class="line">                &#125; <span class="keyword">else</span> <span class="keyword">if</span> (<span class="string">"video"</span>.equals(type)) &#123;</div><div class="line">                    contentUri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;</div><div class="line">                &#125; <span class="keyword">else</span> <span class="keyword">if</span> (<span class="string">"audio"</span>.equals(type)) &#123;</div><div class="line">                    contentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;</div><div class="line">                &#125;</div><div class="line"></div><div class="line">                <span class="keyword">final</span> String selection = <span class="string">"_id=?"</span>;</div><div class="line">                <span class="keyword">final</span> String[] selectionArgs = <span class="keyword">new</span> String[] &#123;</div><div class="line">                        split[<span class="number">1</span>]</div><div class="line">                &#125;;</div><div class="line"></div><div class="line">                <span class="keyword">return</span> getDataColumn(context, contentUri, selection, selectionArgs);</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        <span class="comment">// MediaStore (and general)</span></div><div class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (<span class="string">"content"</span>.equalsIgnoreCase(uri.getScheme())) &#123;</div><div class="line">            <span class="keyword">return</span> getDataColumn(context, uri, <span class="keyword">null</span>, <span class="keyword">null</span>);</div><div class="line">        &#125;</div><div class="line">        <span class="comment">// File</span></div><div class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (<span class="string">"file"</span>.equalsIgnoreCase(uri.getScheme())) &#123;</div><div class="line">            <span class="keyword">return</span> uri.getPath();</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>再有，即使获取的结果为null，也要传给web，即直接调用<code>mUploadMessage.onReceiveValue(null)</code>,否则网页会阻塞。</p>
+<p>最后，在打release包的时候，因为我们会混淆，要特别设置不要混淆WebChromeClient子类里面的openFileChooser方法，由于不是继承的方法，所以默认会被混淆，然后就无法选择文件了。</p>
+<p>就这样吧。</p>
+<blockquote>
+<p>原文地址：<a href="http://blog.isming.me/2015/12/21/android-webview-upload-file/">http://blog.isming.me/2015/12/21/android-webview-upload-file/</a>，转载请注明出处。</p>
+</blockquote>
+
+        
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2016/01/09/chang-android-statusbar-text-color/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption"><</strong>
+      <div class="article-nav-title">
+        
+          Android系统更改状态栏字体颜色
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2015/10/18/webview-use/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Android WebView使用的技巧与一些坑</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share">
+
+<div class="bdsharebuttonbox">
+    <i>分享到：</i>
+    <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+    <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间"></a>
+    <a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博"></a>
+    <a href="#" class="bds_sqq" data-cmd="sqq" title="分享到QQ好友"></a>
+    <a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网"></a>
+    <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+    <a href="#" class="bds_more" data-cmd="more"></a>
+</div>
+
+    <script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"1","bdSize":"32"},"share":{"bdCustomStyle":"bdshare:"}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
+
+</div>
+
+
+
+
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" ></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"isming"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2017 Sam
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    <script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3Fc22f102f5fbaa79cf43b93add1805f4f' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/mobile.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+
+<! -- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+
+  </div>
+</body>
+</html>

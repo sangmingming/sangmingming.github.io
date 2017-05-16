@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="theme-color" content="#778899">
+  
+  <title>码农明明桑</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="明明的个人技术记录">
+<meta property="og:type" content="website">
+<meta property="og:title" content="码农明明桑">
+<meta property="og:url" content="http://blog.isming.me/page/2/index.html">
+<meta property="og:site_name" content="码农明明桑">
+<meta property="og:description" content="明明的个人技术记录">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="码农明明桑">
+<meta name="twitter:description" content="明明的个人技术记录">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="http://apps.bdimg.com/libs/jquery/1.9.0/jquery.min.js"></script>
+</head>
+
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			<img src="http://isming.qiniudn.com/my_avatar.jpg">
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">Sam</a></h1>
+		</hgroup>
+
+		
+		<p class="header-subtitle">技术路上的一些记录</p>
+		
+
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+							<li><a href="/links">朋友</a></li>
+				        
+							<li><a href="/about">关于</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="github" target="_blank" href="https://github.com/sangmingming" title="github">github</a>
+					        
+								<a class="weibo" target="_blank" href="http://weibo.com/mingmingsang" title="weibo">weibo</a>
+					        
+								<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				
+				
+
+				
+			</div>
+		</div>
+	</header>				
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">Sam</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+				<img src="http://isming.qiniudn.com/my_avatar.jpg">
+				<hgroup>
+				  <h1 class="header-author">Sam</h1>
+				</hgroup>
+			</div>
+			
+			<p class="header-subtitle">技术路上的一些记录</p>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+					<li><a href="/links">朋友</a></li>
+		        
+					<li><a href="/about">关于</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="https://github.com/sangmingming" title="github">github</a>
+			        
+						<a class="weibo" target="_blank" href="http://weibo.com/mingmingsang" title="weibo">weibo</a>
+			        
+						<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+      <div class="body-wrap">
+  
+    <article id="post-android-multi-dex" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/05/01/android-multi-dex/" class="article-date">
+  	<time datetime="2015-04-30T16:33:08.000Z" itemprop="datePublished">2015年5月1日</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/05/01/android-multi-dex/">打破Android应用65K方法数魔咒</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>近日，我们的应用，在编译的时候不幸的遇到这个错误</p>
+<blockquote>
+<p>Conversion to Dalvik format failed: Unable to execute dex: method ID not in [0, 0xffff]: 65536</p>
+</blockquote>
+<p>这才让我意识到原来我们的程序中，方法数已经超过了65536。在之前，已经知道了android系统的java虚拟机dalvik在执行java程序时，使用原生类型short来索引dex文件中的方法，因此方法数就呗限制在65536了。之前我一直以为，这个数量已经很大了，不会达到上限，结果今天就达到了。</p>
+<p>不过这个东西呢，我们也是很容易的进行解决的，因为，就在去年不久前，google官方提供了多dex的支持库，因此，我们可以很简单的解决这个问题。</p>
+        <hr/>
+        <p class="article-more-link">
+          <a  href="/2015/05/01/android-multi-dex/#more">more >></a>
+        </p>
+      
+    </div>
+    
+    <div class="article-info">
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android/">android</a></li></ul>
+	</div>
+
+      
+
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+  
+    <article id="post-android-build-speed-up" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/03/18/android-build-speed-up/" class="article-date">
+  	<time datetime="2015-03-18T14:56:10.000Z" itemprop="datePublished">2015年3月18日</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/03/18/android-build-speed-up/">加速Android Studio/Gradle构建</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>已经使用Android Studio进行开发超过一年，随着项目的增大，依赖库的增多，构建速度越来越慢，现在最慢要6分钟才能build一个release的安装包，在网上查找资料，发现可以通过一些配置可以加快速度，这里跟大家分享一下。</p>
+<h3 id="开启gradle单独的守护进程"><a href="#开启gradle单独的守护进程" class="headerlink" title="开启gradle单独的守护进程"></a>开启gradle单独的守护进程</h3><p>在下面的目录下面创建<code>gradle.properties</code>文件：</p>
+<ul>
+<li><code>/home/&lt;username&gt;/.gradle/</code> (Linux)     </li>
+<li><code>/Users/&lt;username&gt;/.gradle/</code> (Mac)</li>
+<li><code>C:\Users\&lt;username&gt;\.gradle</code> (Windows)</li>
+</ul>
+<p>并在文件中增加：<br><figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">org.gradle.daemon=<span class="literal">true</span></div></pre></td></tr></table></figure></p>
+        <hr/>
+        <p class="article-more-link">
+          <a  href="/2015/03/18/android-build-speed-up/#more">more >></a>
+        </p>
+      
+    </div>
+    
+    <div class="article-info">
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android/">android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android-studio/">android studio</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/gradle/">gradle</a></li></ul>
+	</div>
+
+      
+
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+  
+    <article id="post-java-annotation" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/03/06/java-annotation/" class="article-date">
+  	<time datetime="2015-03-05T16:19:19.000Z" itemprop="datePublished">2015年3月6日</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/03/06/java-annotation/">java注解</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>从java 5.0开始，为我们提供注解功能，通过注解可以限制代码的重载，过时，以及实现一些其他功能，这里，就来分析一下java的注解。</p>
+<h3 id="java-元注解"><a href="#java-元注解" class="headerlink" title="java 元注解"></a>java 元注解</h3><p>首先来看java元注解，分别是：</p>
+        <hr/>
+        <p class="article-more-link">
+          <a  href="/2015/03/06/java-annotation/#more">more >></a>
+        </p>
+      
+    </div>
+    
+    <div class="article-info">
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android/">android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li></ul>
+	</div>
+
+      
+
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+  
+    <article id="post-android-view-animation" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/02/01/android-view-animation/" class="article-date">
+  	<time datetime="2015-02-01T03:10:50.000Z" itemprop="datePublished">2015年2月1日</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/02/01/android-view-animation/">android动画-View Animation</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>视图动画（View Animation）,又称补间动画（Tween Animation）,即给出两个关键帧，通过一些算法将给定属性值在给定的时间内在两个关键帧间渐变。本文首先讲解各种基本动画的使用，其实介绍View动画的工作过程。</p>
+<h3 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h3><p>视图动画只能作用于View对象，是对View的变换，默认支持的类型有：</p>
+<ul>
+<li>透明度变化(AlphaAnimation)</li>
+<li>缩放(ScaleAnimation)</li>
+<li>位移(TranslateAnimation)</li>
+<li>旋转(RotateAnimation)</li>
+</ul>
+<p>可以使用AnimationSet让多个动画集合在一起运行，使用插值器(Interpolator)设置动画的速度。</p>
+        <hr/>
+        <p class="article-more-link">
+          <a  href="/2015/02/01/android-view-animation/#more">more >></a>
+        </p>
+      
+    </div>
+    
+    <div class="article-info">
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android/">android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/animation/">animation</a></li></ul>
+	</div>
+
+      
+
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+  
+    <article id="post-android-frame-animation" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/01/28/android-frame-animation/" class="article-date">
+  	<time datetime="2015-01-28T12:13:47.000Z" itemprop="datePublished">2015年1月28日</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/01/28/android-frame-animation/">android动画-Frame Animation</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>动画可以在视觉上增加程序的流畅度，我之前对于动画这一块，是会用，但是不全面，这里写下博客，全面梳理一下Android动画方面的知识。当然，关于动画这块，也有很多前人写了很多内容，大家可以去参考。</p>
+<p>3.0以前，android支持两种动画模式，<em>Tween Animation</em>,<em>Frame Animation</em>，在android3.0中又引入了一个新的动画系统：<em>Property Animation</em>，这三种动画模式在SDK中被称为<em>Property Animation</em>,<em>View Animation</em>,<em>Drawable Animation</em>。 可通过<a href="http://nineoldandroids.com/" target="_blank" rel="external">NineOldAndroids</a>项目在3.0之前的系统中使用Property Animation。另外呢，还有activity之间的过渡动画，android5.0增加的矢量动画，过渡效果等。</p>
+<p>本文首先来说Frame Animation.</p>
+        <hr/>
+        <p class="article-more-link">
+          <a  href="/2015/01/28/android-frame-animation/#more">more >></a>
+        </p>
+      
+    </div>
+    
+    <div class="article-info">
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android/">android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/animation/">animation</a></li></ul>
+	</div>
+
+      
+
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+  
+    <article id="post-android-anti-decompile" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/01/18/android-anti-decompile/" class="article-date">
+  	<time datetime="2015-01-17T17:35:53.000Z" itemprop="datePublished">2015年1月18日</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/01/18/android-anti-decompile/">android反编译-如何防止反编译</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>前面介绍了怎样去反编译别人的代码。哈哈，这里居然又写进行防止反编译。但是，还是先来写写吧。</p>
+<h3 id="使用ProGuard"><a href="#使用ProGuard" class="headerlink" title="使用ProGuard"></a>使用ProGuard</h3><p>proguard android的sdk中就有提供，使用它可以对代码进行混淆和精简，处理后的代码，虽然仍然可以反编译，但是阅读起来相当困难，降低代码的可读性。操作简单，推荐使用。</p>
+        <hr/>
+        <p class="article-more-link">
+          <a  href="/2015/01/18/android-anti-decompile/#more">more >></a>
+        </p>
+      
+    </div>
+    
+    <div class="article-info">
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android/">android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/decompile/">decompile</a></li></ul>
+	</div>
+
+      
+
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+  
+    <article id="post-android-decompile-smali" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/01/14/android-decompile-smali/" class="article-date">
+  	<time datetime="2015-01-14T15:52:44.000Z" itemprop="datePublished">2015年1月14日</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/01/14/android-decompile-smali/">android反编译-smali语法</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>前面我们有说过android反编译的工具，如何进行反编译。反编译后可以得到jar或者得到smali文件。Android采用的是java语言进行开发，但是Android系统有自己的虚拟机Dalvik,代码编译最终不是采用的java的class，而是使用的smali。我们反编译得到的代码，jar的话可能很多地方无法正确的解释出来，如果我们反编译的是smali则可以正确的理解程序的意思。因此，我们有必要熟悉smali语法。</p>
+<h3 id="类型的表示"><a href="#类型的表示" class="headerlink" title="类型的表示"></a>类型的表示</h3><p>java里面包含两种类型，原始类型和引用类型(包括对象)，同时映射到smali也是有这两大类型。</p>
+        <hr/>
+        <p class="article-more-link">
+          <a  href="/2015/01/14/android-decompile-smali/#more">more >></a>
+        </p>
+      
+    </div>
+    
+    <div class="article-info">
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android/">android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/decompile/">decompile</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/smali/">smali</a></li></ul>
+	</div>
+
+      
+
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+  
+    <article id="post-android-decompile-tools" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/01/11/android-decompile-tools/" class="article-date">
+  	<time datetime="2015-01-11T14:19:17.000Z" itemprop="datePublished">2015年1月11日</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/01/11/android-decompile-tools/">android反编译-反编译工具和方法</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>开发过程中有些时候会遇到一些功能，自己不知道该怎么做，然而别的软件里面已经有了，这个时候可以采用反编译的方式，解开其他的程序，来了解一些它的做法，同时啊，还可以借鉴别人的软件结构，资源文件，等等，哈哈。那我就来讲解一些关于反编译相关的知识，主要分三篇，第一篇介绍反编译的工具和方法，第二篇，介绍smali的语法,第三篇介绍如何防止反编译，主要通过这几篇文章，了解如何去做反编译和代码加固。<br>
+        <hr/>
+        <p class="article-more-link">
+          <a  href="/2015/01/11/android-decompile-tools/#more">more >></a>
+        </p>
+      
+    </div>
+    
+    <div class="article-info">
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android/">android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/decompile/">decompile</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/tools/">tools</a></li></ul>
+	</div>
+
+      
+
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+  
+    <article id="post-2014-review" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/01/05/2014-review/" class="article-date">
+  	<time datetime="2015-01-05T14:24:37.000Z" itemprop="datePublished">2015年1月5日</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/01/05/2014-review/">2014年总结</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="14年总结"><a href="#14年总结" class="headerlink" title="14年总结"></a>14年总结</h3><p>又一年开始，网上也流散着许多的年终总结，往年我也会写写，都是流水的回忆。前两日，与小波电话聊天，突然想到问他一四年用三个词总结是什么？得到的是失恋，毕业，工作。让我说说2014的三个词，竟然一时无从说起。这两日一直思考这个问题，毕竟这一年过的比较平淡。用三个关键词形容2014，就是”踏实”, “责任”和”收获”吧。</p>
+        <hr/>
+        <p class="article-more-link">
+          <a  href="/2015/01/05/2014-review/#more">more >></a>
+        </p>
+      
+    </div>
+    
+    <div class="article-info">
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/乱弹/">乱弹</a></li></ul>
+	</div>
+
+      
+
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+  
+    <article id="post-import-library-to-android-studio" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2014/12/12/import-library-to-android-studio/" class="article-date">
+  	<time datetime="2014-12-12T14:22:34.000Z" itemprop="datePublished">2014年12月12日</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2014/12/12/import-library-to-android-studio/">导入开源库到基于Android Studio构建的项目中</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>前两天，谷歌发布了Android Studio 1.0的正式版，也有更多的人开始迁移到Android Studio进行开发。然而，网上很多的开源库,控件等还是以前的基于Eclipse进行开发，很多人不知道怎么导入到自己的基于Android Studio项目中来，微博上也有人私信我，让我来写写，正好今天回来的比较早，就写写吧。主要介绍一下常见的一些导包的场景。</p>
+        <hr/>
+        <p class="article-more-link">
+          <a  href="/2014/12/12/import-library-to-android-studio/#more">more >></a>
+        </p>
+      
+    </div>
+    
+    <div class="article-info">
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android/">android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android-studio/">android studio</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/gradle/">gradle</a></li></ul>
+	</div>
+
+      
+
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+  
+  
+    <nav id="page-nav">
+      <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/3/">Next &raquo;</a>
+    </nav>
+  
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2017 Sam
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    <script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3Fc22f102f5fbaa79cf43b93add1805f4f' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/mobile.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+
+<! -- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+
+  </div>
+</body>
+</html>

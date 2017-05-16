@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="theme-color" content="#778899">
+  
+  <title>Toast的使用详解 | 码农明明桑</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Android中提供一种简单的Toast消息提示框机制，可以在用户点击了某些按钮后，提示用户一些信息，提示的信息不能被用户点击，Toast的提示信息根据用户设置的显示时间后自动消失。Toast的提示信息可以在调试程序的时候方便的显示某些想显示的东西,或者给用户提供友好的界面显示效果。 有两种方式去创建并且显示Toast：">
+<meta name="keywords" content="android">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Toast的使用详解">
+<meta property="og:url" content="http://blog.isming.me/2014/03/22/toast-use/index.html">
+<meta property="og:site_name" content="码农明明桑">
+<meta property="og:description" content="Android中提供一种简单的Toast消息提示框机制，可以在用户点击了某些按钮后，提示用户一些信息，提示的信息不能被用户点击，Toast的提示信息根据用户设置的显示时间后自动消失。Toast的提示信息可以在调试程序的时候方便的显示某些想显示的东西,或者给用户提供友好的界面显示效果。 有两种方式去创建并且显示Toast：">
+<meta property="og:updated_time" content="2017-05-16T02:31:11.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Toast的使用详解">
+<meta name="twitter:description" content="Android中提供一种简单的Toast消息提示框机制，可以在用户点击了某些按钮后，提示用户一些信息，提示的信息不能被用户点击，Toast的提示信息根据用户设置的显示时间后自动消失。Toast的提示信息可以在调试程序的时候方便的显示某些想显示的东西,或者给用户提供友好的界面显示效果。 有两种方式去创建并且显示Toast：">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="http://apps.bdimg.com/libs/jquery/1.9.0/jquery.min.js"></script>
+</head>
+
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			<img src="http://isming.qiniudn.com/my_avatar.jpg">
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">Sam</a></h1>
+		</hgroup>
+
+		
+		<p class="header-subtitle">技术路上的一些记录</p>
+		
+
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+							<li><a href="/links">朋友</a></li>
+				        
+							<li><a href="/about">关于</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="github" target="_blank" href="https://github.com/sangmingming" title="github">github</a>
+					        
+								<a class="weibo" target="_blank" href="http://weibo.com/mingmingsang" title="weibo">weibo</a>
+					        
+								<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				
+				
+
+				
+			</div>
+		</div>
+	</header>				
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">Sam</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+				<img src="http://isming.qiniudn.com/my_avatar.jpg">
+				<hgroup>
+				  <h1 class="header-author">Sam</h1>
+				</hgroup>
+			</div>
+			
+			<p class="header-subtitle">技术路上的一些记录</p>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+					<li><a href="/links">朋友</a></li>
+		        
+					<li><a href="/about">关于</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="https://github.com/sangmingming" title="github">github</a>
+			        
+						<a class="weibo" target="_blank" href="http://weibo.com/mingmingsang" title="weibo">weibo</a>
+			        
+						<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+      <div class="body-wrap"><article id="post-toast-use" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2014/03/22/toast-use/" class="article-date">
+  	<time datetime="2014-03-22T01:44:05.000Z" itemprop="datePublished">2014年3月22日</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Toast的使用详解
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android/">android</a></li></ul>
+	</div>
+
+        
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Android中提供一种简单的Toast消息提示框机制，可以在用户点击了某些按钮后，提示用户一些信息，提示的信息不能被用户点击，Toast的提示信息根据用户设置的显示时间后自动消失。Toast的提示信息可以在调试程序的时候方便的显示某些想显示的东西,或者给用户提供友好的界面显示效果。</p>
+<h4 id="有两种方式去创建并且显示Toast："><a href="#有两种方式去创建并且显示Toast：" class="headerlink" title="有两种方式去创建并且显示Toast："></a>有两种方式去创建并且显示Toast：</h4><a id="more"></a>
+<ol>
+<li><p>Toast.makeText(Context context, int resId, int duration)<br> Toast.makeText(Context context, CharSequence text, int duration)<br>Context为上下文，通常为当前activity;resId是string字符串的id，CharSequence为你要显示的字符串，duration为显示的时间，可以选择Toast.LENGTH_SHORT或Toast.LENGTH_LONG,也可自定义时间。<br> 使用方法：<br><code>Toast.makeText(this, &quot;this is string&quot;, Toast.LENGTH_SHORT).show();</code></p>
+</li>
+<li><p>自己创建Toast，并且设置视图，即自定义<br>如：</p>
+</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">Toast toast = <span class="keyword">new</span> Toast(<span class="keyword">this</span>);		</div><div class="line"><span class="comment">// 定义一个ImageView		</span></div><div class="line">ImageView imageView = <span class="keyword">new</span> ImageView(<span class="keyword">this</span>);		</div><div class="line">imageView.setImageResource(R.drawable.ic_launcher);		</div><div class="line"><span class="comment">// 定义一个Layout，这里是Layout		</span></div><div class="line">LinearLayout Layout = <span class="keyword">new</span> LinearLayout(<span class="keyword">this</span>);		</div><div class="line">Layout.setOrientation(LinearLayout.HORIZONTAL);		</div><div class="line"><span class="comment">// 将ImageView放到Layout中		</span></div><div class="line">Layout.addView(imageView);		</div><div class="line"><span class="comment">// 设置View		</span></div><div class="line">toast.setView(Layout);		</div><div class="line"><span class="comment">//设置显示时间		</span></div><div class="line">toast.setDuration(<span class="number">20</span>);		</div><div class="line">toast.show();</div></pre></td></tr></table></figure>
+<p>通过上面的代码就可以自己定义一个Toast了，我们还在其中显示了图片。</p>
+<h4 id="如何设置Toast显示的位置"><a href="#如何设置Toast显示的位置" class="headerlink" title="如何设置Toast显示的位置"></a>如何设置Toast显示的位置</h4><p>方法一：</p>
+<p><em>setGravity(int gravity, int xOffset, int yOffset)</em> 三个参数分别表示(起点位置,水平向右位移,垂直向下位移)</p>
+<p> 方法二：</p>
+<p><em>setMargin(float horizontalMargin, float verticalMargin)</em><br> 以横向和纵向的百分比设置显示位置，参数均为float类型(水平位移正右负左，竖直位移正上负下)</p>
+<h4 id="注意事项："><a href="#注意事项：" class="headerlink" title="注意事项："></a>注意事项：</h4><p>Toast中有一个public方法setText（），可以给toast设置resid或者string，该方式尽可以在我们的第一种方法中使用，第二种自定义toast的方式是不可以使用的，使用的话会抛出异常。</p>
+<p>原因是使用第一种方式创建，Toast会自己创建一个view，即textview，而我们使用这个setText实际是向这个TextView设置内容，而自定义的View不会有这个控件，因此会报错。</p>
+
+        
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2014/03/25/manage-activityde-lifecycle/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption"><</strong>
+      <div class="article-nav-title">
+        
+          管理Activity的生命周期
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2014/03/16/androidyi-bu-cao-zuo-zong-jie/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">android异步操作总结</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share">
+
+<div class="bdsharebuttonbox">
+    <i>分享到：</i>
+    <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+    <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间"></a>
+    <a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博"></a>
+    <a href="#" class="bds_sqq" data-cmd="sqq" title="分享到QQ好友"></a>
+    <a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网"></a>
+    <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+    <a href="#" class="bds_more" data-cmd="more"></a>
+</div>
+
+    <script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"1","bdSize":"32"},"share":{"bdCustomStyle":"bdshare:"}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
+
+</div>
+
+
+
+
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" ></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"isming"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2017 Sam
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    <script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3Fc22f102f5fbaa79cf43b93add1805f4f' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/mobile.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+
+<! -- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+
+  </div>
+</body>
+</html>

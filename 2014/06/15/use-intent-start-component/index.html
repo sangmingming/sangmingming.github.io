@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="theme-color" content="#778899">
+  
+  <title>使用Intent启动组件 | 码农明明桑</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="android应用程序的三大组件——Activities、Services、Broadcast Receiver，通过消息触发，这个消息就是Intent，中文又翻译为”意图”(我感觉读着不顺畅,还是读英文)。我们可以通过Intent去启动三大组件，并且通过Intent携带数据到其他组件中。本文来看一下怎么使用Intent启动组件，以及Intent的过滤规则。 Intent对象首先来看Intent对">
+<meta name="keywords" content="android,intent">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用Intent启动组件">
+<meta property="og:url" content="http://blog.isming.me/2014/06/15/use-intent-start-component/index.html">
+<meta property="og:site_name" content="码农明明桑">
+<meta property="og:description" content="android应用程序的三大组件——Activities、Services、Broadcast Receiver，通过消息触发，这个消息就是Intent，中文又翻译为”意图”(我感觉读着不顺畅,还是读英文)。我们可以通过Intent去启动三大组件，并且通过Intent携带数据到其他组件中。本文来看一下怎么使用Intent启动组件，以及Intent的过滤规则。 Intent对象首先来看Intent对">
+<meta property="og:updated_time" content="2017-05-16T02:31:11.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="使用Intent启动组件">
+<meta name="twitter:description" content="android应用程序的三大组件——Activities、Services、Broadcast Receiver，通过消息触发，这个消息就是Intent，中文又翻译为”意图”(我感觉读着不顺畅,还是读英文)。我们可以通过Intent去启动三大组件，并且通过Intent携带数据到其他组件中。本文来看一下怎么使用Intent启动组件，以及Intent的过滤规则。 Intent对象首先来看Intent对">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="http://apps.bdimg.com/libs/jquery/1.9.0/jquery.min.js"></script>
+</head>
+
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			<img src="http://isming.qiniudn.com/my_avatar.jpg">
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">Sam</a></h1>
+		</hgroup>
+
+		
+		<p class="header-subtitle">技术路上的一些记录</p>
+		
+
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+							<li><a href="/links">朋友</a></li>
+				        
+							<li><a href="/about">关于</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="github" target="_blank" href="https://github.com/sangmingming" title="github">github</a>
+					        
+								<a class="weibo" target="_blank" href="http://weibo.com/mingmingsang" title="weibo">weibo</a>
+					        
+								<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				
+				
+
+				
+			</div>
+		</div>
+	</header>				
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">Sam</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+				<img src="http://isming.qiniudn.com/my_avatar.jpg">
+				<hgroup>
+				  <h1 class="header-author">Sam</h1>
+				</hgroup>
+			</div>
+			
+			<p class="header-subtitle">技术路上的一些记录</p>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+					<li><a href="/links">朋友</a></li>
+		        
+					<li><a href="/about">关于</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="https://github.com/sangmingming" title="github">github</a>
+			        
+						<a class="weibo" target="_blank" href="http://weibo.com/mingmingsang" title="weibo">weibo</a>
+			        
+						<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+      <div class="body-wrap"><article id="post-use-intent-start-component" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2014/06/15/use-intent-start-component/" class="article-date">
+  	<time datetime="2014-06-15T15:19:37.000Z" itemprop="datePublished">2014年6月15日</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      使用Intent启动组件
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android/">android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/intent/">intent</a></li></ul>
+	</div>
+
+        
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>android应用程序的三大组件——Activities、Services、Broadcast Receiver，通过消息触发，这个消息就是Intent，中文又翻译为”意图”(我感觉读着不顺畅,还是读英文)。我们可以通过Intent去启动三大组件，并且通过Intent携带数据到其他组件中。本文来看一下怎么使用Intent启动组件，以及Intent的过滤规则。</p>
+<h2 id="Intent对象"><a href="#Intent对象" class="headerlink" title="Intent对象"></a>Intent对象</h2><p>首先来看Intent对象中包含的成员。<br><a id="more"></a></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">private</span> String mAction;   <span class="comment">//动作</span></div><div class="line"><span class="keyword">private</span> Uri mData;		  <span class="comment">//数据</span></div><div class="line"><span class="keyword">private</span> String mType;</div><div class="line"><span class="keyword">private</span> String mPackage;   <span class="comment">//包名</span></div><div class="line"><span class="keyword">private</span> ComponentName mComponent;  <span class="comment">//组件名 包含程序包名+类名，以及应用包名</span></div><div class="line"><span class="keyword">private</span> <span class="keyword">int</span> mFlags;			<span class="comment">//标志</span></div><div class="line"><span class="keyword">private</span> HashSet&lt;String&gt; mCategories;   <span class="comment">//种类</span></div><div class="line"><span class="keyword">private</span> Bundle mExtras;    <span class="comment">//附加信息</span></div><div class="line"><span class="keyword">private</span> Rect mSourceBounds;</div><div class="line"><span class="keyword">private</span> Intent mSelector;</div><div class="line"><span class="keyword">private</span> ClipData mClipData;</div></pre></td></tr></table></figure>
+<p>看Intent的源码，主要包含以上成员。</p>
+<h2 id="Intent解析"><a href="#Intent解析" class="headerlink" title="Intent解析"></a>Intent解析</h2><p>Intent解析有两种方式：显式解析和隐式解析。</p>
+<p>显式解析，我们直接传组件进入，打开这个指定的组件，比较简单，通常应用程序内使用。<br>比如我们创建一个显式的Intent：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Intent intent = <span class="keyword">new</span> Intent(context, OtherActivity.class);</div></pre></td></tr></table></figure>
+<p>隐式解析，没有指定具体的组件，通过规则去匹配组件。通常用于多个程序之间的互相调用比较多。我们使用隐式解析式，action、data（包括URI和数据类型）、category都必须有。比如我们启动浏览器去打开一个网址，intent可以这样创建：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Intent intent = <span class="keyword">new</span> Intent(Intent.ACTION_VIEW);</div><div class="line">intent.setData(Uri.parse(<span class="string">"http://blog.isming.me"</span>));</div></pre></td></tr></table></figure>
+<p>上面没有填写category，创建Intent的时候会自动填写为default。</p>
+<p>##等待补充吧。</p>
+<p>####乱扯</p>
+<p>好吧，本来像，会写的很长的，但是真正想写的时候，发现就这么简单，也没什么好写的。下次多看看源码，再看有没有要补充的。就酱紫了！</p>
+
+        
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2014/06/22/my-soft-in-ubuntu/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption"><</strong>
+      <div class="article-nav-title">
+        
+          一个程序员的Ubuntu安装的那些软件
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2014/06/04/parse-json-in-android/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">android中JSON的解析</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share">
+
+<div class="bdsharebuttonbox">
+    <i>分享到：</i>
+    <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+    <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间"></a>
+    <a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博"></a>
+    <a href="#" class="bds_sqq" data-cmd="sqq" title="分享到QQ好友"></a>
+    <a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网"></a>
+    <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+    <a href="#" class="bds_more" data-cmd="more"></a>
+</div>
+
+    <script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"1","bdSize":"32"},"share":{"bdCustomStyle":"bdshare:"}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
+
+</div>
+
+
+
+
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" ></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"isming"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2017 Sam
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    <script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3Fc22f102f5fbaa79cf43b93add1805f4f' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/mobile.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+
+<! -- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+
+  </div>
+</body>
+</html>

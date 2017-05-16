@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="theme-color" content="#778899">
+  
+  <title>android中JSON的解析 | 码农明明桑</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="android中网络数据传输是经常被用到的，通常我们使用xml或者json，而json更加轻量，便捷，我们使用的更多。我自己在项目中使用很多，今天就说说android中怎么去解析JSON，帮助自己总结内容，同时帮助别人少走弯路。 ##JSON语法首先看JSON的语法和结构，这样我们才知道怎么去解析它。JSON语法时JavaScript对象表示语法的子集。 JSON的值可以是：    数字（整数或者">
+<meta name="keywords" content="android,json">
+<meta property="og:type" content="article">
+<meta property="og:title" content="android中JSON的解析">
+<meta property="og:url" content="http://blog.isming.me/2014/06/04/parse-json-in-android/index.html">
+<meta property="og:site_name" content="码农明明桑">
+<meta property="og:description" content="android中网络数据传输是经常被用到的，通常我们使用xml或者json，而json更加轻量，便捷，我们使用的更多。我自己在项目中使用很多，今天就说说android中怎么去解析JSON，帮助自己总结内容，同时帮助别人少走弯路。 ##JSON语法首先看JSON的语法和结构，这样我们才知道怎么去解析它。JSON语法时JavaScript对象表示语法的子集。 JSON的值可以是：    数字（整数或者">
+<meta property="og:updated_time" content="2017-05-16T02:31:11.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="android中JSON的解析">
+<meta name="twitter:description" content="android中网络数据传输是经常被用到的，通常我们使用xml或者json，而json更加轻量，便捷，我们使用的更多。我自己在项目中使用很多，今天就说说android中怎么去解析JSON，帮助自己总结内容，同时帮助别人少走弯路。 ##JSON语法首先看JSON的语法和结构，这样我们才知道怎么去解析它。JSON语法时JavaScript对象表示语法的子集。 JSON的值可以是：    数字（整数或者">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="http://apps.bdimg.com/libs/jquery/1.9.0/jquery.min.js"></script>
+</head>
+
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			<img src="http://isming.qiniudn.com/my_avatar.jpg">
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">Sam</a></h1>
+		</hgroup>
+
+		
+		<p class="header-subtitle">技术路上的一些记录</p>
+		
+
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+							<li><a href="/links">朋友</a></li>
+				        
+							<li><a href="/about">关于</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="github" target="_blank" href="https://github.com/sangmingming" title="github">github</a>
+					        
+								<a class="weibo" target="_blank" href="http://weibo.com/mingmingsang" title="weibo">weibo</a>
+					        
+								<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				
+				
+
+				
+			</div>
+		</div>
+	</header>				
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">Sam</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+				<img src="http://isming.qiniudn.com/my_avatar.jpg">
+				<hgroup>
+				  <h1 class="header-author">Sam</h1>
+				</hgroup>
+			</div>
+			
+			<p class="header-subtitle">技术路上的一些记录</p>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+					<li><a href="/links">朋友</a></li>
+		        
+					<li><a href="/about">关于</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="https://github.com/sangmingming" title="github">github</a>
+			        
+						<a class="weibo" target="_blank" href="http://weibo.com/mingmingsang" title="weibo">weibo</a>
+			        
+						<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+      <div class="body-wrap"><article id="post-parse-json-in-android" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2014/06/04/parse-json-in-android/" class="article-date">
+  	<time datetime="2014-06-04T14:57:01.000Z" itemprop="datePublished">2014年6月4日</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      android中JSON的解析
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android/">android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/json/">json</a></li></ul>
+	</div>
+
+        
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>android中网络数据传输是经常被用到的，通常我们使用xml或者json，而json更加轻量，便捷，我们使用的更多。我自己在项目中使用很多，今天就说说android中怎么去解析JSON，帮助自己总结内容，同时帮助别人少走弯路。</p>
+<p>##JSON语法<br>首先看JSON的语法和结构，这样我们才知道怎么去解析它。JSON语法时JavaScript对象表示语法的子集。</p>
+<p>JSON的值可以是：  </p>
+<ul>
+<li><p>数字（整数或者浮点数）</p>
+</li>
+<li><p>字符串（在双引号内）</p>
+</li>
+<li><p>逻辑值(true 或 false)</p>
+</li>
+<li><p>数组(使用方括号[]包围)</p>
+</li>
+<li><p>对象( 使用花括号{}包围)</p>
+</li>
+<li><p>null</p>
+</li>
+</ul>
+<p>JSON中有且只有两种结构：对象和数组。</p>
+<p>1、对象：对象在js中表示为“{}”括起来的内容，数据结构为 <em>{key：value,key：value,…}</em>的键值对的结构，在面向对象的语言中，key为对象的属性，value为对应的属性值，所以很容易理解，取值方法为 对象.key 获取属性值，这个属性值的类型可以是 数字、字符串、数组、对象几种。<br><a id="more"></a><br>2、数组：数组在js中是中括号“[]”括起来的内容，数据结构为 <em>[“java”,”javascript”,”vb”,…]</em>，取值方式和所有语言中一样，使用索引获取，字段值的类型可以是 数字、字符串、数组、对象几种。</p>
+<p>##andoroid解析JSON<br>android sdk中为我们提供了org.json，可以用来解析json，在android3.0又为在android.util包JsonReader和JsonWriter来进行json的解析和生成。</p>
+<p>####使用org.json包JSONObject和JSONArray进行解析<br>我们知道json中就两种结构array和object，因此就有这个两个类进行解析。</p>
+<p>如我们有下面几个json字符串：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&#123;<span class="string">"name"</span>:<span class="string">"sam"</span>,<span class="string">"age"</span>:<span class="number">18</span>,<span class="string">"weight"</span>:<span class="number">60</span>&#125; <span class="comment">//json1 一个json对象</span></div><div class="line">[<span class="number">12</span>,<span class="number">13</span>,<span class="number">15</span>]                    <span class="comment">//json2 一个数字数组</span></div><div class="line">[&#123;<span class="string">"name"</span>:<span class="string">"sam"</span>,<span class="string">"age"</span>:<span class="number">18</span>&#125;,&#123;<span class="string">"name"</span>:<span class="string">"leo"</span>,<span class="string">"age"</span>:<span class="number">19</span>&#125;,&#123;<span class="string">"name"</span>:<span class="string">"sky"</span>, <span class="string">"age"</span>:<span class="number">20</span>&#125;] <span class="comment">//json3 json array中有object</span></div></pre></td></tr></table></figure>
+<p>第一个json对象json1的解析</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">JSONObject jsonObj = <span class="keyword">new</span> JSONObject(json1);</div><div class="line">String name = jsonObj.optString(<span class="string">"name"</span>);</div><div class="line"><span class="keyword">int</span> age = jsonObj.optInt(<span class="string">"age"</span>);</div><div class="line"><span class="keyword">int</span> weight = jsonObj.optInt(<span class="string">"weight"</span>);</div></pre></td></tr></table></figure>
+<p>另外还有</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">Object opt（String name）</div><div class="line"><span class="function"><span class="keyword">boolean</span> <span class="title">optBoolean</span><span class="params">(String name)</span></span></div><div class="line"><span class="keyword">double</span> <span class="title">optDouble</span><span class="params">(String name)</span></div><div class="line">JSONArray <span class="title">optJSONArray</span><span class="params">(String name)</span></div><div class="line">JSONObject <span class="title">optJSONObject</span><span class="params">(String name)</span></div></pre></td></tr></table></figure>
+<p>等方法，我推荐用这些方法，这些方法在解析时，如果对应字段不存在会返回空值或者0，不会报错。</p>
+<p>当然如果你使用以下方法<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="function">Object <span class="title">get</span><span class="params">(String name)</span></span></div><div class="line"><span class="keyword">boolean</span> <span class="title">getBoolean</span><span class="params">(String name)</span></div><div class="line"><span class="keyword">int</span> <span class="title">getInt</span><span class="params">(String name)</span></div></pre></td></tr></table></figure></p>
+<p>等方法时，代码不会去判断是否存在该字段，需要你自己去判断，否则的话会报错。自己判断的话使用<code>has(String name)</code>来判断。</p>
+<p>再来看解析数组，简单的数组。第二个json2<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">JSONArray jsonArray = <span class="keyword">new</span> JSONArray(json2);</div><div class="line"><span class="keyword">for</span> (<span class="keyword">int</span> = <span class="number">0</span>; i &lt; jsonArray.length();i++) &#123;</div><div class="line">    <span class="keyword">int</span> age = jsonArray.optInt(i); </div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>解析复杂数组，包含对象，json3<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">JSONArray jsonArray = <span class="keyword">new</span> JSONArray(json3);</div><div class="line"><span class="keyword">for</span> (<span class="keyword">int</span> = <span class="number">0</span>; i &lt; jsonArray.length();i++) &#123;</div><div class="line">    JSONObject jsonObject = jsonArray.optJSONObject(i);</div><div class="line">    String name = jsonObject.optString(<span class="string">"name"</span>);</div><div class="line">    <span class="keyword">int</span> age = jsonObject.optInt(<span class="string">"age"</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>从上面可以看到数组的话解析方法和对象差不多，只是将键值替换为在数组中的下标。另外也是有optXXX（int index）和getXXX（int index）方法的，opt也是安全的，即对应index无值的时候，不会报错，返回空，推荐使用。</p>
+<p>####使用JsonReader进行解析</p>
+<p>JsonReader的使用其实和xml解析中的pull是有一点类似的，我们来看示例。</p>
+<p>前面的JSONObject和JSONArray创建时传的是String，而JsonReader需要传入的时候是Reader，网络访问中，我们可以直接拿输入流传进来，转成Reader。我们这里假设我们上面的String已经转成InputStream了，分别为jsonIs1，jsonIs2,jsonIs3。</p>
+<p>上面的json1解析：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">JsonReader reader = <span class="keyword">new</span> JsonReader(<span class="keyword">new</span> InputStreamReader(jsonIs1));</div><div class="line"><span class="keyword">try</span> &#123;积分：<span class="number">49</span>排名：第<span class="number">1495693</span>名上传资源：<span class="number">1</span></div><div class="line">    reader.beginObject();</div><div class="line">    <span class="keyword">while</span> (reader.hasNext()) &#123;</div><div class="line">        String keyName = reader.nextName();</div><div class="line">        <span class="keyword">if</span> (keyName.equals(<span class="string">"name"</span>)) &#123; </div><div class="line">            String name = reader.nextString();</div><div class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (keyName.equals(<span class="string">"age"</span>)) &#123;</div><div class="line">            <span class="keyword">int</span> age = reader.nextInt();</div><div class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (keyName.equals(<span class="string">"weight"</span>)) &#123;</div><div class="line">            <span class="keyword">int</span> weight = reader.nextInt();</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    reader.endObject();</div><div class="line">&#125; <span class="keyword">finally</span> &#123;</div><div class="line">    reader.close();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>上面json2的解析:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">JsonReader reader = <span class="keyword">new</span> JsonReader(<span class="keyword">new</span> InputStreamReader(jsonIs2));</div><div class="line"><span class="keyword">try</span> &#123;</div><div class="line">    List&lt;Integer&gt; ages = <span class="keyword">new</span> ArrayList&lt;Integer&gt;();</div><div class="line">    reader.beginArray();</div><div class="line">    <span class="keyword">while</span> (reader.hasNext()) &#123;</div><div class="line">        ages.add(reader.nextInt());</div><div class="line">    &#125;</div><div class="line">    reader.endArray();</div><div class="line">&#125; <span class="keyword">finally</span> &#123;</div><div class="line">    reader.close();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>第三个我就不写示例了。</p>
+<p>看到这个的话是通过去遍历我们的json，去取得我们的内容，我觉得在效率上面会比第一种效率高一些。具体使用的话就按照我这两个例子可以写出来的。</p>
+<p>##使用GSON解析JSON</p>
+<p>GSON是谷歌出品，很好用。同时呢还有一些其他的第三方的比如fastjson等，都和Gson差不多，传一个string和要转换的对象，帮你直接直接解析出来，不再需要我们自己一个字段一段字段的解析。这里就以Gson为例吧，因为我只用过Gson，对其最熟悉。^_^</p>
+<p>使用Gson，我们需要导入Gson的包，下载地址<a href="https://code.google.com/p/google-gson/downloads/list" target="_blank" rel="external">https://code.google.com/p/google-gson/downloads/list</a>。</p>
+<p>现在开始看看，怎么解析上面的三个json字符串例子。</p>
+<p>第一个对象json1</p>
+<p>首先我们需要一个实体类<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">People</span></span>&#123;</div><div class="line"></div><div class="line"><span class="keyword">public</span> String name;</div><div class="line"></div><div class="line"><span class="meta">@SerializedName</span>(age)</div><div class="line">pubic <span class="keyword">int</span> mAge;    <span class="comment">//如果我们类中成员的名称和json对象中的键名不同，可以通过注解来设置名字</span></div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="keyword">int</span> weight;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>然后就可以解析了</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Gson gson = <span class="keyword">new</span> Gson();</div><div class="line">Poeple people = gson.fromJson(json1, People.class);</div></pre></td></tr></table></figure>
+<p>对于第二个json2，我们可以解析成int数组，也可以解析成Integer的List。<br>解析成数组：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Gson gson = <span class="keyword">new</span> Gson();</div><div class="line"><span class="keyword">int</span>[] ages = gson.fromJson(json2, <span class="keyword">int</span>[].class);</div></pre></td></tr></table></figure></p>
+<p>解析成List：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Gson gson = <span class="keyword">new</span> Gson();</div><div class="line">List&lt;Integer&gt; ages = gson.fromJson(json2, <span class="keyword">new</span> TypeToken&lt;List&lt;Integer&gt;&gt;()&#123;&#125;.getType);</div></pre></td></tr></table></figure>
+<p>第三个同样可以解析成List或者数组，我们就直接解析成List.<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Gson gson = <span class="keyword">new</span> Gson();</div><div class="line">List&lt;People&gt; peoples = gson.fromJson(json3, <span class="keyword">new</span> TypeToke&lt;List&lt;People&gt;&gt;()&#123;&#125;.getType);</div></pre></td></tr></table></figure></p>
+<p>从上面的代码看到，使用Gson解析的话就非常简单了。需要注意的是如果对应的键值和成员名称不同的话可以使用注解来标记。</p>
+<p>##闲扯</p>
+<p>上面就说清了主流的一些解析，可以看到使用Gson之后解析是十分简单，这可以为我们的开发节约很多的时间。同时呢android本身为我们提供的也挺够用的，并且3.0后增加的JsonReader操作更加流畅，和其他如Pull解析xml的方式有些类似。</p>
+<p>本文中仅仅介绍了使用，还有一些api以及高级用法没有提到，毕竟一篇文章能描写的有限，请自行查看官方文档。</p>
+<p>上面说的只是解析，其实还有json的生成，JSONObject,JSONArray,都可以直接生成json的，3.0也提供了JsonWriter来生成json。而Gson中，直接gson.toJson()，就可以生成json了，一切都是这么的美妙。不过我们平时，生成json使用比较少，我这里就不写了（或者单独写一篇生成）^_^。</p>
+<p>参考资料地址：    </p>
+<ul>
+<li><p><a href="http://developer.android.com/reference/org/json/JSONArray.html" target="_blank" rel="external">http://developer.android.com/reference/org/json/JSONArray.html</a></p>
+</li>
+<li><p><a href="http://developer.android.com/reference/org/json/JSONObject.html" target="_blank" rel="external">http://developer.android.com/reference/org/json/JSONObject.html</a></p>
+</li>
+<li><p><a href="http://developer.android.com/reference/android/util/JsonReader.html" target="_blank" rel="external">http://developer.android.com/reference/android/util/JsonReader.html</a></p>
+</li>
+<li><p><a href="https://code.google.com/p/google-gson/" target="_blank" rel="external">https://code.google.com/p/google-gson/</a></p>
+</li>
+</ul>
+
+        
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2014/06/15/use-intent-start-component/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption"><</strong>
+      <div class="article-nav-title">
+        
+          使用Intent启动组件
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2014/05/31/use-proguard/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">使用proguard混淆android代码</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share">
+
+<div class="bdsharebuttonbox">
+    <i>分享到：</i>
+    <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+    <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间"></a>
+    <a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博"></a>
+    <a href="#" class="bds_sqq" data-cmd="sqq" title="分享到QQ好友"></a>
+    <a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网"></a>
+    <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+    <a href="#" class="bds_more" data-cmd="more"></a>
+</div>
+
+    <script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"1","bdSize":"32"},"share":{"bdCustomStyle":"bdshare:"}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
+
+</div>
+
+
+
+
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" ></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"isming"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2017 Sam
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    <script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3Fc22f102f5fbaa79cf43b93add1805f4f' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/mobile.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+
+<! -- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+
+  </div>
+</body>
+</html>

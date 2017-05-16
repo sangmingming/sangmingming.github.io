@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="theme-color" content="#778899">
+  
+  <title>加速Android Studio/Gradle构建 | 码农明明桑</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="已经使用Android Studio进行开发超过一年，随着项目的增大，依赖库的增多，构建速度越来越慢，现在最慢要6分钟才能build一个release的安装包，在网上查找资料，发现可以通过一些配置可以加快速度，这里跟大家分享一下。 开启gradle单独的守护进程在下面的目录下面创建gradle.properties文件：  /home/&amp;lt;username&amp;gt;/.gradle/ (Linu">
+<meta name="keywords" content="android,gradle,android studio">
+<meta property="og:type" content="article">
+<meta property="og:title" content="加速Android Studio&#x2F;Gradle构建">
+<meta property="og:url" content="http://blog.isming.me/2015/03/18/android-build-speed-up/index.html">
+<meta property="og:site_name" content="码农明明桑">
+<meta property="og:description" content="已经使用Android Studio进行开发超过一年，随着项目的增大，依赖库的增多，构建速度越来越慢，现在最慢要6分钟才能build一个release的安装包，在网上查找资料，发现可以通过一些配置可以加快速度，这里跟大家分享一下。 开启gradle单独的守护进程在下面的目录下面创建gradle.properties文件：  /home/&amp;lt;username&amp;gt;/.gradle/ (Linu">
+<meta property="og:image" content="http://isming.qiniudn.com/as_gradle_offline.png">
+<meta property="og:image" content="http://isming.qiniudn.com/as_gradle_config.png">
+<meta property="og:updated_time" content="2017-05-16T02:31:11.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="加速Android Studio&#x2F;Gradle构建">
+<meta name="twitter:description" content="已经使用Android Studio进行开发超过一年，随着项目的增大，依赖库的增多，构建速度越来越慢，现在最慢要6分钟才能build一个release的安装包，在网上查找资料，发现可以通过一些配置可以加快速度，这里跟大家分享一下。 开启gradle单独的守护进程在下面的目录下面创建gradle.properties文件：  /home/&amp;lt;username&amp;gt;/.gradle/ (Linu">
+<meta name="twitter:image" content="http://isming.qiniudn.com/as_gradle_offline.png">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="http://apps.bdimg.com/libs/jquery/1.9.0/jquery.min.js"></script>
+</head>
+
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			<img src="http://isming.qiniudn.com/my_avatar.jpg">
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">Sam</a></h1>
+		</hgroup>
+
+		
+		<p class="header-subtitle">技术路上的一些记录</p>
+		
+
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+							<li><a href="/links">朋友</a></li>
+				        
+							<li><a href="/about">关于</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="github" target="_blank" href="https://github.com/sangmingming" title="github">github</a>
+					        
+								<a class="weibo" target="_blank" href="http://weibo.com/mingmingsang" title="weibo">weibo</a>
+					        
+								<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				
+				
+
+				
+			</div>
+		</div>
+	</header>				
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">Sam</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+				<img src="http://isming.qiniudn.com/my_avatar.jpg">
+				<hgroup>
+				  <h1 class="header-author">Sam</h1>
+				</hgroup>
+			</div>
+			
+			<p class="header-subtitle">技术路上的一些记录</p>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+					<li><a href="/links">朋友</a></li>
+		        
+					<li><a href="/about">关于</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="https://github.com/sangmingming" title="github">github</a>
+			        
+						<a class="weibo" target="_blank" href="http://weibo.com/mingmingsang" title="weibo">weibo</a>
+			        
+						<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+      <div class="body-wrap"><article id="post-android-build-speed-up" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/03/18/android-build-speed-up/" class="article-date">
+  	<time datetime="2015-03-18T14:56:10.000Z" itemprop="datePublished">2015年3月18日</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      加速Android Studio/Gradle构建
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android/">android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android-studio/">android studio</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/gradle/">gradle</a></li></ul>
+	</div>
+
+        
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>已经使用Android Studio进行开发超过一年，随着项目的增大，依赖库的增多，构建速度越来越慢，现在最慢要6分钟才能build一个release的安装包，在网上查找资料，发现可以通过一些配置可以加快速度，这里跟大家分享一下。</p>
+<h3 id="开启gradle单独的守护进程"><a href="#开启gradle单独的守护进程" class="headerlink" title="开启gradle单独的守护进程"></a>开启gradle单独的守护进程</h3><p>在下面的目录下面创建<code>gradle.properties</code>文件：</p>
+<ul>
+<li><code>/home/&lt;username&gt;/.gradle/</code> (Linux)     </li>
+<li><code>/Users/&lt;username&gt;/.gradle/</code> (Mac)</li>
+<li><code>C:\Users\&lt;username&gt;\.gradle</code> (Windows)</li>
+</ul>
+<p>并在文件中增加：<br><figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">org.gradle.daemon=<span class="literal">true</span></div></pre></td></tr></table></figure></p>
+<a id="more"></a>
+<p>同时修改项目下的<code>gradle.properties</code>文件也可以优化：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line"># Project-wide Gradle settings.</div><div class="line"></div><div class="line"># IDE (e.g. Android Studio) users:</div><div class="line"># Settings specified in this file will override any Gradle settings</div><div class="line"># configured through the IDE.</div><div class="line"></div><div class="line"># For more details on how to configure your build environment visit</div><div class="line"># http://www.gradle.org/docs/current/userguide/build_environment.html</div><div class="line"></div><div class="line"># The Gradle daemon aims to improve the startup and execution time of Gradle.</div><div class="line"># When set to true the Gradle daemon is to run the build.</div><div class="line"># TODO: disable daemon on CI, since builds should be clean and reliable on servers</div><div class="line">org.gradle.daemon=true</div><div class="line"></div><div class="line"># Specifies the JVM arguments used for the daemon process.</div><div class="line"># The setting is particularly useful for tweaking memory settings.</div><div class="line"># Default value: -Xmx10248m -XX:MaxPermSize=256m</div><div class="line">org.gradle.jvmargs=-Xmx2048m -XX:MaxPermSize=512m -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8</div><div class="line"></div><div class="line"># When configured, Gradle will run in incubating parallel mode.</div><div class="line"># This option should only be used with decoupled projects. More details, visit</div><div class="line"># http://www.gradle.org/docs/current/userguide/multi_project_builds.html#sec:decoupled_projects</div><div class="line">org.gradle.parallel=true</div><div class="line"></div><div class="line"># Enables new incubating mode that makes Gradle selective when configuring projects. </div><div class="line"># Only relevant projects are configured which results in faster builds for large multi-projects.</div><div class="line"># http://www.gradle.org/docs/current/userguide/multi_project_builds.html#sec:configuration_on_demand</div><div class="line">org.gradle.configureondemand=true</div></pre></td></tr></table></figure>
+<p>同时上面的这些参数也可以配置到前面的用户目录下的gradle.properties文件里，那样就不是针对一个项目生效，而是针对所有项目生效。</p>
+<p>上面的配置文件主要就是做， 增大gradle运行的java虚拟机的大小，让gradle在编译的时候使用独立进程，让gradle可以平行的运行。</p>
+<h3 id="修改android-studio配置"><a href="#修改android-studio配置" class="headerlink" title="修改android studio配置"></a>修改android studio配置</h3><p>在android studio的配置中，开启offline模式，以及修改配置。实际上的配置和上面的一大段一样，主要是在这个地方配置的只会在ide构建的时候生效，命令行构建不会生效。</p>
+<p><img src="http://isming.qiniudn.com/as_gradle_offline.png" alt="开启offline"></p>
+<p><img src="http://isming.qiniudn.com/as_gradle_config.png" alt="设置运行模式和VM配置"></p>
+<h3 id="命令行构建"><a href="#命令行构建" class="headerlink" title="命令行构建"></a>命令行构建</h3><p>基于上面的配置，命令行构建时在命令后面加上这个参数即可 <code>--daemon --parallel --offline</code>。</p>
+<h3 id="引入依赖库时使用aar"><a href="#引入依赖库时使用aar" class="headerlink" title="引入依赖库时使用aar"></a>引入依赖库时使用aar</h3><p>使用网上第三方的依赖库时尽量使用aar，可以在maven<a href="http://gradleplease.appspot.com/" target="_blank" rel="external">http://gradleplease.appspot.com/</a>或者githu<a href="https://github.com/Goddchen/mvn-repo" target="_blank" rel="external">https://github.com/Goddchen/mvn-repo</a>搜索。</p>
+<p>自己的库模块也可以打包成aar，关于这个可以参考stormzhang的文章<a href="http://www.stormzhang.com/android/2015/03/01/android-reference-local-aar/" target="_blank" rel="external">http://www.stormzhang.com/android/2015/03/01/android-reference-local-aar/</a>。</p>
+<h3 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h3><p>经过这样一番折腾，我原来需要4，5分钟才能构建完成的项目，现在只需要30秒左右就可以构建完成了。当然了，如果你这样还是不可以的话，那么，你应该换电脑了，ssd的硬盘，更大的内存，必须的上了。</p>
+<blockquote>
+<p>原文地址：<a href="http://blog.isming.me/2015/03/18/android-build-speed-up/">http://blog.isming.me/2015/03/18/android-build-speed-up/</a>，转载请注明出处。</p>
+</blockquote>
+
+        
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2015/05/01/android-multi-dex/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption"><</strong>
+      <div class="article-nav-title">
+        
+          打破Android应用65K方法数魔咒
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2015/03/06/java-annotation/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">java注解</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share">
+
+<div class="bdsharebuttonbox">
+    <i>分享到：</i>
+    <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+    <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间"></a>
+    <a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博"></a>
+    <a href="#" class="bds_sqq" data-cmd="sqq" title="分享到QQ好友"></a>
+    <a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网"></a>
+    <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+    <a href="#" class="bds_more" data-cmd="more"></a>
+</div>
+
+    <script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"1","bdSize":"32"},"share":{"bdCustomStyle":"bdshare:"}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
+
+</div>
+
+
+
+
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" ></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"isming"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2017 Sam
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    <script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3Fc22f102f5fbaa79cf43b93add1805f4f' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/mobile.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+
+<! -- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+
+  </div>
+</body>
+</html>

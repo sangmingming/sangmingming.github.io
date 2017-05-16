@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="theme-color" content="#778899">
+  
+  <title>android动画-View Animation | 码农明明桑</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="视图动画（View Animation）,又称补间动画（Tween Animation）,即给出两个关键帧，通过一些算法将给定属性值在给定的时间内在两个关键帧间渐变。本文首先讲解各种基本动画的使用，其实介绍View动画的工作过程。 概述视图动画只能作用于View对象，是对View的变换，默认支持的类型有：  透明度变化(AlphaAnimation) 缩放(ScaleAnimation) 位移(T">
+<meta name="keywords" content="android,animation">
+<meta property="og:type" content="article">
+<meta property="og:title" content="android动画-View Animation">
+<meta property="og:url" content="http://blog.isming.me/2015/02/01/android-view-animation/index.html">
+<meta property="og:site_name" content="码农明明桑">
+<meta property="og:description" content="视图动画（View Animation）,又称补间动画（Tween Animation）,即给出两个关键帧，通过一些算法将给定属性值在给定的时间内在两个关键帧间渐变。本文首先讲解各种基本动画的使用，其实介绍View动画的工作过程。 概述视图动画只能作用于View对象，是对View的变换，默认支持的类型有：  透明度变化(AlphaAnimation) 缩放(ScaleAnimation) 位移(T">
+<meta property="og:updated_time" content="2017-05-16T02:31:11.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="android动画-View Animation">
+<meta name="twitter:description" content="视图动画（View Animation）,又称补间动画（Tween Animation）,即给出两个关键帧，通过一些算法将给定属性值在给定的时间内在两个关键帧间渐变。本文首先讲解各种基本动画的使用，其实介绍View动画的工作过程。 概述视图动画只能作用于View对象，是对View的变换，默认支持的类型有：  透明度变化(AlphaAnimation) 缩放(ScaleAnimation) 位移(T">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="http://apps.bdimg.com/libs/jquery/1.9.0/jquery.min.js"></script>
+</head>
+
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			<img src="http://isming.qiniudn.com/my_avatar.jpg">
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">Sam</a></h1>
+		</hgroup>
+
+		
+		<p class="header-subtitle">技术路上的一些记录</p>
+		
+
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+							<li><a href="/links">朋友</a></li>
+				        
+							<li><a href="/about">关于</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="github" target="_blank" href="https://github.com/sangmingming" title="github">github</a>
+					        
+								<a class="weibo" target="_blank" href="http://weibo.com/mingmingsang" title="weibo">weibo</a>
+					        
+								<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				
+				
+
+				
+			</div>
+		</div>
+	</header>				
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">Sam</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+				<img src="http://isming.qiniudn.com/my_avatar.jpg">
+				<hgroup>
+				  <h1 class="header-author">Sam</h1>
+				</hgroup>
+			</div>
+			
+			<p class="header-subtitle">技术路上的一些记录</p>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+					<li><a href="/links">朋友</a></li>
+		        
+					<li><a href="/about">关于</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="https://github.com/sangmingming" title="github">github</a>
+			        
+						<a class="weibo" target="_blank" href="http://weibo.com/mingmingsang" title="weibo">weibo</a>
+			        
+						<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+      <div class="body-wrap"><article id="post-android-view-animation" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/02/01/android-view-animation/" class="article-date">
+  	<time datetime="2015-02-01T03:10:50.000Z" itemprop="datePublished">2015年2月1日</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      android动画-View Animation
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android/">android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/animation/">animation</a></li></ul>
+	</div>
+
+        
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>视图动画（View Animation）,又称补间动画（Tween Animation）,即给出两个关键帧，通过一些算法将给定属性值在给定的时间内在两个关键帧间渐变。本文首先讲解各种基本动画的使用，其实介绍View动画的工作过程。</p>
+<h3 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h3><p>视图动画只能作用于View对象，是对View的变换，默认支持的类型有：</p>
+<ul>
+<li>透明度变化(AlphaAnimation)</li>
+<li>缩放(ScaleAnimation)</li>
+<li>位移(TranslateAnimation)</li>
+<li>旋转(RotateAnimation)</li>
+</ul>
+<p>可以使用AnimationSet让多个动画集合在一起运行，使用插值器(Interpolator)设置动画的速度。</p>
+<a id="more"></a>
+<p>上面说到的几种动画，以及AnimationSet都是Animation的之类，因此Animation中有的属性，以及xml的配置属性，他们都有，因此，单独说每个动画的时候只说其特有的方法和属性。对于使用xml配置时需要放到res下面的animation文件夹下。</p>
+<h3 id="AlphaAnimation-透明度动画"><a href="#AlphaAnimation-透明度动画" class="headerlink" title="AlphaAnimation 透明度动画"></a>AlphaAnimation 透明度动画</h3><p>就是改变视图的透明度，可以实现淡入淡出等动画。这个动画比较简单只需要设置开始透明度和结束透明度即可。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Animation animation = <span class="keyword">new</span> AlphaAnimation(<span class="number">0.1f</span>, <span class="number">1.0f</span>); <span class="comment">//fromAlpha 0.1f   toAlpha 1.0f</span></div></pre></td></tr></table></figure>
+<p>或</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">alpha</span> <span class="attr">android:fromAlpha</span> = <span class="string">"0.1f"</span> <span class="attr">android:toAlpha</span>=<span class="string">"1.0f"</span> /&gt;</span></div></pre></td></tr></table></figure>
+<h3 id="ScaleAnimation-缩放"><a href="#ScaleAnimation-缩放" class="headerlink" title="ScaleAnimation 缩放"></a>ScaleAnimation 缩放</h3><p>缩放动画，支持设置开始x缩放（宽度缩放倍数），开始y缩放， 结束x缩放，结束y缩放，以及缩放基点x坐标，缩放基点y坐标。</p>
+<p>x缩放和y缩放都是相对于原始的宽度和高度的，1.0表示不缩放。</p>
+<p>坐标基点，同时有参数可以设置坐标基点类型，分别是：</p>
+<ul>
+<li><code>Animation.ABSOLUTE</code>(默认值) 相对于控件的0点的坐标值</li>
+<li><code>Animation.RELATIVE_TO_SELF</code> 相对于自己宽或者高的百分比（1.0表示100%）</li>
+<li><code>Animation.RELATIVE_TO_PARENT</code> 相对于父控件的宽或者高的百分比.</li>
+</ul>
+<p>默认基点是视图的0点，默认坐标基点类型是ABSOLUTE。</p>
+<p>有如下几种构造函数</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">ScaleAnimation(Context context, AttributeSet attrs)</div><div class="line">ScaleAnimation(<span class="keyword">float</span> fromX, <span class="keyword">float</span> toX, <span class="keyword">float</span> fromY, <span class="keyword">float</span> toY)</div><div class="line"><span class="keyword">new</span> ScaleAnimation(<span class="number">1.0f</span>, <span class="number">1.5f</span>, <span class="number">1.0f</span>, <span class="number">1.5f</span>);</div><div class="line">ScaleAnimation(<span class="keyword">float</span> fromX, <span class="keyword">float</span> toX, <span class="keyword">float</span> fromY, <span class="keyword">float</span> toY, <span class="keyword">float</span> pivotX, <span class="keyword">float</span> pivotY)</div><div class="line"><span class="keyword">new</span> ScaleAnimation(<span class="number">1.0f</span>, <span class="number">1.5f</span>, <span class="number">1.0f</span>, <span class="number">1.5f</span>, <span class="number">10</span>, <span class="number">10</span>);</div><div class="line">ScaleAnimation(<span class="keyword">float</span> fromX, <span class="keyword">float</span> toX, <span class="keyword">float</span> fromY, <span class="keyword">float</span> toY, <span class="keyword">int</span> pivotXType, <span class="keyword">float</span> pivotXValue, <span class="keyword">int</span> pivotYType, <span class="keyword">float</span> pivotYValue)</div><div class="line"><span class="keyword">new</span> ScaleAnimation(<span class="number">1.0f</span>, <span class="number">1.5f</span>, <span class="number">1.0f</span>, <span class="number">1.5f</span>, Animation.RELATIVE_TO_SELF, <span class="number">0.5f</span>, Animation.RELATIVE_TO_SELF, <span class="number">0.5f</span>); <span class="comment">//以中心点为基点</span></div></pre></td></tr></table></figure>
+<p>XML配置：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">scale</span></span></div><div class="line">        <span class="attr">android:fromXScale</span>=<span class="string">"float"</span></div><div class="line">        <span class="attr">android:toXScale</span>=<span class="string">"float"</span></div><div class="line">        <span class="attr">android:fromYScale</span>=<span class="string">"float"</span></div><div class="line">        <span class="attr">android:toYScale</span>=<span class="string">"float"</span></div><div class="line">        <span class="attr">android:pivotX</span>=<span class="string">"float"</span></div><div class="line">        <span class="attr">android:pivotY</span>=<span class="string">"float"</span> /&gt;</div></pre></td></tr></table></figure>
+<h3 id="TranslateAnimation-位移"><a href="#TranslateAnimation-位移" class="headerlink" title="TranslateAnimation 位移"></a>TranslateAnimation 位移</h3><p>平移支持x轴平移起点和y轴平移起点，以及设置结束点。同时每个点都可以设置type，type和上面缩放动画的基点类型一样,默认类型是ABSOLUTE.</p>
+<p>有以下几个构造函数：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">TranslateAnimation(Context context, AttributeSet attrs)</div><div class="line">TranslateAnimation(<span class="keyword">float</span> fromXDelta, <span class="keyword">float</span> toXDelta, <span class="keyword">float</span> fromYDelta, <span class="keyword">float</span> toYDelta)</div><div class="line">TranslateAnimation(<span class="keyword">int</span> fromXType, <span class="keyword">float</span> fromXValue, <span class="keyword">int</span> toXType, <span class="keyword">float</span> toXValue, <span class="keyword">int</span> fromYType, <span class="keyword">float</span> fromYValue, <span class="keyword">int</span> toYType, <span class="keyword">float</span> toYValue)</div></pre></td></tr></table></figure>
+<p>XML配置：<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">translate</span></span></div><div class="line">        <span class="attr">android:fromXDelta</span>=<span class="string">"float"</span></div><div class="line">        <span class="attr">android:toXDelta</span>=<span class="string">"float"</span></div><div class="line">        <span class="attr">android:fromYDelta</span>=<span class="string">"float"</span></div><div class="line">        <span class="attr">android:toYDelta</span>=<span class="string">"float"</span> /&gt;</div></pre></td></tr></table></figure></p>
+<h3 id="RoatationAnimation-旋转"><a href="#RoatationAnimation-旋转" class="headerlink" title="RoatationAnimation 旋转"></a>RoatationAnimation 旋转</h3><p>旋转支持设置旋转开始角度，和旋转结束角度，以及旋转基点，和旋转基点类型。类型同上面一样,默认旋转基点是（0，0），默认类型同上面一样，也不多说了。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">RotateAnimation(Context context, AttributeSet attrs)</div><div class="line">RotateAnimation(<span class="keyword">float</span> fromDegrees, <span class="keyword">float</span> toDegrees)</div><div class="line">RotateAnimation(<span class="keyword">float</span> fromDegrees, <span class="keyword">float</span> toDegrees, <span class="keyword">float</span> pivotX, <span class="keyword">float</span> pivotY)</div><div class="line">RotateAnimation(<span class="keyword">float</span> fromDegrees, <span class="keyword">float</span> toDegrees, <span class="keyword">int</span> pivotXType, <span class="keyword">float</span> pivotXValue, <span class="keyword">int</span> pivotYType, <span class="keyword">float</span> pivotYValue)</div></pre></td></tr></table></figure>
+<p>XML配置：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">rotate</span></span></div><div class="line">        <span class="attr">android:fromDegrees</span>=<span class="string">"float"</span></div><div class="line">        <span class="attr">android:toDegrees</span>=<span class="string">"float"</span></div><div class="line">        <span class="attr">android:pivotX</span>=<span class="string">"float"</span></div><div class="line">        <span class="attr">android:pivotY</span>=<span class="string">"float"</span> /&gt;</div></pre></td></tr></table></figure>
+<h3 id="AnimationSet-动画集合"><a href="#AnimationSet-动画集合" class="headerlink" title="AnimationSet 动画集合"></a>AnimationSet 动画集合</h3><p>动画集合就是可以让多个动画一起运行，或者依次运行。</p>
+<p>通过<code>addAnimation(Animation a)</code>向集合中添加动画，使用子动画的<code>setStartOffset(long offset)</code>设置延时，从而实现子动画之间的间隔。可以设置是否共享时间插值器。</p>
+<p>xml配置：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">set</span>&gt;</span></div><div class="line"><span class="comment">&lt;!--这里写子动画--&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">rotation</span> <span class="attr">....</span>/&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">alpha</span> <span class="attr">.....</span>/&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">set</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>属性动画(Property Animation)</p>
+<h3 id="Animation"><a href="#Animation" class="headerlink" title="Animation"></a>Animation</h3><p>单独把Animation拿出来说，是因为前面几个都是Animation,他们有一些属性都是从父类继承的。包括时常，插值器，是否重复，监听器等。</p>
+<p>setFillBefore(boolean)和setFillAfter(boolean)分别是动画开始前和动画结束后是否保持动画状态，默认前者为ture，后者为false;</p>
+<p>xml中可以配置的属性（这些在前面几个动画中省略了，也是可以使用的）：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">android:detachWallpaper</div><div class="line">android:duration</div><div class="line">android:fillAfter</div><div class="line">android:fillBefore</div><div class="line">android:fillEnabled</div><div class="line">android:interpolator</div><div class="line">android:repeatCount</div><div class="line">android:repeatMode   INFINTE(无限期)，RESTART（重新开始，默认值）</div><div class="line">android:startOffset</div><div class="line">android:zAdjustment   ZORDER_BOTTOM,ZORDER_NORMAL, ZORDER_TOP</div></pre></td></tr></table></figure>
+<h4 id="启动动画："><a href="#启动动画：" class="headerlink" title="启动动画："></a>启动动画：</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">view.startAnimation(animation);</div><div class="line"><span class="comment">//或者这样</span></div><div class="line">view.setAnimation(animation);</div><div class="line">animation.start();</div></pre></td></tr></table></figure>
+<h3 id="Interpolator-插值器"><a href="#Interpolator-插值器" class="headerlink" title="Interpolator 插值器"></a>Interpolator 插值器</h3><p>通过设置插值器可以改变动画的速度，以及最终效果。<br>android sdk提供了几种默认插值器，而且这些插值器在新的protery animation上仍然可以使用，这个后面再说。</p>
+<ul>
+<li>AccelerateDecelerateInterpolator 先加速后减速</li>
+<li>AccelerateInterpolator 加速</li>
+<li>AnticipateInterPolator </li>
+<li>AnticipateOvershootInterpolator</li>
+<li>BounceInterpolator</li>
+<li>CycleInterpolator</li>
+<li>LinearInterpolator</li>
+<li>OvershootInterpolator</li>
+<li>PathInterpolator</li>
+</ul>
+<p>当然，我们也可以自定义Interpolator,一般开始值为0，结束值为1.0，然后根据算法来改变值。</p>
+<h3 id="动画原理解析"><a href="#动画原理解析" class="headerlink" title="动画原理解析"></a>动画原理解析</h3><p>动画就是根据间隔时间，不停的去刷新界面，把时间分片，在那个时间片，通过传入插值器的值到Animation.applyTransformation（），来计算当前的值（比如旋转角度值，透明度等）.</p>
+<p>因此，我们也可以继承Animation,从写applyTransformation()来实现我们的其他的动画。</p>
+<h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h3><p>使用view动画时，如果需要用到类似基点类型和基点设置的，一定要注意设置对点，不然效果恨不如意。</p>
+<p>另外，view动画，若动画前view在a点，动画过程以及动画后，view变化了位置，则点击点仍然在原位置，这是个大问题，特别需要注意。</p>
+<p>在android apidemo中，有动画的使用，以及自定义动画，各种插值器效果，各位可以查看，我已经将其放到github上面了,地址：<a href="https://github.com/sangmingming/Android-ApiDemos" target="_blank" rel="external">https://github.com/sangmingming/Android-ApiDemos</a></p>
+<blockquote>
+<p>原文地址：<a href="http://blog.isming.me/2015/02/01/android-view-animation/">http://blog.isming.me/2015/02/01/android-view-animation/</a>，转载请注明出处。</p>
+</blockquote>
+
+        
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2015/03/06/java-annotation/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption"><</strong>
+      <div class="article-nav-title">
+        
+          java注解
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2015/01/28/android-frame-animation/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">android动画-Frame Animation</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share">
+
+<div class="bdsharebuttonbox">
+    <i>分享到：</i>
+    <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+    <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间"></a>
+    <a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博"></a>
+    <a href="#" class="bds_sqq" data-cmd="sqq" title="分享到QQ好友"></a>
+    <a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网"></a>
+    <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+    <a href="#" class="bds_more" data-cmd="more"></a>
+</div>
+
+    <script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"1","bdSize":"32"},"share":{"bdCustomStyle":"bdshare:"}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
+
+</div>
+
+
+
+
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" ></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"isming"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2017 Sam
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    <script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3Fc22f102f5fbaa79cf43b93add1805f4f' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/mobile.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+
+<! -- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+
+  </div>
+</body>
+</html>

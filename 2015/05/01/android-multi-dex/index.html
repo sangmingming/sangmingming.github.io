@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="theme-color" content="#778899">
+  
+  <title>打破Android应用65K方法数魔咒 | 码农明明桑</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="近日，我们的应用，在编译的时候不幸的遇到这个错误  Conversion to Dalvik format failed: Unable to execute dex: method ID not in [0, 0xffff]: 65536  这才让我意识到原来我们的程序中，方法数已经超过了65536。在之前，已经知道了android系统的java虚拟机dalvik在执行java程序时，使用原生类">
+<meta name="keywords" content="android">
+<meta property="og:type" content="article">
+<meta property="og:title" content="打破Android应用65K方法数魔咒">
+<meta property="og:url" content="http://blog.isming.me/2015/05/01/android-multi-dex/index.html">
+<meta property="og:site_name" content="码农明明桑">
+<meta property="og:description" content="近日，我们的应用，在编译的时候不幸的遇到这个错误  Conversion to Dalvik format failed: Unable to execute dex: method ID not in [0, 0xffff]: 65536  这才让我意识到原来我们的程序中，方法数已经超过了65536。在之前，已经知道了android系统的java虚拟机dalvik在执行java程序时，使用原生类">
+<meta property="og:updated_time" content="2017-05-16T02:31:11.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="打破Android应用65K方法数魔咒">
+<meta name="twitter:description" content="近日，我们的应用，在编译的时候不幸的遇到这个错误  Conversion to Dalvik format failed: Unable to execute dex: method ID not in [0, 0xffff]: 65536  这才让我意识到原来我们的程序中，方法数已经超过了65536。在之前，已经知道了android系统的java虚拟机dalvik在执行java程序时，使用原生类">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="http://apps.bdimg.com/libs/jquery/1.9.0/jquery.min.js"></script>
+</head>
+
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			<img src="http://isming.qiniudn.com/my_avatar.jpg">
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">Sam</a></h1>
+		</hgroup>
+
+		
+		<p class="header-subtitle">技术路上的一些记录</p>
+		
+
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+							<li><a href="/links">朋友</a></li>
+				        
+							<li><a href="/about">关于</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="github" target="_blank" href="https://github.com/sangmingming" title="github">github</a>
+					        
+								<a class="weibo" target="_blank" href="http://weibo.com/mingmingsang" title="weibo">weibo</a>
+					        
+								<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				
+				
+
+				
+			</div>
+		</div>
+	</header>				
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">Sam</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+				<img src="http://isming.qiniudn.com/my_avatar.jpg">
+				<hgroup>
+				  <h1 class="header-author">Sam</h1>
+				</hgroup>
+			</div>
+			
+			<p class="header-subtitle">技术路上的一些记录</p>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+					<li><a href="/links">朋友</a></li>
+		        
+					<li><a href="/about">关于</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="https://github.com/sangmingming" title="github">github</a>
+			        
+						<a class="weibo" target="_blank" href="http://weibo.com/mingmingsang" title="weibo">weibo</a>
+			        
+						<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+      <div class="body-wrap"><article id="post-android-multi-dex" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/05/01/android-multi-dex/" class="article-date">
+  	<time datetime="2015-04-30T16:33:08.000Z" itemprop="datePublished">2015年5月1日</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      打破Android应用65K方法数魔咒
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android/">android</a></li></ul>
+	</div>
+
+        
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>近日，我们的应用，在编译的时候不幸的遇到这个错误</p>
+<blockquote>
+<p>Conversion to Dalvik format failed: Unable to execute dex: method ID not in [0, 0xffff]: 65536</p>
+</blockquote>
+<p>这才让我意识到原来我们的程序中，方法数已经超过了65536。在之前，已经知道了android系统的java虚拟机dalvik在执行java程序时，使用原生类型short来索引dex文件中的方法，因此方法数就呗限制在65536了。之前我一直以为，这个数量已经很大了，不会达到上限，结果今天就达到了。</p>
+<p>不过这个东西呢，我们也是很容易的进行解决的，因为，就在去年不久前，google官方提供了多dex的支持库，因此，我们可以很简单的解决这个问题。</p>
+<a id="more"></a>
+<h3 id="开发工具升级"><a href="#开发工具升级" class="headerlink" title="开发工具升级"></a>开发工具升级</h3><p>将android sdks build tools 和android support library要升级到最新的，这个使用android sdks manager很容易就完成了。</p>
+<h3 id="配置build-gradle"><a href="#配置build-gradle" class="headerlink" title="配置build.gradle"></a>配置build.gradle</h3><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">android &#123; </div><div class="line">compileSdkVersion 21 </div><div class="line">buildToolsVersion "21.1.0" </div><div class="line">defaultConfig &#123;     </div><div class="line">...     </div><div class="line">minSdkVersion 14     </div><div class="line">targetSdkVersion 21     </div><div class="line">...     </div><div class="line">// Enabling multidex support.     </div><div class="line">multiDexEnabled true </div><div class="line">&#125; </div><div class="line">... </div><div class="line">&#125; </div><div class="line">dependencies&#123; </div><div class="line">compile 'com.android.support:multidex:1.0.0’ //dependencies</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="让应用支持多dex"><a href="#让应用支持多dex" class="headerlink" title="让应用支持多dex"></a>让应用支持多dex</h3><p>androidManifest.xml中application中声明android.support.multidex.MultiDexApplication;</p>
+<p>或自己定义一个Application类，继承自MultiDexApplication；</p>
+<p>或者自己定义的Application类，在attachBaseContext()方法中，添加MultiDex.install(this);</p>
+<h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h3><p>通过上面的方法即可轻松完成多dex，不过在低版本的android系统（低于android4.0）可能会有bug出现，还要多进行测试。</p>
+<p>究其原因，其实我们的app，自己写的代码现在其实不是很多，代码中使用了大量的第三方sdk，以及其他的一些功能集成。</p>
+<p>下面，就要想办法，减少第三方的功能库了。这里跟大家分享一下解决方案。</p>
+<p>参考资料： <a href="http://developer.android.com/tools/building/multidex.html" target="_blank" rel="external">http://developer.android.com/tools/building/multidex.html</a></p>
+<blockquote>
+<p>原文地址：<a href="http://blog.isming.me/2015/05/01/android-multi-dex/">http://blog.isming.me/2015/05/01/android-multi-dex/</a>，转载请注明出处。</p>
+</blockquote>
+
+        
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2015/05/10/sticker-view/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption"><</strong>
+      <div class="article-nav-title">
+        
+          图片贴纸旋转缩放功能的实现
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2015/03/18/android-build-speed-up/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">加速Android Studio/Gradle构建</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share">
+
+<div class="bdsharebuttonbox">
+    <i>分享到：</i>
+    <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+    <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间"></a>
+    <a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博"></a>
+    <a href="#" class="bds_sqq" data-cmd="sqq" title="分享到QQ好友"></a>
+    <a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网"></a>
+    <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+    <a href="#" class="bds_more" data-cmd="more"></a>
+</div>
+
+    <script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"1","bdSize":"32"},"share":{"bdCustomStyle":"bdshare:"}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
+
+</div>
+
+
+
+
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" ></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"isming"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2017 Sam
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    <script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3Fc22f102f5fbaa79cf43b93add1805f4f' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/mobile.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+
+<! -- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+
+  </div>
+</body>
+</html>

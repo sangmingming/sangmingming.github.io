@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="theme-color" content="#778899">
+  
+  <title>在python中使用mysql | 码农明明桑</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="缘由最近在折腾一个小东西需要抓取网上的页面，然后进行解析，将结果放到数据库中。了解到Python在这方面有优势，便选用之。因为我有台服务器上面安装有mysql，自然使用之。在进行数据库的这个操作过程中遇到了不少问题，这里记录一下，大家共勉。 python中mysql的调用百度之后可以通过MySQLdb进行数据库操作，查看文档,了解到python中提供了一个_mysql时直接实现了mysql的c语言">
+<meta name="keywords" content="mysql,python">
+<meta property="og:type" content="article">
+<meta property="og:title" content="在python中使用mysql">
+<meta property="og:url" content="http://blog.isming.me/2014/04/27/use-mysql-in-python/index.html">
+<meta property="og:site_name" content="码农明明桑">
+<meta property="og:description" content="缘由最近在折腾一个小东西需要抓取网上的页面，然后进行解析，将结果放到数据库中。了解到Python在这方面有优势，便选用之。因为我有台服务器上面安装有mysql，自然使用之。在进行数据库的这个操作过程中遇到了不少问题，这里记录一下，大家共勉。 python中mysql的调用百度之后可以通过MySQLdb进行数据库操作，查看文档,了解到python中提供了一个_mysql时直接实现了mysql的c语言">
+<meta property="og:updated_time" content="2017-05-16T02:31:11.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="在python中使用mysql">
+<meta name="twitter:description" content="缘由最近在折腾一个小东西需要抓取网上的页面，然后进行解析，将结果放到数据库中。了解到Python在这方面有优势，便选用之。因为我有台服务器上面安装有mysql，自然使用之。在进行数据库的这个操作过程中遇到了不少问题，这里记录一下，大家共勉。 python中mysql的调用百度之后可以通过MySQLdb进行数据库操作，查看文档,了解到python中提供了一个_mysql时直接实现了mysql的c语言">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="http://apps.bdimg.com/libs/jquery/1.9.0/jquery.min.js"></script>
+</head>
+
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			<img src="http://isming.qiniudn.com/my_avatar.jpg">
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">Sam</a></h1>
+		</hgroup>
+
+		
+		<p class="header-subtitle">技术路上的一些记录</p>
+		
+
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+							<li><a href="/links">朋友</a></li>
+				        
+							<li><a href="/about">关于</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="github" target="_blank" href="https://github.com/sangmingming" title="github">github</a>
+					        
+								<a class="weibo" target="_blank" href="http://weibo.com/mingmingsang" title="weibo">weibo</a>
+					        
+								<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				
+				
+
+				
+			</div>
+		</div>
+	</header>				
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">Sam</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+				<img src="http://isming.qiniudn.com/my_avatar.jpg">
+				<hgroup>
+				  <h1 class="header-author">Sam</h1>
+				</hgroup>
+			</div>
+			
+			<p class="header-subtitle">技术路上的一些记录</p>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+					<li><a href="/links">朋友</a></li>
+		        
+					<li><a href="/about">关于</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="https://github.com/sangmingming" title="github">github</a>
+			        
+						<a class="weibo" target="_blank" href="http://weibo.com/mingmingsang" title="weibo">weibo</a>
+			        
+						<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+      <div class="body-wrap"><article id="post-use-mysql-in-python" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2014/04/27/use-mysql-in-python/" class="article-date">
+  	<time datetime="2014-04-27T14:36:29.000Z" itemprop="datePublished">2014年4月27日</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      在python中使用mysql
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mysql/">mysql</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/">python</a></li></ul>
+	</div>
+
+        
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="缘由"><a href="#缘由" class="headerlink" title="缘由"></a>缘由</h3><p>最近在折腾一个小东西需要抓取网上的页面，然后进行解析，将结果放到数据库中。了解到Python在这方面有优势，便选用之。因为我有台服务器上面安装有mysql，自然使用之。在进行数据库的这个操作过程中遇到了不少问题，这里记录一下，大家共勉。</p>
+<h3 id="python中mysql的调用"><a href="#python中mysql的调用" class="headerlink" title="python中mysql的调用"></a>python中mysql的调用</h3><p>百度之后可以通过MySQLdb进行数据库操作，查看<a href="http://mysql-python.sourceforge.net/MySQLdb.html" target="_blank" rel="external">文档</a>,了解到python中提供了一个_mysql时直接实现了mysql的c语言API。MySQLdb是对其在更高一层的封装，因此，使用起来更加方便。我们可以使用_mysql，但更好的方法是使用MySQLdb<br><a id="more"></a></p>
+<h3 id="安装中遇到的问题"><a href="#安装中遇到的问题" class="headerlink" title="安装中遇到的问题"></a>安装中遇到的问题</h3><p>在这个页面<a href="http://sourceforge.net/projects/mysql-python/" target="_blank" rel="external">http://sourceforge.net/projects/mysql-python/</a>可以下载到最新版本的MySQLdb，解压后执行安装时，可能会有一些问题。     </p>
+<ul>
+<li><p>通过<code>python setup.py build</code> 执行安装会提示<code>No module named setuptools</code><br>解决方法，安装之        </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo apt-get install python-setuptools</div></pre></td></tr></table></figure>
+</li>
+<li><p>再次执行，可能还是会出错 mysql_config not found<br>  此时我们需要安装mysqld-dev</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">sudo apt-get install libmysqld-dev</div></pre></td></tr></table></figure>
+</li>
+<li><p>可能再次执行还会出现错误，类似这样   ` </p>
+<blockquote>
+<blockquote>
+<blockquote>
+<p>building ‘mysql’ extension gcc -pthread -fno-strict-aliasing -DNDEBUG -g -fwrapv -O2 -Wall -Wstrict-prototypes -fPIC -Dversion_info=(1,2,3,’final’,0) -Dversion=1.2.3 -I/usr/include/mysql -I/usr/include/python2.7 -c mysql.c -o build/temp.linux-i686-2.7/mysql.o -DBIG_JOINS=1 -fno-strict-aliasing -DUNIV_LINUX -DUNIV_LINUX In file included from mysql.c:29:0: pymemcompat.h:10:20: fatal error: Python.h: No such file or directory      </p>
+</blockquote>
+</blockquote>
+</blockquote>
+</li>
+</ul>
+<p>解决方案<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo apt-get install python-dev</div></pre></td></tr></table></figure></p>
+<p>这步骤是安装python的一些开发用的头文件。 </p>
+<ul>
+<li>基本上前面三种之后，不会再出现其他问题了。但是如果mysql是自己安装的，并且lib文件没有放到/usr/local/lib下面则还会报错。<br>解决办法将文件软连接到这个目录下，或者修改系统的/etc/ld.so.cnf文件，把我们lib所在的目录放进去。两种方法都可以，然后在ldconfig，让其生效即可。<br>比如我们用第一种方法 <code>ln -s /usr/local/mysql/lib/mysql/libmysqlclient* /usr/lib</code></li>
+</ul>
+<h3 id="实际使用"><a href="#实际使用" class="headerlink" title="实际使用"></a>实际使用</h3><ol>
+<li><p>引入MySQLdb库 </p>
+<p> import MySQLdb</p>
+</li>
+<li><p>连接数据库 </p>
+<p> conn=MySQLdb.connect(host=”localhost”,user=”root”,passwd=”sa”,db=”mytable”,charset=”utf8”)<br>提供的connect方法用来和数据库建立连接,接收数个参数,返回连接对象.  </p>
+</li>
+<li><p>执行语句和取结果         </p>
+<p> cursor=conn.cursor()<br> n=cursor.execute(sql,param)<br>首先,我们用使用连接对象获得一个cursor对象,接下来,我们会使用cursor提供的方法来进行工作.这些方法包括两大类:1.执行命令,2.接收返回值<br>后面再详细说，这里不详说 </p>
+</li>
+<li><p>结束，关闭数据库连接<br>需要分别的关闭指针对象和连接对象.他们有名字相同的方法     </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">cursor.close()         </div><div class="line">conn.close()</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3 id="常用操作API"><a href="#常用操作API" class="headerlink" title="常用操作API"></a>常用操作API</h3><p>对事务操作的支持,标准的方法 commit() 提交<br>rollback() 回滚<br>cursor用来执行命令的方法:<br>callproc(self, procname, args):用来执行存储过程,接收的参数为存储过程名和参数列表,返回值为受影响的行数<br>execute(self, query, args):执行单条sql语句,接收的参数为sql语句本身和使用的参数列表,返回值为受影响的行数<br>executemany(self, query, args):执行单挑sql语句,但是重复执行参数列表里的参数,返回值为受影响的行数 nextset(self):移动到下一个结果集<br>cursor用来接收返回值的方法:<br>fetchall(self):接收全部的返回结果行.<br>fetchmany(self, size=None):接收size条返回结果行.如果size的值大于返回的结果行的数量,则会返回cursor.arraysize条数据.<br>fetchone(self):返回一条结果行.<br>scroll(self, value, mode=‘relative’):移动指针到某一行.如果mode=‘relative’,则表示从当前所在行移动value条,如果 mode=‘absolute’,则表示从结果集的第一行移动value条. </p>
+<h3 id="最后插一句"><a href="#最后插一句" class="headerlink" title="最后插一句"></a>最后插一句</h3><p>电脑升级到ubuntu14.04重新装的，之前的博客仓库没了，重新从github上面拉回来，中间出了点差错，我删除文件，这篇文章差点没有了，不过还好现在能看到这篇文章。哈哈～～</p>
+
+        
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2014/05/09/change-ubuntu-to-mac/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption"><</strong>
+      <div class="article-nav-title">
+        
+          ubuntu快速变装mac
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2014/04/09/use-git-rsync-site/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">使用git同步网站代码</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share">
+
+<div class="bdsharebuttonbox">
+    <i>分享到：</i>
+    <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+    <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间"></a>
+    <a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博"></a>
+    <a href="#" class="bds_sqq" data-cmd="sqq" title="分享到QQ好友"></a>
+    <a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网"></a>
+    <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+    <a href="#" class="bds_more" data-cmd="more"></a>
+</div>
+
+    <script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"1","bdSize":"32"},"share":{"bdCustomStyle":"bdshare:"}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
+
+</div>
+
+
+
+
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" ></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"isming"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2017 Sam
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    <script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3Fc22f102f5fbaa79cf43b93add1805f4f' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/mobile.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+
+<! -- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+
+  </div>
+</body>
+</html>

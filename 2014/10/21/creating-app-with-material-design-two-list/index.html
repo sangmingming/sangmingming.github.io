@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="theme-color" content="#778899">
+  
+  <title>创建Material Design风格的Android应用--创建列表和卡片 | 码农明明桑</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="上次说过使用主题，应用Material Design的样式，同时卡片布局也是Material Design的重要组成部分，今天来写写。 引言在程序中创建复杂的Material Design 样式的 List和Card,可以使用RecyclerView和CardView组件,这两个组件是在最新的support v7包(version 21)中提供的。因此需要引入依赖包： 12345dependenc">
+<meta name="keywords" content="android,material design">
+<meta property="og:type" content="article">
+<meta property="og:title" content="创建Material Design风格的Android应用--创建列表和卡片">
+<meta property="og:url" content="http://blog.isming.me/2014/10/21/creating-app-with-material-design-two-list/index.html">
+<meta property="og:site_name" content="码农明明桑">
+<meta property="og:description" content="上次说过使用主题，应用Material Design的样式，同时卡片布局也是Material Design的重要组成部分，今天来写写。 引言在程序中创建复杂的Material Design 样式的 List和Card,可以使用RecyclerView和CardView组件,这两个组件是在最新的support v7包(version 21)中提供的。因此需要引入依赖包： 12345dependenc">
+<meta property="og:image" content="http://isming.qiniudn.com/RecyclerView.png">
+<meta property="og:image" content="http://isming.qiniudn.com/card_travel.png">
+<meta property="og:updated_time" content="2017-05-16T02:31:11.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="创建Material Design风格的Android应用--创建列表和卡片">
+<meta name="twitter:description" content="上次说过使用主题，应用Material Design的样式，同时卡片布局也是Material Design的重要组成部分，今天来写写。 引言在程序中创建复杂的Material Design 样式的 List和Card,可以使用RecyclerView和CardView组件,这两个组件是在最新的support v7包(version 21)中提供的。因此需要引入依赖包： 12345dependenc">
+<meta name="twitter:image" content="http://isming.qiniudn.com/RecyclerView.png">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="http://apps.bdimg.com/libs/jquery/1.9.0/jquery.min.js"></script>
+</head>
+
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			<img src="http://isming.qiniudn.com/my_avatar.jpg">
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">Sam</a></h1>
+		</hgroup>
+
+		
+		<p class="header-subtitle">技术路上的一些记录</p>
+		
+
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+							<li><a href="/links">朋友</a></li>
+				        
+							<li><a href="/about">关于</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="github" target="_blank" href="https://github.com/sangmingming" title="github">github</a>
+					        
+								<a class="weibo" target="_blank" href="http://weibo.com/mingmingsang" title="weibo">weibo</a>
+					        
+								<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				
+				
+
+				
+			</div>
+		</div>
+	</header>				
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">Sam</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+				<img src="http://isming.qiniudn.com/my_avatar.jpg">
+				<hgroup>
+				  <h1 class="header-author">Sam</h1>
+				</hgroup>
+			</div>
+			
+			<p class="header-subtitle">技术路上的一些记录</p>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+					<li><a href="/links">朋友</a></li>
+		        
+					<li><a href="/about">关于</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="https://github.com/sangmingming" title="github">github</a>
+			        
+						<a class="weibo" target="_blank" href="http://weibo.com/mingmingsang" title="weibo">weibo</a>
+			        
+						<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+      <div class="body-wrap"><article id="post-creating-app-with-material-design-two-list" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2014/10/21/creating-app-with-material-design-two-list/" class="article-date">
+  	<time datetime="2014-10-21T15:07:47.000Z" itemprop="datePublished">2014年10月21日</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      创建Material Design风格的Android应用--创建列表和卡片
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android/">android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/material-design/">material design</a></li></ul>
+	</div>
+
+        
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>上次说过使用主题，应用Material Design的样式，同时卡片布局也是Material Design的重要组成部分，今天来写写。</p>
+<h3 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h3><p>在程序中创建复杂的Material Design 样式的 List和Card,可以使用RecyclerView和CardView组件,这两个组件是在最新的support v7包(version 21)中提供的。因此需要引入依赖包：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">dependencies &#123;</div><div class="line">    compile <span class="string">'com.android.support:appcompat-v7:+'</span></div><div class="line">    compile <span class="string">'com.android.support:cardview-v7:+'</span></div><div class="line">    compile <span class="string">'com.android.support:recyclerview-v7:+'</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<a id="more"></a>
+<h3 id="创建List"><a href="#创建List" class="headerlink" title="创建List"></a>创建List</h3><p>RecylerView组件是一个更加高效灵活的ListView。这个组件时一个显示大数据集的容器，可以有效的滚动，保持显示一定数量的视图。使用RecyclerView组件，当你有数据集，并且数据集的元素在运行时根据用户的操作或者网络事件改变。</p>
+<p>RecylerView类简化大数据集的显示和处理，通过提供：<br>布局管理者控制元素定位。<br>在通用的元素上操作上显示默认的动画，比如移除和增加元素。</p>
+<p>使用RecyclerView组件，你需要指定一个Adapter和布局管理器，创建一个Adapter继承RecyclerView.Adapter类，具体的实现细节要根据数据集合视图的类型变化，具体信息，看下面的例子。</p>
+<p>一个布局管理器定位Item视图在RecyclerView中，决定什么时候去回收它当他不再可见时。当重用（或者回收）一个视图时，布局管理器可能会请求适配器（Adapter）去替换子视图中的内容用不同的内容。通过这种方式回收重用视图，可以减少view的创建和避免更多的<em>findViewById()</em>，从而提高性能。</p>
+<p>RecyclerView提供了以下内建的布局管理器：</p>
+<blockquote>
+<p>LinearLayoutManager 显示Item 在一个水平或者垂直的滚动列表中。<br>GridLayoutManager 显示Item 作为网格布局。<br>StaggeredGridLayoutManager 显示Item在交错的网格布局。</p>
+</blockquote>
+<p>也可以自己通过继承<em>RecyclerView.LayoutManager</em>类创建自定义的布局管理器。</p>
+<p><img src="http://isming.qiniudn.com/RecyclerView.png" alt="RecylerView组件"></p>
+<p>RecylerView组件</p>
+<h5 id="动画："><a href="#动画：" class="headerlink" title="动画："></a>动画：</h5><p>RecyclerView默认情况下就有动画，在删除或者增加Ite的时候。如果需要自定义动画，继承RecyclerView.ItemAnimator类，并且使用RecyclerView.setItemAnimator()方法将定义的动画设置到我们的视图中。</p>
+<p>下面开始看例子：<br>1.首先在xml布局文件增加一个RecyclerView<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment">&lt;!-- A RecyclerView with some commonly used attributes --&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">android.support.v7.widget.RecyclerView</span></span></div><div class="line">    <span class="attr">android:id</span>=<span class="string">"@+id/my_recycler_view"</span></div><div class="line">    <span class="attr">android:scrollbars</span>=<span class="string">"vertical"</span></div><div class="line">    <span class="attr">android:layout_width</span>=<span class="string">"match_parent"</span></div><div class="line">    <span class="attr">android:layout_height</span>=<span class="string">"match_parent"</span>/&gt;</div></pre></td></tr></table></figure></p>
+<p>2.然后在我们的Java代码中使用，附加Adapter和数据就可以显示了。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyActivity</span> <span class="keyword">extends</span> <span class="title">Activity</span> </span>&#123;</div><div class="line">    <span class="keyword">private</span> RecyclerView mRecyclerView;</div><div class="line">    <span class="keyword">private</span> RecyclerView.Adapter mAdapter;</div><div class="line">    <span class="keyword">private</span> RecyclerView.LayoutManager mLayoutManager;</div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</div><div class="line">        <span class="keyword">super</span>.onCreate(savedInstanceState);</div><div class="line">        setContentView(R.layout.my_activity);</div><div class="line">        mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);</div><div class="line"></div><div class="line">        <span class="comment">// use this setting to improve performance if you know that changes</span></div><div class="line">        <span class="comment">// in content do not change the layout size of the RecyclerView</span></div><div class="line">        mRecyclerView.setHasFixedSize(<span class="keyword">true</span>);</div><div class="line"></div><div class="line">        <span class="comment">// use a linear layout manager</span></div><div class="line">        mLayoutManager = <span class="keyword">new</span> LinearLayoutManager(<span class="keyword">this</span>);</div><div class="line">        mRecyclerView.setLayoutManager(mLayoutManager);</div><div class="line"></div><div class="line">        <span class="comment">// specify an adapter (see also next example)</span></div><div class="line">        mAdapter = <span class="keyword">new</span> MyAdapter(myDataset);</div><div class="line">        mRecyclerView.setAdapter(mAdapter);</div><div class="line">    &#125;</div><div class="line">    ...</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>3.Adapter提供访问数据集中的Item，创建视图映射到数据上，并且替换布局的内容数据用新的item。下面的代码显示一个简单的实现，使用TextView显示简单的String数组。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyAdapter</span> <span class="keyword">extends</span> <span class="title">RecyclerView</span>.<span class="title">Adapter</span>&lt;<span class="title">MyAdapter</span>.<span class="title">ViewHolder</span>&gt; </span>&#123;</div><div class="line">    <span class="keyword">private</span> String[] mDataset;</div><div class="line"></div><div class="line">    <span class="comment">// Provide a reference to the views for each data item</span></div><div class="line">    <span class="comment">// Complex data items may need more than one view per item, and</span></div><div class="line">    <span class="comment">// you provide access to all the views for a data item in a view holder</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">ViewHolder</span> <span class="keyword">extends</span> <span class="title">RecyclerView</span>.<span class="title">ViewHolder</span> </span>&#123;</div><div class="line">        <span class="comment">// each data item is just a string in this case</span></div><div class="line">        <span class="keyword">public</span> TextView mTextView;</div><div class="line">        <span class="function"><span class="keyword">public</span> <span class="title">ViewHolder</span><span class="params">(TextView v)</span> </span>&#123;</div><div class="line">            <span class="keyword">super</span>(v);</div><div class="line">            mTextView = v;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">// Provide a suitable constructor (depends on the kind of dataset)</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">MyAdapter</span><span class="params">(String[] myDataset)</span> </span>&#123;</div><div class="line">        mDataset = myDataset;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">// Create new views (invoked by the layout manager)</span></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="keyword">public</span> MyAdapter.<span class="function">ViewHolder <span class="title">onCreateViewHolder</span><span class="params">(ViewGroup parent,</span></span></div><div class="line">                                                   <span class="keyword">int</span> viewType) &#123;</div><div class="line">        <span class="comment">// create a new view</span></div><div class="line">        View v = LayoutInflater.from(parent.getContext())</div><div class="line">                               .inflate(R.layout.my_text_view, parent, <span class="keyword">false</span>);</div><div class="line">        <span class="comment">// set the view's size, margins, paddings and layout parameters</span></div><div class="line">        ...</div><div class="line">        ViewHolder vh = <span class="keyword">new</span> ViewHolder(v);</div><div class="line">        <span class="keyword">return</span> vh;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">// Replace the contents of a view (invoked by the layout manager)</span></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onBindViewHolder</span><span class="params">(ViewHolder holder, <span class="keyword">int</span> position)</span> </span>&#123;</div><div class="line">        <span class="comment">// - get element from your dataset at this position</span></div><div class="line">        <span class="comment">// - replace the contents of the view with that element</span></div><div class="line">        holder.mTextView.setText(mDataset[position]);</div><div class="line"></div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">// Return the size of your dataset (invoked by the layout manager)</span></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getItemCount</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> mDataset.length;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h3 id="创建Card"><a href="#创建Card" class="headerlink" title="创建Card"></a>创建Card</h3><p><em>CardView</em>继承<em>FrameLayout</em>类，通过它可以显示信息在卡片内部，并且在不同的平台上有统一的样式。CardView组件可以有阴影和圆角。</p>
+<p>创建有阴影的Card,使用<em>card_view:cardElevation</em>属性。CardView 使用真实的高度和动态阴影在Android5.0(API 21)和更高版本，较早的版本则使用传统的阴影。</p>
+<p>使用这些属性去定制CardView的外观：</p>
+<blockquote>
+<p>使用<em>card_view:cardCornerRadius</em>属性设置圆角的半径，在布局文件中。<br>使用<em>CardView.setRadius</em>方法设置圆角的半径在java代码中。<br>设置卡片的背景颜色，使用<em>card_view:cardBackgroundColor</em>属性。</p>
+</blockquote>
+<p>下面是一个在xml布局文件中包含一个CardView的示例：<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">LinearLayout</span> <span class="attr">xmlns:android</span>=<span class="string">"http://schemas.android.com/apk/res/android"</span></span></div><div class="line">    <span class="attr">xmlns:tools</span>=<span class="string">"http://schemas.android.com/tools"</span></div><div class="line">    <span class="attr">xmlns:card_view</span>=<span class="string">"http://schemas.android.com/apk/res-auto"</span></div><div class="line">    <span class="attr">...</span> &gt;</div><div class="line">    <span class="comment">&lt;!-- A CardView that contains a TextView --&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">android.support.v7.widget.CardView</span></span></div><div class="line">        <span class="attr">xmlns:card_view</span>=<span class="string">"http://schemas.android.com/apk/res-auto"</span></div><div class="line">        <span class="attr">android:id</span>=<span class="string">"@+id/card_view"</span></div><div class="line">        <span class="attr">android:layout_gravity</span>=<span class="string">"center"</span></div><div class="line">        <span class="attr">android:layout_width</span>=<span class="string">"200dp"</span></div><div class="line">        <span class="attr">android:layout_height</span>=<span class="string">"200dp"</span></div><div class="line">        <span class="attr">card_view:cardCornerRadius</span>=<span class="string">"4dp"</span>&gt;</div><div class="line"></div><div class="line">        <span class="tag">&lt;<span class="name">TextView</span></span></div><div class="line">            <span class="attr">android:id</span>=<span class="string">"@+id/info_text"</span></div><div class="line">            <span class="attr">android:layout_width</span>=<span class="string">"match_parent"</span></div><div class="line">            <span class="attr">android:layout_height</span>=<span class="string">"match_parent"</span> /&gt;</div><div class="line">    <span class="tag">&lt;/<span class="name">android.support.v7.widget.CardView</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">LinearLayout</span>&gt;</span></div></pre></td></tr></table></figure></p>
+<p><img src="http://isming.qiniudn.com/card_travel.png" alt="Card示例图"></p>
+<p>Card示例图</p>
+<h3 id="乱弹"><a href="#乱弹" class="headerlink" title="乱弹"></a>乱弹</h3><p>通过上面可以看到RecyclerView。跟我们经常使用的ListView很像，不过它的父类并不是AbsListView,因此不能混着使用。但是在很多地方可以替换ListView,通过ViewHolder,View重用，可以看到这是一个更加高效的视图组件，推荐使用。</p>
+<p>CardView,本质上就是一个比较符合Material Design的组件，使用Card布局，效果更好。很多人之前可能也使用一些CardUi,谷歌官方出了这个，强烈推荐使用。</p>
+<p>上面RecyclerView和CardView,是分开写的，但是我们可以用在一起的哦，不要糊涂了呀。</p>
+<p>参考资料：<a href="http://developer.android.com/training/material/lists-cards.html" target="_blank" rel="external">http://developer.android.com/training/material/lists-cards.html</a></p>
+<blockquote>
+<p>原文地址：<a href="http://blog.isming.me/2014/10/21/creating-app-with-material-design-two-list/">http://blog.isming.me/2014/10/21/creating-app-with-material-design-two-list/</a>，转载请注明出处。</p>
+</blockquote>
+
+        
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2014/10/26/creating-app-with-material-design-three-shadows/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption"><</strong>
+      <div class="article-nav-title">
+        
+          创建Material Design风格的Android应用--定义阴影和裁剪视图
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2014/10/18/creating-android-app-with-material-design-one-theme/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">创建Material Design风格的Android应用--应用主题</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share">
+
+<div class="bdsharebuttonbox">
+    <i>分享到：</i>
+    <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+    <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间"></a>
+    <a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博"></a>
+    <a href="#" class="bds_sqq" data-cmd="sqq" title="分享到QQ好友"></a>
+    <a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网"></a>
+    <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+    <a href="#" class="bds_more" data-cmd="more"></a>
+</div>
+
+    <script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"1","bdSize":"32"},"share":{"bdCustomStyle":"bdshare:"}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
+
+</div>
+
+
+
+
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" ></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"isming"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2017 Sam
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    <script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3Fc22f102f5fbaa79cf43b93add1805f4f' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/mobile.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+
+<! -- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="theme-color" content="#778899">
+  
+  <title>Android应用使用自定义字体的一些探究 | 码农明明桑</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="最近团队里面在做程序界面统一的工作，因此希望统一字体，接到一个研究怎么自定义字体的任务。因为我们的开发模式，所以需要研究在界面内的字体自定义，以及webview的显示中的字体自定义。 android系统内置字体android 系统本身内置了一些字体，可以在程序中使用，并且支持在xml配置textView的时候进行修改字体的样式。支持字段为android:textStyle ,android:typ">
+<meta name="keywords" content="android">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android应用使用自定义字体的一些探究">
+<meta property="og:url" content="http://blog.isming.me/2015/07/07/android-custom-font/index.html">
+<meta property="og:site_name" content="码农明明桑">
+<meta property="og:description" content="最近团队里面在做程序界面统一的工作，因此希望统一字体，接到一个研究怎么自定义字体的任务。因为我们的开发模式，所以需要研究在界面内的字体自定义，以及webview的显示中的字体自定义。 android系统内置字体android 系统本身内置了一些字体，可以在程序中使用，并且支持在xml配置textView的时候进行修改字体的样式。支持字段为android:textStyle ,android:typ">
+<meta property="og:updated_time" content="2017-05-16T02:31:11.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android应用使用自定义字体的一些探究">
+<meta name="twitter:description" content="最近团队里面在做程序界面统一的工作，因此希望统一字体，接到一个研究怎么自定义字体的任务。因为我们的开发模式，所以需要研究在界面内的字体自定义，以及webview的显示中的字体自定义。 android系统内置字体android 系统本身内置了一些字体，可以在程序中使用，并且支持在xml配置textView的时候进行修改字体的样式。支持字段为android:textStyle ,android:typ">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="http://apps.bdimg.com/libs/jquery/1.9.0/jquery.min.js"></script>
+</head>
+
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			<img src="http://isming.qiniudn.com/my_avatar.jpg">
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">Sam</a></h1>
+		</hgroup>
+
+		
+		<p class="header-subtitle">技术路上的一些记录</p>
+		
+
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+							<li><a href="/links">朋友</a></li>
+				        
+							<li><a href="/about">关于</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="github" target="_blank" href="https://github.com/sangmingming" title="github">github</a>
+					        
+								<a class="weibo" target="_blank" href="http://weibo.com/mingmingsang" title="weibo">weibo</a>
+					        
+								<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				
+				
+
+				
+			</div>
+		</div>
+	</header>				
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">Sam</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+				<img src="http://isming.qiniudn.com/my_avatar.jpg">
+				<hgroup>
+				  <h1 class="header-author">Sam</h1>
+				</hgroup>
+			</div>
+			
+			<p class="header-subtitle">技术路上的一些记录</p>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+					<li><a href="/links">朋友</a></li>
+		        
+					<li><a href="/about">关于</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="https://github.com/sangmingming" title="github">github</a>
+			        
+						<a class="weibo" target="_blank" href="http://weibo.com/mingmingsang" title="weibo">weibo</a>
+			        
+						<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+      <div class="body-wrap"><article id="post-android-custom-font" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/07/07/android-custom-font/" class="article-date">
+  	<time datetime="2015-07-07T11:04:22.000Z" itemprop="datePublished">2015年7月7日</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Android应用使用自定义字体的一些探究
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android/">android</a></li></ul>
+	</div>
+
+        
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>最近团队里面在做程序界面统一的工作，因此希望统一字体，接到一个研究怎么自定义字体的任务。因为我们的开发模式，所以需要研究在界面内的字体自定义，以及webview的显示中的字体自定义。</p>
+<h3 id="android系统内置字体"><a href="#android系统内置字体" class="headerlink" title="android系统内置字体"></a>android系统内置字体</h3><p>android 系统本身内置了一些字体，可以在程序中使用，并且支持在xml配置textView的时候进行修改字体的样式。支持字段为<code>android:textStyle</code> ,<code>android:typeface</code>, <code>android:fontFamily</code>，系统内置了<code>normal|bold|italic</code>三种style, 内置了<code>normal</code>，<code>sans</code>,<code>serif</code>,<code>monospace</code>，几种字体（实测这几种字体仅英文有效），typace和fontFamily功能一样。</p>
+<a id="more"></a>
+<h3 id="使用自定义的字体"><a href="#使用自定义的字体" class="headerlink" title="使用自定义的字体"></a>使用自定义的字体</h3><p>以上的方式可以改变字体的样式，还不是真正的自定义。</p>
+<p>android系统支持TypeFace，即ttf的字体文件。</p>
+<p>我们可以在程序中放入ttf字体文件，在程序中使用Typeface设置字<br>体。</p>
+<p>第一步，在assets目录下新建fonts目录，把ttf字体文件放到这。<br>第二步，程序中调用：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">AssetManager mgr=getAssets();<span class="comment">//得到AssetManager</span></div><div class="line">Typeface tf=Typeface.createFromAsset(mgr, <span class="string">"fonts/ttf.ttf"</span>);<span class="comment">//根据路径得到Typeface</span></div><div class="line">tv.setTypeface(tf);<span class="comment">//设置字体</span></div></pre></td></tr></table></figure>
+<p>注意ttf文件命名不能使用中文,否则可能无法加载。</p>
+<p>对于需要使用比较多的地方，可以写一个TextView的子类来统一处理。</p>
+<h3 id="在webview中使用自定义地体"><a href="#在webview中使用自定义地体" class="headerlink" title="在webview中使用自定义地体"></a>在webview中使用自定义地体</h3><p>对于本地的网页，在asset目录放字体文件，并在css中添加以下内容，自定义一个字体face，并且在需要的地方使用这个字体face即可。</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">@<span class="keyword">font-face</span> &#123;</div><div class="line">	<span class="attribute">font-family</span>: <span class="string">"MyFont"</span>;</div><div class="line">	<span class="attribute">src</span>: <span class="built_in">url</span>(<span class="string">'file:///android_asset/fonts/ttf.ttf'</span>);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="selector-tag">h3</span> &#123; <span class="attribute">font-family</span>:<span class="string">"MyFont"</span>&#125;</div></pre></td></tr></table></figure>
+<p>对于在线的网页，则需要把字体文件放到服务器，使用同样的方式定义字体face,应用到每个地方。</p>
+<p>为了减少网页或者说服务器端的工作，可以使用本地注入的方式注入font-face的css，并对整个网页进行样式替换。</p>
+<p>给webview自定义webViewClient,重写<code>onPageFinish</code>,在其中添加如下内容：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line">view.loadUrl(<span class="string">"javascript:!function()&#123;"</span> +</div><div class="line">        <span class="string">"s=document.createElement('style');s.innerHTML="</span></div><div class="line">        + <span class="string">"\"@font-face&#123;font-family:myhyqh;src:url('**injection**/hyqh.ttf');&#125;*&#123;font-family:myhyqh !important;&#125;\";"</span></div><div class="line">        + <span class="string">"document.getElementsByTagName('head')[0].appendChild(s);"</span> +</div><div class="line">        <span class="string">"document.getElementsByTagName('body')[0].style.fontFamily = \"myhyqh\";&#125;()"</span>);</div><div class="line">``` </div><div class="line"></div><div class="line">由于网页上是没有权限访问本地的asset文件夹的，因此我们需要拦截请求来加载本地的文件，我这里替换了`file:<span class="comment">///android_assets/`为 `**injection**/`了，我们还需要重写</span></div><div class="line">`shouldInterceptRequest`</div><div class="line">在请求为我们这个字体文件的时候，加载本地文件：</div><div class="line"></div><div class="line">```java</div><div class="line"><span class="meta">@Override</span></div><div class="line"><span class="function"><span class="keyword">public</span> WebResourceResponse <span class="title">shouldInterceptRequest</span><span class="params">(WebView view, String url)</span> </span>&#123;</div><div class="line">    WebResourceResponse response =  <span class="keyword">super</span>.shouldInterceptRequest(view, url);</div><div class="line">    CLog.i(<span class="string">"load intercept request:"</span> + url);</div><div class="line">    <span class="keyword">if</span> (url != <span class="keyword">null</span> &amp;&amp; url.contains(<span class="string">"**injection**/"</span>)) &#123;</div><div class="line"></div><div class="line">        <span class="comment">//String assertPath = url.replace("**injection**/", "");</span></div><div class="line">        String assertPath = url.substring(url.indexOf(<span class="string">"**injection**/"</span>) + <span class="string">"**injection**/"</span>.length(), url.length());</div><div class="line">        <span class="keyword">try</span> &#123;</div><div class="line"></div><div class="line">            response = <span class="keyword">new</span> WebResourceResponse(<span class="string">"application/x-font-ttf"</span>,</div><div class="line">                    <span class="string">"UTF8"</span>, getAssets().open(assertPath)</div><div class="line">                    );</div><div class="line">        &#125; <span class="keyword">catch</span> (IOException e) &#123;</div><div class="line">            e.printStackTrace();</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> response;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>###问题</p>
+<p>使用字体统一界面，但是也遇到了一些问题，如下：</p>
+<ol>
+<li>运行速度变慢（毫秒级，用户觉查不到），由于需要读取自定义的字体文件，以及需要渲染，比使用系统字体要慢。</li>
+<li>emoji在5.0以下的系统会有问题。</li>
+<li>在网页，如果采用服务器文件的方法，会消耗用户的流量</li>
+<li>在网页，采用本地注入方式，因为是在onpagefinish后才开始加载字体，因此页面会重新渲染，影响效果。这样还会造成网页可能会出现样式错误。</li>
+</ol>
+<p>因为我们的程序中大量使用到emoji，以及考虑到性能的问题，决定还是使用系统自带的字体了。</p>
+<p>如果你在这方面有更好的方案，欢迎交流！</p>
+<blockquote>
+<p>原文地址：<a href="http://blog.isming.me/2015/07/07/android-custom-font/">http://blog.isming.me/2015/07/07/android-custom-font/</a>，转载请注明出处。</p>
+</blockquote>
+
+        
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2015/08/01/gradle-fir-plugin/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption"><</strong>
+      <div class="article-nav-title">
+        
+          一个上传apk到fir的gradle插件
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2015/05/10/sticker-view/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">图片贴纸旋转缩放功能的实现</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share">
+
+<div class="bdsharebuttonbox">
+    <i>分享到：</i>
+    <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+    <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间"></a>
+    <a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博"></a>
+    <a href="#" class="bds_sqq" data-cmd="sqq" title="分享到QQ好友"></a>
+    <a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网"></a>
+    <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+    <a href="#" class="bds_more" data-cmd="more"></a>
+</div>
+
+    <script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"1","bdSize":"32"},"share":{"bdCustomStyle":"bdshare:"}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
+
+</div>
+
+
+
+
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" ></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"isming"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2017 Sam
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    <script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3Fc22f102f5fbaa79cf43b93add1805f4f' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/mobile.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+
+<! -- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+
+  </div>
+</body>
+</html>

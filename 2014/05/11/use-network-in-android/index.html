@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="theme-color" content="#778899">
+  
+  <title>android中网络操作使用总结（http） | 码农明明桑</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Android是作为智能手机的操作系统，我们开发的应用，大多数也都需要连接网络，通过网络发送数据、获取数据，因此作为一个应用开发者必须熟悉怎么进行网络访问与连接。通常android中进行网络连接一般是使用scoket或者http，http是最多的情况，这里，我来总结下，怎么进行http网络访问操作。 android是采用java语言进行开发的，android的包中包含java的URLConnect">
+<meta name="keywords" content="android">
+<meta property="og:type" content="article">
+<meta property="og:title" content="android中网络操作使用总结（http）">
+<meta property="og:url" content="http://blog.isming.me/2014/05/11/use-network-in-android/index.html">
+<meta property="og:site_name" content="码农明明桑">
+<meta property="og:description" content="Android是作为智能手机的操作系统，我们开发的应用，大多数也都需要连接网络，通过网络发送数据、获取数据，因此作为一个应用开发者必须熟悉怎么进行网络访问与连接。通常android中进行网络连接一般是使用scoket或者http，http是最多的情况，这里，我来总结下，怎么进行http网络访问操作。 android是采用java语言进行开发的，android的包中包含java的URLConnect">
+<meta property="og:updated_time" content="2017-05-16T02:31:11.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="android中网络操作使用总结（http）">
+<meta name="twitter:description" content="Android是作为智能手机的操作系统，我们开发的应用，大多数也都需要连接网络，通过网络发送数据、获取数据，因此作为一个应用开发者必须熟悉怎么进行网络访问与连接。通常android中进行网络连接一般是使用scoket或者http，http是最多的情况，这里，我来总结下，怎么进行http网络访问操作。 android是采用java语言进行开发的，android的包中包含java的URLConnect">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="http://apps.bdimg.com/libs/jquery/1.9.0/jquery.min.js"></script>
+</head>
+
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			<img src="http://isming.qiniudn.com/my_avatar.jpg">
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">Sam</a></h1>
+		</hgroup>
+
+		
+		<p class="header-subtitle">技术路上的一些记录</p>
+		
+
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+							<li><a href="/links">朋友</a></li>
+				        
+							<li><a href="/about">关于</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="github" target="_blank" href="https://github.com/sangmingming" title="github">github</a>
+					        
+								<a class="weibo" target="_blank" href="http://weibo.com/mingmingsang" title="weibo">weibo</a>
+					        
+								<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				
+				
+
+				
+			</div>
+		</div>
+	</header>				
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">Sam</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+				<img src="http://isming.qiniudn.com/my_avatar.jpg">
+				<hgroup>
+				  <h1 class="header-author">Sam</h1>
+				</hgroup>
+			</div>
+			
+			<p class="header-subtitle">技术路上的一些记录</p>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+					<li><a href="/links">朋友</a></li>
+		        
+					<li><a href="/about">关于</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="https://github.com/sangmingming" title="github">github</a>
+			        
+						<a class="weibo" target="_blank" href="http://weibo.com/mingmingsang" title="weibo">weibo</a>
+			        
+						<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+      <div class="body-wrap"><article id="post-use-network-in-android" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2014/05/11/use-network-in-android/" class="article-date">
+  	<time datetime="2014-05-11T14:49:26.000Z" itemprop="datePublished">2014年5月11日</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      android中网络操作使用总结（http）
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android/">android</a></li></ul>
+	</div>
+
+        
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Android是作为智能手机的操作系统，我们开发的应用，大多数也都需要连接网络，通过网络发送数据、获取数据，因此作为一个应用开发者必须熟悉怎么进行网络访问与连接。通常android中进行网络连接一般是使用scoket或者http，http是最多的情况，这里，我来总结下，怎么进行http网络访问操作。</p>
+<p>android是采用java语言进行开发的，android的包中包含java的URLConnection和apache 的httpclient，因此我们可以使用这两个工具进行网络连接和操作。同时，为了控制是否允许程序连接网络，我们开发应用时，需要在Manifest文件中配置申请网络连接的权限，代码如下。<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">uses-permission</span> <span class="attr">android:name</span>=<span class="string">"android.permission.INTERNET"</span>/&gt;</span></div></pre></td></tr></table></figure></p>
+<a id="more"></a>
+<h3 id="使用URLConnection连接网络"><a href="#使用URLConnection连接网络" class="headerlink" title="使用URLConnection连接网络"></a>使用URLConnection连接网络</h3><p>URLConnection为java.net包中提供的网络访问，支持http，https，ftp等，进行http连接时，使用HttpURLConnection即可，示例代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">URL url = <span class="keyword">new</span> URL(<span class="string">"http://www.android.com/"</span>);</div><div class="line">HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();</div><div class="line"><span class="keyword">try</span> &#123;</div><div class="line">    InputStream in = <span class="keyword">new</span> BufferedInputStream(urlConnection.getInputStream());</div><div class="line">    readStream(in);   <span class="comment">//该方法是我们自己写的，从流中取数据保存到本地，实现从网络获取数据。</span></div><div class="line"><span class="keyword">finally</span> &#123;</div><div class="line">    urlConnection.disconnect();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>向服务器提交数据时，需要采用POST传输<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();</div><div class="line"><span class="keyword">try</span> &#123;</div><div class="line">    urlConnection.setDoOutput(<span class="keyword">true</span>);    <span class="comment">//设置可以上传数据</span></div><div class="line">    urlConnection.setChunkedStreamingMode(<span class="number">0</span>);</div><div class="line"></div><div class="line">    OutputStream out = <span class="keyword">new</span> BufferedOutputStream(urlConnection.getOutputStream());</div><div class="line">    writeStream(out);   <span class="comment">//该方法时我们自己写的，向输出流中写数据，实现数据上传。</span></div><div class="line"></div><div class="line">    InputStream in = <span class="keyword">new</span> BufferedInputStream(urlConnection.getInputStream());</div><div class="line">    readStream(in);</div><div class="line"><span class="keyword">finally</span> &#123;</div><div class="line">    urlConnection.disconnect();</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>更多使用方法和函数请查看:<a href="http://developer.android.com/reference/java/net/HttpURLConnection.html" target="_blank" rel="external">http://developer.android.com/reference/java/net/HttpURLConnection.html</a></p>
+<p>同时HttpsURLConnection的使用方法请查看:<a href="http://developer.android.com/reference/javax/net/ssl/HttpsURLConnection.html" target="_blank" rel="external">http://developer.android.com/reference/javax/net/ssl/HttpsURLConnection.html</a></p>
+<h3 id="使用HttpClient"><a href="#使用HttpClient" class="headerlink" title="使用HttpClient"></a>使用HttpClient</h3><p>这个呢，我们也可以使用AndroidHttpClient页可以使用apache默认的DeafultHttpClient,两者之间仅仅常见Client不同，其他都一样</p>
+<p>创建AndroidHttpClient<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">AndroidHttpClient httpClient = AndroidHttpClient.newInstance(<span class="string">"user-agent"</span>);</div><div class="line">```java</div><div class="line">创建DefaultHttpClient</div><div class="line">```java</div><div class="line">HttpClient client = <span class="keyword">new</span> DefaultHttpClient();</div></pre></td></tr></table></figure></p>
+<p>GET请求<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">HttpGet getRequest = <span class="keyword">new</span> HttpGet(<span class="string">"http://blog.isming.me"</span>);</div><div class="line"><span class="keyword">try</span> &#123;  </div><div class="line">    HttpResponse response = httpClient.execute(getMethod); <span class="comment">//发起GET请求  </span></div><div class="line">  </div><div class="line">    Log.i(TAG, <span class="string">"resCode = "</span> + response.getStatusLine().getStatusCode()); <span class="comment">//获取响应码  </span></div><div class="line">    Log.i(TAG, <span class="string">"result = "</span> + EntityUtils.toString(response.getEntity(), <span class="string">"utf-8"</span>));<span class="comment">//获取服务器响应内容  </span></div><div class="line">&#125; <span class="keyword">catch</span> (ClientProtocolException e) &#123;  </div><div class="line">    <span class="comment">// TODO Auto-generated catch block  </span></div><div class="line">    e.printStackTrace();  </div><div class="line">&#125; <span class="keyword">catch</span> (IOException e) &#123;  </div><div class="line">    <span class="comment">// TODO Auto-generated catch block  </span></div><div class="line">    e.printStackTrace();  </div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>发起POST请求：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//先将要传的数据放入List  </span></div><div class="line">params = <span class="keyword">new</span> LinkedList&lt;BasicNameValuePair&gt;();  </div><div class="line">params.add(<span class="keyword">new</span> BasicNameValuePair(<span class="string">"param1"</span>, <span class="string">"Post方法"</span>));  </div><div class="line">params.add(<span class="keyword">new</span> BasicNameValuePair(<span class="string">"param2"</span>, <span class="string">"第二个参数"</span>));  </div><div class="line">              </div><div class="line"><span class="keyword">try</span> &#123;  </div><div class="line">    HttpPost postMethod = <span class="keyword">new</span> HttpPost(baseUrl);  </div><div class="line">    postMethod.setEntity(<span class="keyword">new</span> UrlEncodedFormEntity(params, <span class="string">"utf-8"</span>)); <span class="comment">//将参数填入POST Entity中  </span></div><div class="line">                  </div><div class="line">    HttpResponse response = httpClient.execute(postMethod); <span class="comment">//执行POST方法  </span></div><div class="line">    Log.i(TAG, <span class="string">"resCode = "</span> + response.getStatusLine().getStatusCode()); <span class="comment">//获取响应码  </span></div><div class="line">    Log.i(TAG, <span class="string">"result = "</span> + EntityUtils.toString(response.getEntity(), <span class="string">"utf-8"</span>)); <span class="comment">//获取响应内容  </span></div><div class="line">                  </div><div class="line">&#125; <span class="keyword">catch</span> (UnsupportedEncodingException e) &#123;  </div><div class="line">    <span class="comment">// TODO Auto-generated catch block  </span></div><div class="line">    e.printStackTrace();  </div><div class="line">&#125; <span class="keyword">catch</span> (ClientProtocolException e) &#123;  </div><div class="line">    <span class="comment">// TODO Auto-generated catch block  </span></div><div class="line">    e.printStackTrace();  </div><div class="line">&#125; <span class="keyword">catch</span> (IOException e) &#123;  </div><div class="line">    <span class="comment">// TODO Auto-generated catch block  </span></div><div class="line">    e.printStackTrace();  </div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h3 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h3><p>从上面看到，使用HttpClient更加方便，明了。不过Android官方给我们的文档说明是建议android2.2及以下版本建议使用HttpClient，android2.3及以上版本建议使用HttpURLConnection。</p>
+<p>原因是HttpURLConnection时一个轻量级的Http客户端，提供的API比较简单，方便扩展，但是在2.2及以前版本中，这个API存在一些bug，在2.3的版本中，给修改了。</p>
+<p>而HttpClient虽然稳定，bug少，但是其提供的API很多，进行升级和扩展不方便，android团队在提升和优化其方面的积极性不高。</p>
+<p>因此，在Android2.2版本以前，使用HttpClient时最好的选择。<br>Android2.3版本及以后，使用HttpURLConnection时最佳选择。</p>
+<h3 id="框架"><a href="#框架" class="headerlink" title="框架"></a>框架</h3><p>网络连接是耗时的操作，通常我们不会将其放在UI线程操作，会编写异步线程，将其放在后台线程执行（<a href="http://blog.isming.me/blog/2014/03/16/androidyi-bu-cao-zuo-zong-jie/">异步线程操作看这里</a>）。</p>
+<p>而网上有一些线程的网络操作框架，可以减少我们的工作量，同时我们自己写的好，可能很多异常处理之类的，没有其向的更加全面。   </p>
+<p>有轻量的<a href="http://loopj.com/android-async-http/" target="_blank" rel="external">android-async-http</a><br>谷歌官方的<a href="https://android.googlesource.com/platform/frameworks/volley/" target="_blank" rel="external">volley</a><br>Square提供的<a href="http://square.github.io/retrofit/" target="_blank" rel="external">Retrofit</a>                </p>
+<p>这个可以根据自己项目的需要选择不同的框架，有空我来写写volley的使用（<code>PS：网上已经有使用方法了，自己百度去</code>），另外两个我的连接中已经有使用方法了。          </p>
+<blockquote>
+<p>ok，完成！<br>写的东西不少，但是介绍的不够详细。如果不清楚的，欢迎与我交流</p>
+</blockquote>
+
+        
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2014/05/11/read-android-source-use-idea/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption"><</strong>
+      <div class="article-nav-title">
+        
+          使用Intellij IDEA阅读android源码
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2014/05/09/change-ubuntu-to-mac/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">ubuntu快速变装mac</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share">
+
+<div class="bdsharebuttonbox">
+    <i>分享到：</i>
+    <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+    <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间"></a>
+    <a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博"></a>
+    <a href="#" class="bds_sqq" data-cmd="sqq" title="分享到QQ好友"></a>
+    <a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网"></a>
+    <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+    <a href="#" class="bds_more" data-cmd="more"></a>
+</div>
+
+    <script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"1","bdSize":"32"},"share":{"bdCustomStyle":"bdshare:"}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
+
+</div>
+
+
+
+
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" ></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"isming"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2017 Sam
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    <script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3Fc22f102f5fbaa79cf43b93add1805f4f' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/mobile.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+
+<! -- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="theme-color" content="#778899">
+  
+  <title>在低版本android系统上实现Material设计应用 | 码农明明桑</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="​Material Design真的很好看，动画效果真的很实用。前面也写了一些文章介绍如何编写Material风格的程序，但是很多都是一些新的api，低版本上面没有这些api，我们没办法使用。但是不用气馁，google官方，以及一些大牛，给我们提供了一些程序，让我们在低版本上面可以实现Material风格的程序，这里就给大家介绍一下。  妹子图截屏">
+<meta name="keywords" content="android,material design">
+<meta property="og:type" content="article">
+<meta property="og:title" content="在低版本android系统上实现Material设计应用">
+<meta property="og:url" content="http://blog.isming.me/2014/11/17/material-design-for-pre-lollipop-android/index.html">
+<meta property="og:site_name" content="码农明明桑">
+<meta property="og:description" content="​Material Design真的很好看，动画效果真的很实用。前面也写了一些文章介绍如何编写Material风格的程序，但是很多都是一些新的api，低版本上面没有这些api，我们没办法使用。但是不用气馁，google官方，以及一些大牛，给我们提供了一些程序，让我们在低版本上面可以实现Material风格的程序，这里就给大家介绍一下。  妹子图截屏">
+<meta property="og:image" content="http://isming.qiniudn.com/screenmeizitu.png">
+<meta property="og:updated_time" content="2017-05-16T02:31:11.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="在低版本android系统上实现Material设计应用">
+<meta name="twitter:description" content="​Material Design真的很好看，动画效果真的很实用。前面也写了一些文章介绍如何编写Material风格的程序，但是很多都是一些新的api，低版本上面没有这些api，我们没办法使用。但是不用气馁，google官方，以及一些大牛，给我们提供了一些程序，让我们在低版本上面可以实现Material风格的程序，这里就给大家介绍一下。  妹子图截屏">
+<meta name="twitter:image" content="http://isming.qiniudn.com/screenmeizitu.png">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="http://apps.bdimg.com/libs/jquery/1.9.0/jquery.min.js"></script>
+</head>
+
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			<img src="http://isming.qiniudn.com/my_avatar.jpg">
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">Sam</a></h1>
+		</hgroup>
+
+		
+		<p class="header-subtitle">技术路上的一些记录</p>
+		
+
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+							<li><a href="/links">朋友</a></li>
+				        
+							<li><a href="/about">关于</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="github" target="_blank" href="https://github.com/sangmingming" title="github">github</a>
+					        
+								<a class="weibo" target="_blank" href="http://weibo.com/mingmingsang" title="weibo">weibo</a>
+					        
+								<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				
+				
+
+				
+			</div>
+		</div>
+	</header>				
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">Sam</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+				<img src="http://isming.qiniudn.com/my_avatar.jpg">
+				<hgroup>
+				  <h1 class="header-author">Sam</h1>
+				</hgroup>
+			</div>
+			
+			<p class="header-subtitle">技术路上的一些记录</p>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+					<li><a href="/links">朋友</a></li>
+		        
+					<li><a href="/about">关于</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="https://github.com/sangmingming" title="github">github</a>
+			        
+						<a class="weibo" target="_blank" href="http://weibo.com/mingmingsang" title="weibo">weibo</a>
+			        
+						<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+      <div class="body-wrap"><article id="post-material-design-for-pre-lollipop-android" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2014/11/17/material-design-for-pre-lollipop-android/" class="article-date">
+  	<time datetime="2014-11-17T14:07:33.000Z" itemprop="datePublished">2014年11月17日</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      在低版本android系统上实现Material设计应用
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android/">android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/material-design/">material design</a></li></ul>
+	</div>
+
+        
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>​Material Design真的很好看，动画效果真的很实用。前面也写了一些文章介绍如何编写Material风格的程序，但是很多都是一些新的api，低版本上面没有这些api，我们没办法使用。但是不用气馁，google官方，以及一些大牛，给我们提供了一些程序，让我们在低版本上面可以实现Material风格的程序，这里就给大家介绍一下。</p>
+<p><img src="http://isming.qiniudn.com/screenmeizitu.png" alt="妹子图截屏"></p>
+<p>妹子图截屏</p>
+<a id="more"></a>
+<h3 id="使用support-library"><a href="#使用support-library" class="headerlink" title="使用support library"></a>使用support library</h3><p>使用support library最新的版本，appcomt21，可以在较低版本上面实现部分风格，在之前的文章我已经说过了，这里在系统的说一下。</p>
+<p>####应用主题</p>
+<p>这部分的话之前的文章说过，链接在这里: <a href="http://blog.isming.me/2014/10/18/creating-android-app-with-material-design-one-theme/">http://blog.isming.me/2014/10/18/creating-android-app-with-material-design-one-theme/</a></p>
+<p>使用gralde进行构建的话，在依赖中添加v7包：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">dependencies &#123;</div><div class="line">compile <span class="string">'com.android.support:appcompat-v7:21.0.+'</span></div><div class="line">compile <span class="string">'com.android.support:cardview-v7:21.0.+'</span></div><div class="line">compile <span class="string">'com.android.support:recyclerview-v7:21.0.+'</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>使用eclipse构建的话，加入最新的appcompat包即可。</p>
+<p>另外在style文件中加入：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="comment">&lt;!-- extend one of the Theme.AppCompat themes --&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">style</span> <span class="attr">name</span>=<span class="string">"Theme.MyTheme"</span> <span class="attr">parent</span>=<span class="string">"Theme.AppCompat.Light"</span>&gt;</span><span class="xml"></span></div><div class="line"><span class="comment">&lt;!-- customize the color palette --&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">item</span> <span class="attr">name</span>=<span class="string">"colorPrimary"</span>&gt;</span>@color/material_blue_500<span class="tag">&lt;/<span class="name">item</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">item</span> <span class="attr">name</span>=<span class="string">"colorPrimaryDark"</span>&gt;</span>@color/material_blue_700<span class="tag">&lt;/<span class="name">item</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">item</span> <span class="attr">name</span>=<span class="string">"colorAccent"</span>&gt;</span>@color/material_green_A200<span class="tag">&lt;/<span class="name">item</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">style</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>在appliaction中使用我们的这个Theme.MyTheme，上一次的文章中有个错误，这种情况下不需要在valus-v21中创建一个同名的继承自Material的theme,否则会报错。这样我们就可以使用Material风格了。不过低版本上面还是有很多地方不可以实现这种效果的。</p>
+<h4 id="使用Toolbar代替ActionBar。"><a href="#使用Toolbar代替ActionBar。" class="headerlink" title="使用Toolbar代替ActionBar。"></a>使用Toolbar代替ActionBar。</h4><p>android 5.0增加了ToolBar,可以用其代替ActionBar,在更低版本中，推荐使用，这样，动画特效更方便实现。</p>
+<p>在布局文件中增加Toolbar：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">android.support.v7.widget.Toolbar</span></span></div><div class="line">    <span class="attr">xmlns:android</span>=<span class="string">"http://schemas.android.com/apk/res/android"</span></div><div class="line">    <span class="attr">android:id</span>=<span class="string">"@+id/toolbar"</span></div><div class="line">    <span class="attr">android:layout_width</span>=<span class="string">"match_parent"</span></div><div class="line">    <span class="attr">android:layout_height</span>=<span class="string">"wrap_content"</span></div><div class="line">    <span class="attr">android:background</span>=<span class="string">"?attr/colorPrimaryDark"</span>/&gt;</div></pre></td></tr></table></figure>
+<p>在代码中，使用Toolbar代替ActionBar（Activity必须是继承自ActionBarActivity的）：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</div><div class="line">        <span class="keyword">super</span>.onCreate(savedInstanceState);</div><div class="line">        setContentView(getLayoutResource());</div><div class="line">        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);</div><div class="line">        <span class="keyword">if</span> (toolbar != <span class="keyword">null</span>) &#123;</div><div class="line">            setSupportActionBar(toolbar);</div><div class="line">        &#125;</div><div class="line">    &#125;</div></pre></td></tr></table></figure></p>
+<h4 id="使用CardView"><a href="#使用CardView" class="headerlink" title="使用CardView"></a>使用CardView</h4><p>不详说了，参看我之前的博客吧<a href="http://blog.isming.me/2014/10/21/creating-app-with-material-design-two-list/">http://blog.isming.me/2014/10/21/creating-app-with-material-design-two-list/</a>。</p>
+<h4 id="使用动画"><a href="#使用动画" class="headerlink" title="使用动画"></a>使用动画</h4><p>对于低版本，在support v7包中，提供了一些兼容，可以使用activity过渡动画(不过效果没有5.0的好)。</p>
+<p>首先声明主题的时候，创建一个AppTheme.Base用来声明主题，在其上增加动画属性:</p>
+<p>以下放在values/themes.xml中，用于适配低版本：<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">&lt;?xml version="1.0" encoding="utf-8"?&gt;</div><div class="line"><span class="tag">&lt;<span class="name">resources</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">style</span> <span class="attr">name</span>=<span class="string">"AppTheme"</span> <span class="attr">parent</span>=<span class="string">"AppTheme.Base"</span>/&gt;</span><span class="xml"></span></div><div class="line"></div><div class="line">    <span class="tag">&lt;<span class="name">style</span> <span class="attr">name</span>=<span class="string">"AppTheme.Base"</span> <span class="attr">parent</span>=<span class="string">"Theme.AppCompat"</span>&gt;</span><span class="xml"></span></div><div class="line">        <span class="tag">&lt;<span class="name">item</span> <span class="attr">name</span>=<span class="string">"colorPrimary"</span>&gt;</span>@color/colorPrimary<span class="tag">&lt;/<span class="name">item</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">item</span> <span class="attr">name</span>=<span class="string">"colorPrimaryDark"</span>&gt;</span>@color/colorPrimary<span class="tag">&lt;/<span class="name">item</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">item</span> <span class="attr">name</span>=<span class="string">"android:windowNoTitle"</span>&gt;</span>true<span class="tag">&lt;/<span class="name">item</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">item</span> <span class="attr">name</span>=<span class="string">"windowActionBar"</span>&gt;</span>false<span class="tag">&lt;/<span class="name">item</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">style</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">resources</span>&gt;</span></div></pre></td></tr></table></figure></p>
+<p>以下放在values-v21/themes.xml中<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">&lt;?xml version="1.0" encoding="utf-8"?&gt;</div><div class="line"><span class="tag">&lt;<span class="name">resources</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">style</span> <span class="attr">name</span>=<span class="string">"AppTheme"</span> <span class="attr">parent</span>=<span class="string">"AppTheme.Base"</span>&gt;</span><span class="xml"></span></div><div class="line">    <span class="tag">&lt;<span class="name">item</span> <span class="attr">name</span>=<span class="string">"android:windowContentTransitions"</span>&gt;</span>true<span class="tag">&lt;/<span class="name">item</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">item</span> <span class="attr">name</span>=<span class="string">"android:windowAllowEnterTransitionOverlap"</span>&gt;</span>true<span class="tag">&lt;/<span class="name">item</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">item</span> <span class="attr">name</span>=<span class="string">"android:windowAllowReturnTransitionOverlap"</span>&gt;</span>true<span class="tag">&lt;/<span class="name">item</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">item</span> <span class="attr">name</span>=<span class="string">"android:windowSharedElementEnterTransition"</span>&gt;</span>@android:transition/move<span class="tag">&lt;/<span class="name">item</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">item</span> <span class="attr">name</span>=<span class="string">"android:windowSharedElementExitTransition"</span>&gt;</span>@android:transition/move<span class="tag">&lt;/<span class="name">item</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">style</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">resources</span>&gt;</span></div></pre></td></tr></table></figure></p>
+<p>在代码中启动新Activity的时候，使用v7包中的方法,具体过渡方法跟5.0一样，可以看我之前的博客：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(</div><div class="line">     activity, transitionView, DetailActivity.EXTRA_IMAGE);</div><div class="line">ActivityCompat.startActivity(activity, <span class="keyword">new</span> Intent(activity, DetailActivity.class),</div><div class="line">options.toBundle());</div></pre></td></tr></table></figure></p>
+<h3 id="使用开源控件"><a href="#使用开源控件" class="headerlink" title="使用开源控件"></a>使用开源控件</h3><p>对于很多的控件样式，动画，对话框等，使用兼容包无法完成，我们可以使用一些大神开发的第三方包来实现.</p>
+<p>组件: <a href="https://github.com/navasmdc/MaterialDesignLibrary" target="_blank" rel="external">https://github.com/navasmdc/MaterialDesignLibrary</a></p>
+<p><a href="https://github.com/keithellis/MaterialWidget" target="_blank" rel="external">https://github.com/keithellis/MaterialWidget</a></p>
+<p>上面两个主要是一些实现了Material的组件</p>
+<p>Material Design的对话框: <a href="https://github.com/afollestad/material-dialogs" target="_blank" rel="external">https://github.com/afollestad/material-dialogs</a></p>
+<p>这个github仓库收集了很多的开源实现，大家可以过来看看。<a href="https://github.com/lightSky/MaterialDesignCenter" target="_blank" rel="external">https://github.com/lightSky/MaterialDesignCenter</a></p>
+<h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h3><p>根据提供的规范，自己来实现相应的ui界面以及动画效果等等。<br>这里提供一下谷歌的规范地址:<br>谷歌设计规范：<a href="http://www.google.com/design/spec/material-design/introduction.html" target="_blank" rel="external">http://www.google.com/design/spec/material-design/introduction.html需要翻墙</a>、<a href="http://design.1sters.com/" target="_blank" rel="external">http://design.1sters.com(中文)</a></p>
+<p>图标素材：<a href="https://github.com/google/material-design-icons" target="_blank" rel="external">https://github.com/google/material-design-icons</a>、<a href="https://github.com/Templarian/MaterialDesign" target="_blank" rel="external">https://github.com/Templarian/MaterialDesign</a></p>
+<p>谷歌IO2014，Material Design的诠释:<a href="https://github.com/google/iosched" target="_blank" rel="external">https://github.com/google/iosched</a></p>
+<p>其他人写的应用:<a href="https://github.com/afollestad/cabinet" target="_blank" rel="external">https://github.com/afollestad/cabinet</a></p>
+<h4 id="我写的一个应用，从之前的版本改过来，还没完成，大家随便看看就行了-也是Material-Design：https-github-com-sangmingming-Meizitu"><a href="#我写的一个应用，从之前的版本改过来，还没完成，大家随便看看就行了-也是Material-Design：https-github-com-sangmingming-Meizitu" class="headerlink" title="我写的一个应用，从之前的版本改过来，还没完成，大家随便看看就行了,也是Material Design：https://github.com/sangmingming/Meizitu"></a>我写的一个应用，从之前的版本改过来，还没完成，大家随便看看就行了,也是Material Design：<a href="https://github.com/sangmingming/Meizitu" target="_blank" rel="external">https://github.com/sangmingming/Meizitu</a></h4><blockquote>
+<p>原文地址：<a href="http://blog.isming.me/2014/11/17/material-design-for-pre-lollipop-android/">http://blog.isming.me/2014/11/17/material-design-for-pre-lollipop-android/</a>，转载请注明出处。</p>
+</blockquote>
+
+        
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2014/11/21/use-gradle-new/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption"><</strong>
+      <div class="article-nav-title">
+        
+          使用gradle构建android项目（续）
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2014/11/13/creating-app-with-material-design-five-animations/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">创建Material Design风格的Android应用--使用自定义动画</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share">
+
+<div class="bdsharebuttonbox">
+    <i>分享到：</i>
+    <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+    <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间"></a>
+    <a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博"></a>
+    <a href="#" class="bds_sqq" data-cmd="sqq" title="分享到QQ好友"></a>
+    <a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网"></a>
+    <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+    <a href="#" class="bds_more" data-cmd="more"></a>
+</div>
+
+    <script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"1","bdSize":"32"},"share":{"bdCustomStyle":"bdshare:"}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
+
+</div>
+
+
+
+
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" ></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"isming"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2017 Sam
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    <script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3Fc22f102f5fbaa79cf43b93add1805f4f' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/mobile.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+
+<! -- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+
+  </div>
+</body>
+</html>

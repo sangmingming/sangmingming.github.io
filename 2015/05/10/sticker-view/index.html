@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="theme-color" content="#778899">
+  
+  <title>图片贴纸旋转缩放功能的实现 | 码农明明桑</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="我们的项目包含图片编辑功能，特别是包含图片添加水印贴纸的功能，从最初的简单版可以添加一个图片并且移动位置，到现在添加的图片可以进行移动，以及缩放，旋转，已经是和其他的图片处理可以达到一样的很好的效果了。一直想要整理一下，分享一下实现的改进过程，一直没空，也由于我过于懒，没有动笔。今天正好有时间，分享一下。">
+<meta name="keywords" content="android">
+<meta property="og:type" content="article">
+<meta property="og:title" content="图片贴纸旋转缩放功能的实现">
+<meta property="og:url" content="http://blog.isming.me/2015/05/10/sticker-view/index.html">
+<meta property="og:site_name" content="码农明明桑">
+<meta property="og:description" content="我们的项目包含图片编辑功能，特别是包含图片添加水印贴纸的功能，从最初的简单版可以添加一个图片并且移动位置，到现在添加的图片可以进行移动，以及缩放，旋转，已经是和其他的图片处理可以达到一样的很好的效果了。一直想要整理一下，分享一下实现的改进过程，一直没空，也由于我过于懒，没有动笔。今天正好有时间，分享一下。">
+<meta property="og:updated_time" content="2017-05-16T02:31:11.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="图片贴纸旋转缩放功能的实现">
+<meta name="twitter:description" content="我们的项目包含图片编辑功能，特别是包含图片添加水印贴纸的功能，从最初的简单版可以添加一个图片并且移动位置，到现在添加的图片可以进行移动，以及缩放，旋转，已经是和其他的图片处理可以达到一样的很好的效果了。一直想要整理一下，分享一下实现的改进过程，一直没空，也由于我过于懒，没有动笔。今天正好有时间，分享一下。">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="http://apps.bdimg.com/libs/jquery/1.9.0/jquery.min.js"></script>
+</head>
+
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			<img src="http://isming.qiniudn.com/my_avatar.jpg">
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">Sam</a></h1>
+		</hgroup>
+
+		
+		<p class="header-subtitle">技术路上的一些记录</p>
+		
+
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+							<li><a href="/links">朋友</a></li>
+				        
+							<li><a href="/about">关于</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="github" target="_blank" href="https://github.com/sangmingming" title="github">github</a>
+					        
+								<a class="weibo" target="_blank" href="http://weibo.com/mingmingsang" title="weibo">weibo</a>
+					        
+								<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				
+				
+
+				
+			</div>
+		</div>
+	</header>				
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">Sam</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+				<img src="http://isming.qiniudn.com/my_avatar.jpg">
+				<hgroup>
+				  <h1 class="header-author">Sam</h1>
+				</hgroup>
+			</div>
+			
+			<p class="header-subtitle">技术路上的一些记录</p>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+					<li><a href="/links">朋友</a></li>
+		        
+					<li><a href="/about">关于</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="https://github.com/sangmingming" title="github">github</a>
+			        
+						<a class="weibo" target="_blank" href="http://weibo.com/mingmingsang" title="weibo">weibo</a>
+			        
+						<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+      <div class="body-wrap"><article id="post-sticker-view" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/05/10/sticker-view/" class="article-date">
+  	<time datetime="2015-05-10T14:55:04.000Z" itemprop="datePublished">2015年5月10日</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      图片贴纸旋转缩放功能的实现
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android/">android</a></li></ul>
+	</div>
+
+        
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>我们的项目包含图片编辑功能，特别是包含图片添加水印贴纸的功能，从最初的简单版可以添加一个图片并且移动位置，到现在添加的图片可以进行移动，以及缩放，旋转，已经是和其他的图片处理可以达到一样的很好的效果了。一直想要整理一下，分享一下实现的改进过程，一直没空，也由于我过于懒，没有动笔。今天正好有时间，分享一下。</p>
+<a id="more"></a>
+<h3 id="原始阶段：直接添加ImageView，并且设置其在父view中的位置"><a href="#原始阶段：直接添加ImageView，并且设置其在父view中的位置" class="headerlink" title="原始阶段：直接添加ImageView，并且设置其在父view中的位置"></a>原始阶段：直接添加ImageView，并且设置其在父view中的位置</h3><p>父视图为RelativeLayout,贴纸view就是一个ImageView,通过设置topMargin和leftMargin来设置在父视图中显示的位置，不支持缩放和旋转。功能快速实现，代码比较冗余。再有了新的需求不方便扩展。</p>
+<h3 id="新阶段：自定义View，通过matrix变换实现各种功能"><a href="#新阶段：自定义View，通过matrix变换实现各种功能" class="headerlink" title="新阶段：自定义View，通过matrix变换实现各种功能"></a>新阶段：自定义View，通过matrix变换实现各种功能</h3><p>主要是定义一个View，在使用的时候放到需要用到的地方，大小设置和目标图片相同大小。通过matrix对平移，旋转，缩放的操作进行映射，最终改变贴纸图片的绘制结果，因此实现目标功能。下面具体分析各个功能。</p>
+<p>首先创建的视图在设置完贴纸图片之后，要创建一个浮点型数组，用于保存默认未进行任何变换的时候贴纸图片的关键点，以及一个原始矩形用于保存一个默认绘制区域的矩形，用代码表示就是：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">float</span> imgWidth = mBitmap.getWidth();</div><div class="line"><span class="keyword">float</span> imgHeight = mBitmap.getHeight();</div><div class="line"><span class="keyword">float</span>[] originPoints = <span class="keyword">new</span> <span class="keyword">float</span>[]&#123;<span class="number">0</span>, <span class="number">0</span>, imgWidth,<span class="number">0</span>, imgWidth, imgHeight, <span class="number">0</span>, imgHeight, imgWidth/<span class="number">2</span>, imgHeight/<span class="number">2</span>&#125;; <span class="comment">//分别为矩形的四个点，与中心点</span></div><div class="line">RectF mOriginRect = <span class="keyword">new</span> RectF(<span class="number">0</span>, <span class="number">0</span>, imgWidth, imgHeight);</div></pre></td></tr></table></figure></p>
+<p>变换后的点通过Matrix.mapPoints(newPoints, originPoints)进行映射，变换后的矩形通过Matrix.mapRect(newRect, originRect)进行映射，可以通过这些新的点画一些附加元素。至于贴纸图，可以通过获取后的rect进行定位画，也可以直接使用canvas.drawBitmap(bitmap, matrix, paint)方法绘制。</p>
+<p>至于如何进行变换操作，如何进行变换，则是在onTouch中处理各种触摸事件，或者在dispatchTouchEvent。</p>
+<h4 id="平移"><a href="#平移" class="headerlink" title="平移"></a>平移</h4><p>通过判断ACTION_DOWN，ACTION_UP，判断触摸是否在我们的贴纸图片上面，然后计算手指滑动的距离，可以获取到x轴和y轴的平移距离，调用mMatrix.postTranslate(x,y)，然后重新映射绘图即可。</p>
+<h4 id="旋转"><a href="#旋转" class="headerlink" title="旋转"></a>旋转</h4><p>以贴纸图片的一个边缘点为旋转触摸点，以贴纸图片的中心（非贴纸view的中心），计算旋转的角度，调用mMatrix.postRotate(rotation, px, py)， px，py为贴纸图片的中心点（为上面映射后的点，而不是原始点）。</p>
+<h4 id="缩放"><a href="#缩放" class="headerlink" title="缩放"></a>缩放</h4><p>同样通过触摸位置计算两次滑动过程中的缩放比例，来通过Matrix.postScale(scale, scale, px, py)进行缩放。</p>
+<h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h3><p>开始的时候没有想到使用Matrix，进行了很多的尝试，没有很好的结果。最后使用了Matrix之后，则简单很多，只是在计算缩放和旋转的时候，因为数学没有学好，花了很久才把数学问题搞定。</p>
+<p>这里分享我自己的一个完整的贴纸View，开箱即用，<a href="https://github.com/sangmingming/StickerView" target="_blank" rel="external">https://github.com/sangmingming/StickerView</a> 。如果在这方面，你又更好的实现方式，也欢迎留言，与我进行交流。</p>
+<blockquote>
+<p>原文地址：<a href="http://blog.isming.me/2015/05/10/sticker-view/">http://blog.isming.me/2015/05/10/sticker-view/</a>，转载请注明出处。</p>
+</blockquote>
+
+        
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2015/07/07/android-custom-font/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption"><</strong>
+      <div class="article-nav-title">
+        
+          Android应用使用自定义字体的一些探究
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2015/05/01/android-multi-dex/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">打破Android应用65K方法数魔咒</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share">
+
+<div class="bdsharebuttonbox">
+    <i>分享到：</i>
+    <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+    <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间"></a>
+    <a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博"></a>
+    <a href="#" class="bds_sqq" data-cmd="sqq" title="分享到QQ好友"></a>
+    <a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网"></a>
+    <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+    <a href="#" class="bds_more" data-cmd="more"></a>
+</div>
+
+    <script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"1","bdSize":"32"},"share":{"bdCustomStyle":"bdshare:"}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
+
+</div>
+
+
+
+
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" ></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"isming"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2017 Sam
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    <script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3Fc22f102f5fbaa79cf43b93add1805f4f' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/mobile.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+
+<! -- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+
+  </div>
+</body>
+</html>

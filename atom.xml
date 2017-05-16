@@ -1,0 +1,1019 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>码农明明桑</title>
+  <subtitle>技术路上的一些记录</subtitle>
+  <link href="/atom.xml" rel="self"/>
+  
+  <link href="http://blog.isming.me/"/>
+  <updated>2017-05-16T02:31:11.000Z</updated>
+  <id>http://blog.isming.me/</id>
+  
+  <author>
+    <name>Sam</name>
+    <email>ming_1990@qq.com</email>
+  </author>
+  
+  <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>聊聊Android N开始支持的Lambda</title>
+    <link href="http://blog.isming.me/2016/09/13/android-lambda/"/>
+    <id>http://blog.isming.me/2016/09/13/android-lambda/</id>
+    <published>2016-09-13T12:39:03.000Z</published>
+    <updated>2017-05-16T02:31:11.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>Android N 正式版已经发布了。对于开发者来说一个重大的更新是对于Java支持到了Java8，其中一点就是支持Lambda。我们就来聊聊什么是lambda，怎么在Android中使用。</p>
+<h3 id="什么是lambda"><a href="#什么是lambda" class="headerlink" title="什么是lambda"></a>什么是lambda</h3><p>Lambda 可以理解为匿名函数,帮助我们写出更加简洁的代码。</p>
+<a id="more"></a>
+<p>给view设置一个clicklistener，原本你需要写出这样的代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">v.setOnClickListener(<span class="keyword">new</span> View.OnClickListener(View v) &#123;</div><div class="line"> <span class="meta">@Override</span></div><div class="line"> <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onClick</span><span class="params">(View v)</span> </span>&#123;</div><div class="line"> Toast.makeText(getActivity(), <span class="string">"clicked"</span>, Toast.LENGTH_LONG).show()</div><div class="line"> &#125;</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>使用lambda之后:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">.setOnClickListener(v -&gt; Toast.makeText(getActivity(), <span class="string">"clicked"</span>, Toast.LENGTH_LONG).show());</div></pre></td></tr></table></figure>
+<p>是不是代码量爆减。这里再看下怎么写lambda。</p>
+<p>在JavaScript，python等语言中函数是一等公民，但是Java中类才是。使用lambda时候，lambda其实应该是一个对象，依附于函数式接口（只包含一个抽象方法声明的接口，例如刚刚我们举例的<code>OnClickListener</code>就是,在Java 8 需要使用<code>@FunctionalInterface</code>这样保证在编译的时候一个接口只有一个抽象注解）。</p>
+<p>写法的基本规则是这样:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">(arguments) -&gt; &#123;body&#125;</div></pre></td></tr></table></figure>
+<p>arguments 是参数列表，0~n个， 参数为一个时候，可以不要括号<br>body 为具体代码部分，如果代码只有一句的话可以不要大括号<br>返回值会自动推导出类型    </p>
+<p>一些写法实例：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">(<span class="keyword">int</span> a, <span class="keyword">int</span> b) -&gt; &#123;  <span class="keyword">return</span> a + b; &#125;</div><div class="line"></div><div class="line">() -&gt; System.out.println(<span class="string">"Hello World"</span>);</div><div class="line"></div><div class="line">(String s) -&gt; System.out.println(s);</div><div class="line"></div><div class="line">() -&gt; <span class="number">42</span></div><div class="line"></div><div class="line">() -&gt; &#123; <span class="keyword">return</span> <span class="number">3.1415</span> &#125;;</div><div class="line">(a, b) -&gt; &#123;<span class="keyword">return</span> a+b;&#125;</div></pre></td></tr></table></figure>
+<p>另外一点需要注意的是，在我们的lambda表达式中<code>this</code>关键指的是外部对象，而不是我们以为的lambda这个对象。在语法糖的实现过程中，lambda表达式最后会被变为类的私有方法，因此可以放心的使用this。</p>
+<h3 id="使用retrolambda"><a href="#使用retrolambda" class="headerlink" title="使用retrolambda"></a>使用retrolambda</h3><p>目前有个比较成熟的解决方案，使用<code>retrolambd</code>,接入的配置如下：</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">apply <span class="string">plugin:</span> <span class="string">'com.android.application'</span> </div><div class="line">apply <span class="string">plugin:</span><span class="string">'me.tatarka.retrolambda'</span></div><div class="line"></div><div class="line">buildscript &#123;</div><div class="line">    repositories &#123;</div><div class="line">        mavenCentral()</div><div class="line">    &#125;</div><div class="line"></div><div class="line"> dependencies &#123;</div><div class="line">     classpath <span class="string">'me.tatarka:gradle-retrolambda:3.2.5'</span></div><div class="line"> &#125; </div><div class="line">&#125;</div><div class="line">  <span class="comment">// Required because retrolambda is on maven central</span></div><div class="line">repositories &#123;</div><div class="line">    mavenCentral() </div><div class="line">&#125;</div><div class="line"> android &#123;   </div><div class="line">     compileOptions &#123;</div><div class="line">        sourceCompatibility JavaVersion.VERSION_1_8</div><div class="line">        targetCompatibility JavaVersion.VERSION_1_8   </div><div class="line">        &#125;</div><div class="line">&#125;</div><div class="line"><span class="comment">//指定将源码编译的级别，以下会将代码编译到1.7的自己码格式</span></div><div class="line">retrolambda &#123;</div><div class="line">	javaVersion JavaVersion.VERSION_1_7</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>当前，retrolambda对于android gradle插件是有依赖的，需要使用1.5+的插件才可以。</p>
+<p>retrolambda的原理是在编译的过程中，给class文件增加包裹，转成java 1.7支持的格式。</p>
+<h3 id="使用jack"><a href="#使用jack" class="headerlink" title="使用jack"></a>使用jack</h3><p>在Android N，支持使用Java 8， google给我们提供了新的编译工具<code>jack</code>,因此可以直接支持lambda，为了支持低版本的Android也可以用lambda，我们需要将<code>targetSdkVersion</code>和<code>compileSdkVersion</code>设置为23或者更小。启用jack，修改<code>build.gradle</code>如下。</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">android &#123;</div><div class="line">  ...</div><div class="line">  defaultConfig &#123;</div><div class="line">    ...</div><div class="line">    jackOptions &#123;</div><div class="line">      enabled <span class="literal">true</span></div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">  compileOptions &#123;</div><div class="line">    sourceCompatibility JavaVersion.VERSION_1_8</div><div class="line">    targetCompatibility JavaVersion.VERSION_1_8</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>jack工具链会的编译步骤如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Jack (.java --&gt; .jack --&gt; .dex)</div></pre></td></tr></table></figure></p>
+<p>和之前相比，将中间转换为class文件的步骤省略了，不需要多个工具链。<br>在低版本兼容lambda，也同样是使用的语法糖来实现。</p>
+<h3 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h3><p>如上两种工具都可以让我们在进行Android开发的时候来使用lambda，retrolambda出来的时间更早，经过很多次的迭代，目前也有一些app在使用，相比较来说更加成熟。jack则是google开发，减少了对javac的依赖，更多谷歌的自主性，相信后面谷歌大力推广的，但是出于刚刚开发出来因此还不够成熟，对于lint，proguard，instant run还有很多地方支持不好的地方，我们相信以后jack会是趋势。</p>
+<p>出于尝鲜，还是可以来使用的，但是在大的项目里面还是不建议使用的，毕竟万一出了问题还是很难排查的。</p>
+<p>另外，如果想要在android开发更爽快的使用lambda，也可以去试试<code>kotlin</code>这个语言。</p>
+<p>参考资料:      </p>
+<ol>
+<li><a href="http://viralpatel.net/blogs/Lambda-expressions-java-tutorial/" target="_blank" rel="external">http://viralpatel.net/blogs/Lambda-expressions-java-tutorial/</a>       </li>
+<li><a href="https://developer.android.com/guide/platform/j8-jack.html" target="_blank" rel="external">https://developer.android.com/guide/platform/j8-jack.html</a>     </li>
+<li><a href="https://github.com/evant/gradle-retrolambda" target="_blank" rel="external">https://github.com/evant/gradle-retrolambda</a></li>
+</ol>
+<blockquote>
+<p>原文地址：<a href="http://blog.isming.me/2016/09/13/android-lambda/">http://blog.isming.me/2016/09/13/android-lambda/</a>，转载请注明出处。</p>
+</blockquote>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;Android N 正式版已经发布了。对于开发者来说一个重大的更新是对于Java支持到了Java8，其中一点就是支持Lambda。我们就来聊聊什么是lambda，怎么在Android中使用。&lt;/p&gt;
+&lt;h3 id=&quot;什么是lambda&quot;&gt;&lt;a href=&quot;#什么是lambda&quot; class=&quot;headerlink&quot; title=&quot;什么是lambda&quot;&gt;&lt;/a&gt;什么是lambda&lt;/h3&gt;&lt;p&gt;Lambda 可以理解为匿名函数,帮助我们写出更加简洁的代码。&lt;/p&gt;
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>小红书Android客户端演进之路</title>
+    <link href="http://blog.isming.me/2016/08/08/red-android-evolution/"/>
+    <id>http://blog.isming.me/2016/08/08/red-android-evolution/</id>
+    <published>2016-08-08T11:13:00.000Z</published>
+    <updated>2017-05-16T02:31:11.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>小红书Android客户端第一个版本于2014年8月8日发布，转眼到了2016年8月8日，小红书Android版本发版两周年。趁机回顾一下小红书的Android版本，两年中我们踩过很多坑，收获很多经验，分享出来与大家共勉。<br>小红书从最初1.0到现在目前4.7版本，历经两年，安装包从原先的5M发展到现在的17M，产品模块也从原先的只有社区模块发展到了具有社区和电商两个大模块。App包含社区、电商、支付、推送、直播、统计等各种功能和模块，那么开始吧。</p>
+<p><img src="http://isming.qiniudn.com/xingin_banner1.png" alt=""></p>
+<a id="more"></a>
+<h3 id="功能演进"><a href="#功能演进" class="headerlink" title="功能演进"></a>功能演进</h3><p>两年的时间，30多个版本的迭代，许多功能都有了翻天覆地的变化。我们的新人欢迎页也是从最初的比较炫的效果发展到目前比较稳定的简洁版本。当初钟大侠花了无数个日日夜夜，苦心做出来了多个欢迎页动画，虽然现在已经不再使用，但是我们也学习到了一些新技术。后来，钟大侠还是将其贡献到了github开源社区中。<br><img src="https://raw.githubusercontent.com/w446108264/XhsParallaxWelcome/master/output/show.gif" alt="欢迎页第一版"></p>
+<p>下载地址:<a href="https://github.com/w446108264/XhsParallaxWelcome" target="_blank" rel="external">https://github.com/w446108264/XhsParallaxWelcome</a></p>
+<p><img src="http://isming.qiniudn.com/show_two_img.gif" alt="欢迎页第二版"></p>
+<p>下载地址: <a href="https://github.com/w446108264/XhsWelcomeAnim" target="_blank" rel="external">https://github.com/w446108264/XhsWelcomeAnim</a></p>
+<p>社区是小红书的核心价值之一，笔记是小红书社区的核心体现，毋庸置疑，笔记发布是小红书App的核心功能之一，我们一直在产品和技术上，优化我们的笔记发布流程和功能，包括我们将只支持分享单张图片，扩展到现在支持多张图片同时发布。同时支持更丰富的图片编辑效果，更加便捷的发布笔记。</p>
+<p>小红书的笔记展现形式和大多数其他的图片社交App类似，我们也支持图上标签功能。最初小红书图上标签是同其他App类似的黑色的标签。不过在3.0之后，小红书创造了独特的树状标签，给用户带来焕然一新的体验，同时也被其他App竞相模仿。新的标签给技术也带了很多的挑战，我们重新定义了标签的结构，以及标签的生成和展示。可以查看我以前的博客，来看看我是怎样做标签的动画的。（<a href="http://blog.isming.me/2016/06/07/path-property-animation/">http://blog.isming.me/2016/06/07/path-property-animation/</a> ）</p>
+<p>UI的改版，功能上的改动还有很多，这里不再一一提起。小红书Android整体上的风格和iOS保持一致，不过我们在15年初开始，对于App内的细节进行Material Design 适配，包括一些按钮风格、点击效果、字体规范、对话框等等，希望为Android用户带来更好的使用体验。</p>
+<h3 id="技术选型进化"><a href="#技术选型进化" class="headerlink" title="技术选型进化"></a>技术选型进化</h3><p>在技术选型上，这里主要讲一下网络层的框架选型升级和图片加载库的升级。</p>
+<h4 id="网络框架的演进"><a href="#网络框架的演进" class="headerlink" title="网络框架的演进"></a>网络框架的演进</h4><p>App的最初框架是由钟大侠一人花了10来天完成，包括基本的网络请求框架、App大体的架构以及一些主要的功能。最初时候选择框架的原则就是选择自己最熟悉的，因此我们采用了<code>async-http</code>这套框架作为我们底层的网络请求框架，框架完成了网络的异步请求与回调，能够满足当时的需求。</p>
+<p>然而仅仅不到半年之后，我们就决定了使用Volley来替换。替换以后，底层的网络请求代码更加清晰，在Volley返回的结果即直接返回了我们需要的Object，同时将统一的错误处理、公共的参数处理和一些公共的返回使用的参数，全部放在我们自定义的Request当中，这样外部请求所需要传入的参数更少，对于错误的处理更加简单，只需要考虑业务需要的Response，其他全局的返回内容则无需进行干扰。通过Volley的引入，帮助我们在业务的开发上变得更加便捷。引入Volley之初，Volley的底层使用的是HttpClient+HttpURLConnection，后期通过网上的资料发现OkHttp使用NIO更加高效，并且被Android 引入作为系统底层的网络请求，我们也将Volley的底层也替换为OkHttp。</p>
+<p>与此同时，小红书的api请求也在不断进行RESTful，我们遇到一个问题就是经常找一个api的定义比较麻烦。大约在15年11月份，我们引入了Retrofit，通过二次改造，使其支持了公共参数的构建，以及对于GsonConvert的改进支持直接返回我们需要的Object，而且对于RESTful风格的良好支持给我们提供了极大的便利。配合RxJava，我们可以方便的进行多个api的同时请求、api返回的多个线程的切换。</p>
+<h4 id="图片加载框架的演进"><a href="#图片加载框架的演进" class="headerlink" title="图片加载框架的演进"></a>图片加载框架的演进</h4><p>小红书的笔记是以图片加文字为主体的内容，因此会有大量的图片显示需求。和网络框架选型类似，早期选择了比较熟悉的UIL来做图片加载，可以同时支持本地图片和网络图片的加载，在当时可以满足我们的基本需求。</p>
+<p>15年初，我们开始使用更加高清的图片，随之加载速度变慢，占用更多的内存，而且这个时候UIL的作者基本很少维护。我们开始调研使用新的图片加载框架。此时Fresco刚刚出来，还不太稳定，当时没敢用。给我们的可选项有Picasso和Glide两个可选项，Picasso比较轻量，但是相比于UIL在性能上没有太好的提高。Glide代码量较大，不过它会在本地保存多份缓存（原始图片和实际显示尺寸的图片），这样加载本地缓存的时候，可以直接显示大小刚好的尺寸，减少解码的时间，因此会比UIL要快很多。</p>
+<p>15年下半年，我们需要支持gif的动画显示，而Glide对动画的兼容性又不是特别好，这个时候我们直接切到了Fresco。同时Fresco对webp的良好支持，使得我们在后期切换到webp格式的时候，减少了很多工作量。Fresco在4.4及以下版本使用匿名内存来作为内存缓存，为我们减少OOM做了巨大的贡献。</p>
+<p>我们使用的这几个图片加载框架，每个框架的使用都有非常大的区别，这就导致迁移的时候工作量巨大。为了降低迁移成本，我们封装了自己的ImageLoader，在ImageLoader中来实现具体的图片加载，这样保证在迁移的时候，最大程度的降低代码的改动（不过在迁移到Fresco的时候还是改动巨大，因为我们不能直接使用ImageView了o(︶︿︶)o。</p>
+<h4 id="推送的升级"><a href="#推送的升级" class="headerlink" title="推送的升级"></a>推送的升级</h4><p>推送，我觉得也有必要说一说。最初我们快速选用了百度云推送，在当时看来百度的推送比较稳定，同时接入比较简单。实际使用了一年之后，发现送达率不是特别高，并且数据统计做的不太好，无法比较好的统计推送效果。在调研之后，我们决定迁移到小米推送+友盟推送的模式，针对小米用户开启小米推送，其他用户采用友盟推送，为了平滑过渡，在切换期间同时向未升级的老用户继续使用百度云推送进行推送。</p>
+<h3 id="架构升级"><a href="#架构升级" class="headerlink" title="架构升级"></a>架构升级</h3><p>由于一直以来在业务开发占用的时间比较多，目前App的整体架构没有做过太大的改变。</p>
+<p>在Adapter的使用方面，我们将ListView或RecyclerView的Item放到单独的ItemHander，这样可以在不同的页面可以通过将不同的Item组装到一起，从而满足不同地方的需求。这样可以在ListView或RecyclerView来复用相同的代码，提高代码的可维护性。</p>
+<p>前面网络层说到我们的错误处理，这个也是做过比较大的升级。最初时候，网络错误、http请求错误、后台和客户端的错误，都分别在不同的层级进行处理。目前我们在发生错误的时候将错误全部以Exception的方式抛出，最后在上层进行错误的处理。</p>
+<p>App中的状态同步，早期使用使用数据库缓存部分数据，或者使用LocalBroadcast进行广播通讯，前者有很多的限制，后者使用起来较为复杂。近期我们改用EventBus进行状态同步，同时这样也使得各个页面之间的耦合也低。</p>
+<p>App中占比很大的部分是从网络请求数据，获得数据后进行展示，还是以MVC为主。在一些模块的部分地方，做一些databinding，MVP等的测试。后面有机会会更多大范围的重构。</p>
+<h3 id="其他周边进化"><a href="#其他周边进化" class="headerlink" title="其他周边进化"></a>其他周边进化</h3><p>我们的开发最初是使用Eclipse进行开发的，但是Eclipse仅仅存在了不到一个月。在我苦口婆心的劝说下，钟大侠和我一起切换到了Android Studio。而这导致我们的项目目录一直都是使用Eclipse时代的目录格式，直到今年年初才切换到Android Studio推荐的目录格式，切换完目录为我们做debug和release差异化提供了极大的便利。</p>
+<p>APK最初大约只有5M，历史最高峰达到了23M，在App减肥上我们也做了一些努力，主要是使用tinypng压缩图片，so只保留arm的支持。项目的复杂也使得每次编译都变得很慢，关于这个可以看下我以前的gradle加速<a href="http://blog.isming.me/2015/03/18/android-build-speed-up/">http://blog.isming.me/2015/03/18/android-build-speed-up/</a>。</p>
+<p>现在持续集成还是蛮火的，自然我们也在用。最初的时候，我们每天需要手动打包，打完包之后打开fir的网站，将apk传上去，然后在公司的微信群吼一声，告诉大家我们发包了。经历一段时间后，我们编写了一个Gradle插件帮助我们自动上传到fir，在之后我们搭建了Jenkins自动完成这一系列步骤，并通过邮件告知大家，然后就可以愉快的玩耍了。</p>
+<p><img src="http://isming.qiniudn.com/jenkins_ci.jpg" alt="Jenkins"></p>
+<h3 id="未完待续"><a href="#未完待续" class="headerlink" title="未完待续"></a>未完待续</h3><p>本文介绍了我们两年来的一些大的变化，通过一篇文章可能很多东西还是说不清楚，暂时就写这么多。目前项目的组织架构还没有特别大的变化，我们目前已经在做一些小范围的测试，后面将对继续不断的进化和演进。</p>
+<p>现在我们的Android还有坑位，如果你有兴趣，就赶紧发送简历来占坑吧，我的邮箱是: <code>msang#xiaohongshu.com</code> (请手动替换#为@)</p>
+<blockquote>
+<p>本文同步发布于小红书技术微信公众号<code>REDHacker</code>,可如下扫描二维码或搜索id： <code>red-hacker</code>进行关注。</p>
+</blockquote>
+<p><img src="http://isming.qiniudn.com/redhacker.jpg" alt="REDHacker"></p>
+<blockquote>
+<p>原文地址：<a href="http://blog.isming.me/2016/08/08/red-android-evolution/">http://blog.isming.me/2016/08/08/red-android-evolution/</a>，转载请注明出处。</p>
+</blockquote>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;小红书Android客户端第一个版本于2014年8月8日发布，转眼到了2016年8月8日，小红书Android版本发版两周年。趁机回顾一下小红书的Android版本，两年中我们踩过很多坑，收获很多经验，分享出来与大家共勉。&lt;br&gt;小红书从最初1.0到现在目前4.7版本，历经两年，安装包从原先的5M发展到现在的17M，产品模块也从原先的只有社区模块发展到了具有社区和电商两个大模块。App包含社区、电商、支付、推送、直播、统计等各种功能和模块，那么开始吧。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;http://isming.qiniudn.com/xingin_banner1.png&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="Android" scheme="http://blog.isming.me/tags/Android/"/>
+    
+      <category term="架构" scheme="http://blog.isming.me/tags/%E6%9E%B6%E6%9E%84/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Path和Property Animation配合让线条动起来</title>
+    <link href="http://blog.isming.me/2016/06/07/path-property-animation/"/>
+    <id>http://blog.isming.me/2016/06/07/path-property-animation/</id>
+    <published>2016-06-07T06:03:39.000Z</published>
+    <updated>2017-05-16T02:31:11.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>之前做过一个图上标签但是动画样式不太好看，经过查找资料发现了一种全新的思路来实现动画，流畅的让标签的线显示和隐藏，示例如下，就在这里说一说。本文会涉及到Path，Property Animation, PathEffect, PathMeasure。我们开始一一道来。</p>
+<p><img src="http://isming.qiniudn.com/blog/tag_animation.gif" alt="示例"></p>
+<a id="more"></a>
+<h3 id="使用Path绘制曲线"><a href="#使用Path绘制曲线" class="headerlink" title="使用Path绘制曲线"></a>使用Path绘制曲线</h3><p>当我们需要画曲线的时候，可能会直接使用drawLine来画，不太复杂的话还比较好实现，如果需要画曲线，或者拐弯的线的时候使用drawLine就比较复杂了。这时候，我们可以借助<code>Path</code>来drawPath。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">Paint paint = <span class="keyword">new</span> Paint();</div><div class="line">paint.setColor(Color.BLACK);</div><div class="line">paint.setStyle(Paint.Style.STROKE); <span class="comment">//一定要设置为画线条</span></div><div class="line">Path path = <span class="keyword">new</span> Path();</div><div class="line">path.moveTo(<span class="number">100</span>, <span class="number">100</span>);   <span class="comment">//定位path的起点</span></div><div class="line">path.lineTo(<span class="number">100</span>, <span class="number">200</span>);</div><div class="line">path.lineTo(<span class="number">200</span>, <span class="number">150</span>);</div><div class="line">path.close();</div><div class="line">canvas.drawPath(path, paint);</div></pre></td></tr></table></figure>
+<p>通过以上的方法代码我们就可以画出三角形了。</p>
+<h3 id="测量Path的长度"><a href="#测量Path的长度" class="headerlink" title="测量Path的长度"></a>测量Path的长度</h3><p>实现动画的前提是首先得到Path的长度，然后根据长度计算出每个时间节点应该显示的长度。因为系统给我们提供了测量长度的方法，就不需要我们去进行复杂的计算了。直接使用<code>PathMeasure</code>就可以了。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">PathMeasure measure = <span class="keyword">new</span> PathMeasure(path, <span class="keyword">false</span>);</div><div class="line"><span class="keyword">float</span> length = measure.getLength();</div></pre></td></tr></table></figure>
+<h3 id="只绘制Path的一部分"><a href="#只绘制Path的一部分" class="headerlink" title="只绘制Path的一部分"></a>只绘制Path的一部分</h3><p>为了让Path能够逐步显示出来，或者逐步隐藏。我们需要做到能够显示path的一部分，并且改变显示的长度。我们知道可以通过<code>DashPathEffect</code>来显示虚线效果。同时我们可以借助DashPathEffect让我们的实线和虚线的部分的长度分别为我们的Path的长度，然后来改变偏移量，实现只显示path的一部分。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">PathEffect effect = <span class="keyword">new</span> DashPathEffect(<span class="keyword">new</span> <span class="keyword">float</span>[]&#123;pathLength, pathLength&#125;, pathLength/<span class="number">2</span>);</div><div class="line">paint.setPathEffect(effect);</div><div class="line">canvas.drawPath(path, paint)</div></pre></td></tr></table></figure>
+<h3 id="让Path动起来"><a href="#让Path动起来" class="headerlink" title="让Path动起来"></a>让Path动起来</h3><p>通过上面说的，我们改变PathEffect的偏移量就可以改变path显示的长度，因此我们可以给我们的View或者对象定义个属性，通过Property Animation来改变这个属性的值，即可实现动画。</p>
+<p>PathEffect 属性值变化</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">float</span> percentage = <span class="number">0.0f</span>;</div><div class="line">PathEffect effect = <span class="keyword">new</span> DashPathEffect(<span class="keyword">new</span> <span class="keyword">float</span>[]&#123;pathLength, pathLength&#125;, pathLength - pathLength*percentage);</div></pre></td></tr></table></figure>
+<p>动画定义:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Animator animatorLine = ObjectAnimator.ofFloat(view, “percentage”, <span class="number">0.0f</span>, <span class="number">1.0f</span>);</div></pre></td></tr></table></figure>
+<h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h3><p>就这样就实现了。思路甚至代码都是参考一篇国外的博客。思路很重要，一年前做这个动画的时候百思不得姐，花了好多时间，后面实现的效果还是比较僵硬。这次发现了其他人的思路之后，很容易就解决了。</p>
+<p><em>思路很重要，以及要了解更加全面的知识</em>，不然很多东西都不知道，自己的思路还是会被限制。</p>
+<p>最后就是多google，百毒上除了广告，别的东西都挺难找到的。</p>
+<p>没有Demo了，可以参考我参考的那个github的库吧。同时作者已经实现svg的动画显示了，原理相同，只是把svg加载为path，使用同样的动画。代码:<a href="https://github.com/matthewrkula/AnimatedPathView" target="_blank" rel="external">https://github.com/matthewrkula/AnimatedPathView</a></p>
+<blockquote>
+<p>原文地址：<a href="http://blog.isming.me/2016/06/07/path-property-animation/">http://blog.isming.me/2016/06/07/path-property-animation/</a>，转载请注明出处。</p>
+</blockquote>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;之前做过一个图上标签但是动画样式不太好看，经过查找资料发现了一种全新的思路来实现动画，流畅的让标签的线显示和隐藏，示例如下，就在这里说一说。本文会涉及到Path，Property Animation, PathEffect, PathMeasure。我们开始一一道来。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;http://isming.qiniudn.com/blog/tag_animation.gif&quot; alt=&quot;示例&quot;&gt;&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="android" scheme="http://blog.isming.me/tags/android/"/>
+    
+      <category term="animation" scheme="http://blog.isming.me/tags/animation/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Android系统更改状态栏字体颜色</title>
+    <link href="http://blog.isming.me/2016/01/09/chang-android-statusbar-text-color/"/>
+    <id>http://blog.isming.me/2016/01/09/chang-android-statusbar-text-color/</id>
+    <published>2016-01-08T16:41:39.000Z</published>
+    <updated>2017-05-16T02:31:11.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>随着时代的发展，Android的状态栏都不是乌黑一片了，在Android4.4之后我们可以修改状态栏的颜色或者让我们自己的View延伸到状态栏下面。我们可以进行更多的定制化了，然而有的时候我们使用的是淡色的颜色比如白色，由于状态栏上面的文字为白色，这样的话状态栏上面的文字就无法看清了。因此本文提供一些解决方案，可以是MIUI6+,Flyme4+，Android6.0+支持切换状态栏的文字颜色为暗色。</p>
+<a id="more"></a>
+<h3 id="修改MIUI"><a href="#修改MIUI" class="headerlink" title="修改MIUI"></a>修改MIUI</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">boolean</span> <span class="title">setMiuiStatusBarDarkMode</span><span class="params">(Activity activity, <span class="keyword">boolean</span> darkmode)</span> </span>&#123;</div><div class="line">    Class&lt;? extends Window&gt; clazz = activity.getWindow().getClass();</div><div class="line">    <span class="keyword">try</span> &#123;</div><div class="line">        <span class="keyword">int</span> darkModeFlag = <span class="number">0</span>;</div><div class="line">        Class&lt;?&gt; layoutParams = Class.forName(<span class="string">"android.view.MiuiWindowManager$LayoutParams"</span>);</div><div class="line">        Field field = layoutParams.getField(<span class="string">"EXTRA_FLAG_STATUS_BAR_DARK_MODE"</span>);</div><div class="line">        darkModeFlag = field.getInt(layoutParams);</div><div class="line">        Method extraFlagField = clazz.getMethod(<span class="string">"setExtraFlags"</span>, <span class="keyword">int</span>.class, <span class="keyword">int</span>.class);</div><div class="line">        extraFlagField.invoke(activity.getWindow(), darkmode ? darkModeFlag : <span class="number">0</span>, darkModeFlag);</div><div class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</div><div class="line">    &#125; <span class="keyword">catch</span> (Exception e) &#123;</div><div class="line">        e.printStackTrace();</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">false</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>上面为小米官方提供的解决方案，主要为MIUI内置了可以修改状态栏的模式，支持Dark和Light两种模式。</p>
+<h3 id="修改Flyme"><a href="#修改Flyme" class="headerlink" title="修改Flyme"></a>修改Flyme</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">boolean</span> <span class="title">setMeizuStatusBarDarkIcon</span><span class="params">(Activity activity, <span class="keyword">boolean</span> dark)</span> </span>&#123;</div><div class="line">    <span class="keyword">boolean</span> result = <span class="keyword">false</span>;</div><div class="line">    <span class="keyword">if</span> (activity != <span class="keyword">null</span>) &#123;</div><div class="line">        <span class="keyword">try</span> &#123;</div><div class="line">            WindowManager.LayoutParams lp = activity.getWindow().getAttributes();</div><div class="line">            Field darkFlag = WindowManager.LayoutParams.class</div><div class="line">                    .getDeclaredField(<span class="string">"MEIZU_FLAG_DARK_STATUS_BAR_ICON"</span>);</div><div class="line">            Field meizuFlags = WindowManager.LayoutParams.class</div><div class="line">                    .getDeclaredField(<span class="string">"meizuFlags"</span>);</div><div class="line">            darkFlag.setAccessible(<span class="keyword">true</span>);</div><div class="line">            meizuFlags.setAccessible(<span class="keyword">true</span>);</div><div class="line">            <span class="keyword">int</span> bit = darkFlag.getInt(<span class="keyword">null</span>);</div><div class="line">            <span class="keyword">int</span> value = meizuFlags.getInt(lp);</div><div class="line">            <span class="keyword">if</span> (dark) &#123;</div><div class="line">                value |= bit;</div><div class="line">            &#125; <span class="keyword">else</span> &#123;</div><div class="line">                value &amp;= ~bit;</div><div class="line">            &#125;</div><div class="line">            meizuFlags.setInt(lp, value);</div><div class="line">            activity.getWindow().setAttributes(lp);</div><div class="line">            result = <span class="keyword">true</span>;</div><div class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> result;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>同理使用跟miui类似的方式</p>
+<h3 id="修改Android6-0"><a href="#修改Android6-0" class="headerlink" title="修改Android6.0+"></a>修改Android6.0+</h3><p>Android 6.0开始，谷歌官方提供了支持，在style属性中配置<em>android:windowLightStatusBar</em><br>即可， 设置为<code>true</code>时，当statusbar的背景颜色为淡色时，statusbar的文字颜色会变成灰色，为<code>false</code>时同理。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">style</span> <span class="attr">name</span>=<span class="string">"statusBarStyle"</span> <span class="attr">parent</span>=<span class="string">"@android:style/Theme.DeviceDefault.Light"</span>&gt;</span><span class="xml"></span></div><div class="line">    <span class="tag">&lt;<span class="name">item</span> <span class="attr">name</span>=<span class="string">"android:statusBarColor"</span>&gt;</span>@color/status_bar_color<span class="tag">&lt;/<span class="name">item</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">item</span> <span class="attr">name</span>=<span class="string">"android:windowLightStatusBar"</span>&gt;</span>false<span class="tag">&lt;/<span class="name">item</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">style</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>目前为止，android6.0的市场占有率还很少，而MIUI和flyme在国内占有率还算可以，因此，我们可以尽自己所能，适配更多。如果你还有其他的奇淫技巧，也欢迎分享补充。</p>
+<blockquote>
+<p>原文地址：<a href="http://blog.isming.me/2016/01/09/chang-android-statusbar-text-color/">http://blog.isming.me/2016/01/09/chang-android-statusbar-text-color/</a>，转载请注明出处。</p>
+</blockquote>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;随着时代的发展，Android的状态栏都不是乌黑一片了，在Android4.4之后我们可以修改状态栏的颜色或者让我们自己的View延伸到状态栏下面。我们可以进行更多的定制化了，然而有的时候我们使用的是淡色的颜色比如白色，由于状态栏上面的文字为白色，这样的话状态栏上面的文字就无法看清了。因此本文提供一些解决方案，可以是MIUI6+,Flyme4+，Android6.0+支持切换状态栏的文字颜色为暗色。&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="android" scheme="http://blog.isming.me/tags/android/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Android WebView 上传文件支持全解析</title>
+    <link href="http://blog.isming.me/2015/12/21/android-webview-upload-file/"/>
+    <id>http://blog.isming.me/2015/12/21/android-webview-upload-file/</id>
+    <published>2015-12-21T12:02:30.000Z</published>
+    <updated>2017-05-16T02:31:11.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>默认情况下情况下，使用Android的WebView是不能够支持上传文件的。而这个，也是在我们的前端工程师告知之后才了解的。因为Android的每个版本WebView的实现有差异，因此需要对不同版本去适配。花了一点时间，参考别人的代码，这个问题已经解决，这里把我踩过的坑分享出来。</p>
+<p>主要思路是重写WebChromeClient，然后在WebViewActivity中接收选择到的文件Uri，传给页面去上传就可以了。</p>
+<a id="more"></a>
+<h3 id="创建一个WebViewActivity的内部类"><a href="#创建一个WebViewActivity的内部类" class="headerlink" title="创建一个WebViewActivity的内部类"></a>创建一个WebViewActivity的内部类</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">XHSWebChromeClient</span> <span class="keyword">extends</span> <span class="title">WebChromeClient</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="comment">// For Android 3.0+</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">openFileChooser</span><span class="params">(ValueCallback&lt;Uri&gt; uploadMsg)</span> </span>&#123;</div><div class="line">        CLog.i(<span class="string">"UPFILE"</span>, <span class="string">"in openFile Uri Callback"</span>);</div><div class="line">        <span class="keyword">if</span> (mUploadMessage != <span class="keyword">null</span>) &#123;</div><div class="line">            mUploadMessage.onReceiveValue(<span class="keyword">null</span>);</div><div class="line">        &#125;</div><div class="line">        mUploadMessage = uploadMsg;</div><div class="line">        Intent i = <span class="keyword">new</span> Intent(Intent.ACTION_GET_CONTENT);</div><div class="line">        i.addCategory(Intent.CATEGORY_OPENABLE);</div><div class="line">        i.setType(<span class="string">"*/*"</span>);</div><div class="line">        startActivityForResult(Intent.createChooser(i, <span class="string">"File Chooser"</span>), FILECHOOSER_RESULTCODE);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">// For Android 3.0+</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">openFileChooser</span><span class="params">(ValueCallback uploadMsg, String acceptType)</span> </span>&#123;</div><div class="line">        CLog.i(<span class="string">"UPFILE"</span>, <span class="string">"in openFile Uri Callback has accept Type"</span> + acceptType);</div><div class="line">        <span class="keyword">if</span> (mUploadMessage != <span class="keyword">null</span>) &#123;</div><div class="line">            mUploadMessage.onReceiveValue(<span class="keyword">null</span>);</div><div class="line">        &#125;</div><div class="line">        mUploadMessage = uploadMsg;</div><div class="line">        Intent i = <span class="keyword">new</span> Intent(Intent.ACTION_GET_CONTENT);</div><div class="line">        i.addCategory(Intent.CATEGORY_OPENABLE);</div><div class="line">        String type = TextUtils.isEmpty(acceptType) ? <span class="string">"*/*"</span> : acceptType;</div><div class="line">        i.setType(type);</div><div class="line">        startActivityForResult(Intent.createChooser(i, <span class="string">"File Chooser"</span>),</div><div class="line">                FILECHOOSER_RESULTCODE);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">// For Android 4.1</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">openFileChooser</span><span class="params">(ValueCallback&lt;Uri&gt; uploadMsg, String acceptType, String capture)</span> </span>&#123;</div><div class="line">        CLog.i(<span class="string">"UPFILE"</span>, <span class="string">"in openFile Uri Callback has accept Type"</span> + acceptType + <span class="string">"has capture"</span> + capture);</div><div class="line">        <span class="keyword">if</span> (mUploadMessage != <span class="keyword">null</span>) &#123;</div><div class="line">            mUploadMessage.onReceiveValue(<span class="keyword">null</span>);</div><div class="line">        &#125;</div><div class="line">        mUploadMessage = uploadMsg;</div><div class="line">        Intent i = <span class="keyword">new</span> Intent(Intent.ACTION_GET_CONTENT);</div><div class="line">        i.addCategory(Intent.CATEGORY_OPENABLE);</div><div class="line">        String type = TextUtils.isEmpty(acceptType) ? <span class="string">"*/*"</span> : acceptType;</div><div class="line">        i.setType(type);</div><div class="line">        startActivityForResult(Intent.createChooser(i, <span class="string">"File Chooser"</span>), FILECHOOSER_RESULTCODE);</div><div class="line">    &#125;</div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">//Android 5.0+</span></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="meta">@SuppressLint</span>(<span class="string">"NewApi"</span>)</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">onShowFileChooser</span><span class="params">(WebView webView, ValueCallback&lt;Uri[]&gt; filePathCallback, FileChooserParams fileChooserParams)</span> </span>&#123;</div><div class="line">        <span class="keyword">if</span> (mUploadMessage != <span class="keyword">null</span>) &#123;</div><div class="line">            mUploadMessage.onReceiveValue(<span class="keyword">null</span>);</div><div class="line">        &#125;</div><div class="line">        CLog.i(<span class="string">"UPFILE"</span>, <span class="string">"file chooser params："</span> + fileChooserParams.toString());</div><div class="line">        mUploadMessage = filePathCallback;</div><div class="line">        Intent i = <span class="keyword">new</span> Intent(Intent.ACTION_GET_CONTENT);</div><div class="line">        i.addCategory(Intent.CATEGORY_OPENABLE);</div><div class="line">        <span class="keyword">if</span> (fileChooserParams != <span class="keyword">null</span> &amp;&amp; fileChooserParams.getAcceptTypes() != <span class="keyword">null</span></div><div class="line">                &amp;&amp; fileChooserParams.getAcceptTypes().length &gt; <span class="number">0</span>) &#123;</div><div class="line">            i.setType(fileChooserParams.getAcceptTypes()[<span class="number">0</span>]);</div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line">            i.setType(<span class="string">"*/*"</span>);</div><div class="line">        &#125;</div><div class="line">        startActivityForResult(Intent.createChooser(i, <span class="string">"File Chooser"</span>), FILECHOOSER_RESULTCODE);</div><div class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>上面openFileChooser是系统未暴露的接口，因此不需要加Override的注解，同时不同版本有不同的参数，其中的参数，第一个ValueCallback用于我们在选择完文件后，接收文件回调到网页内处理，acceptType为接受的文件mime type。在Android 5.0之后，系统提供了onShowFileChooser来让我们实现选择文件的方法，仍然有ValueCallback，在FileChooserParams参数中，同样包括acceptType。我们可以根据acceptType，来打开系统的或者我们自己创建文件选择器。当然如果需要打开相机拍照，也可以自己去使用打开相机拍照的Intent去打开即可。</p>
+<h3 id="处理选择的文件"><a href="#处理选择的文件" class="headerlink" title="处理选择的文件"></a>处理选择的文件</h3><p>以上是打开响应的选择文件的界面，我们还需要处理接收到文件之后，传给网页来响应。因为我们前面是使用startActivityForResult来打开的选择页面，我们会在onActivityResult中接收到选择的结果。Show code：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Override</span></div><div class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onActivityResult</span><span class="params">(<span class="keyword">int</span> requestCode, <span class="keyword">int</span> resultCode, Intent data)</span> </span>&#123;</div><div class="line">    <span class="keyword">super</span>.onActivityResult(requestCode, resultCode, data);</div><div class="line">    <span class="keyword">if</span> (requestCode == FILECHOOSER_RESULTCODE) &#123;</div><div class="line">        <span class="keyword">if</span> (<span class="keyword">null</span> == mUploadMessage) <span class="keyword">return</span>;</div><div class="line">        Uri result = data == <span class="keyword">null</span> || resultCode != RESULT_OK ? <span class="keyword">null</span> : data.getData();</div><div class="line">        <span class="keyword">if</span> (result == <span class="keyword">null</span>) &#123;</div><div class="line">            mUploadMessage.onReceiveValue(<span class="keyword">null</span>);</div><div class="line">            mUploadMessage = <span class="keyword">null</span>;</div><div class="line">            <span class="keyword">return</span>;</div><div class="line">        &#125;</div><div class="line">        CLog.i(<span class="string">"UPFILE"</span>, <span class="string">"onActivityResult"</span> + result.toString());</div><div class="line">        String path =  FileUtils.getPath(<span class="keyword">this</span>, result);</div><div class="line">        <span class="keyword">if</span> (TextUtils.isEmpty(path)) &#123;</div><div class="line">            mUploadMessage.onReceiveValue(<span class="keyword">null</span>);</div><div class="line">            mUploadMessage = <span class="keyword">null</span>;</div><div class="line">            <span class="keyword">return</span>;</div><div class="line">        &#125;</div><div class="line">        Uri uri = Uri.fromFile(<span class="keyword">new</span> File(path));</div><div class="line">        CLog.i(<span class="string">"UPFILE"</span>, <span class="string">"onActivityResult after parser uri:"</span> + uri.toString());</div><div class="line">        <span class="keyword">if</span> (Build.VERSION.SDK_INT &gt;= Build.VERSION_CODES.LOLLIPOP) &#123;</div><div class="line">            mUploadMessage.onReceiveValue(<span class="keyword">new</span> Uri[]&#123;uri&#125;);</div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line">            mUploadMessage.onReceiveValue(uri);</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        mUploadMessage = <span class="keyword">null</span>;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>以上代码主要就是调用ValueCallback的onReceiveValue方法，将结果传回web。</p>
+<h3 id="注意，其他要说的，重要"><a href="#注意，其他要说的，重要" class="headerlink" title="注意，其他要说的，重要"></a>注意，其他要说的，重要</h3><p>由于不同版本的差别，Android 5.0以下的版本，ValueCallback 的onReceiveValue接收的参数类型是Uri, 5.0及以上版本接收的是Uri数组，在传值的时候需要注意。</p>
+<p>选择文件会使用系统提供的组件或者其他支持的app，返回的uri有的直接是文件的url，有的是contentprovider的uri，因此我们需要统一处理一下，转成文件的uri，可参考以下代码（获取文件的路径）。</p>
+<p>调用getPath可以将Uri转成真实文件的Path，然后可以自己生成文件的Uri</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">FileUtils</span> </span>&#123;</div><div class="line">    <span class="comment">/**</span></div><div class="line">     * <span class="doctag">@param</span> uri The Uri to check.</div><div class="line">     * <span class="doctag">@return</span> Whether the Uri authority is ExternalStorageProvider.</div><div class="line">     */</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">boolean</span> <span class="title">isExternalStorageDocument</span><span class="params">(Uri uri)</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> <span class="string">"com.android.externalstorage.documents"</span>.equals(uri.getAuthority());</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">/**</span></div><div class="line">     * <span class="doctag">@param</span> uri The Uri to check.</div><div class="line">     * <span class="doctag">@return</span> Whether the Uri authority is DownloadsProvider.</div><div class="line">     */</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">boolean</span> <span class="title">isDownloadsDocument</span><span class="params">(Uri uri)</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> <span class="string">"com.android.providers.downloads.documents"</span>.equals(uri.getAuthority());</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">/**</span></div><div class="line">     * <span class="doctag">@param</span> uri The Uri to check.</div><div class="line">     * <span class="doctag">@return</span> Whether the Uri authority is MediaProvider.</div><div class="line">     */</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">boolean</span> <span class="title">isMediaDocument</span><span class="params">(Uri uri)</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> <span class="string">"com.android.providers.media.documents"</span>.equals(uri.getAuthority());</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">/**</span></div><div class="line">     * Get the value of the data column for this Uri. This is useful for</div><div class="line">     * MediaStore Uris, and other file-based ContentProviders.</div><div class="line">     *</div><div class="line">     * <span class="doctag">@param</span> context The context.</div><div class="line">     * <span class="doctag">@param</span> uri The Uri to query.</div><div class="line">     * <span class="doctag">@param</span> selection (Optional) Filter used in the query.</div><div class="line">     * <span class="doctag">@param</span> selectionArgs (Optional) Selection arguments used in the query.</div><div class="line">     * <span class="doctag">@return</span> The value of the _data column, which is typically a file path.</div><div class="line">     */</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">getDataColumn</span><span class="params">(Context context, Uri uri, String selection,</span></span></div><div class="line">                                       String[] selectionArgs) &#123;</div><div class="line"></div><div class="line">        Cursor cursor = <span class="keyword">null</span>;</div><div class="line">        <span class="keyword">final</span> String column = <span class="string">"_data"</span>;</div><div class="line">        <span class="keyword">final</span> String[] projection = &#123;</div><div class="line">                column</div><div class="line">        &#125;;</div><div class="line"></div><div class="line">        <span class="keyword">try</span> &#123;</div><div class="line">            cursor = context.getContentResolver().query(uri, projection, selection, selectionArgs,</div><div class="line">                    <span class="keyword">null</span>);</div><div class="line">            <span class="keyword">if</span> (cursor != <span class="keyword">null</span> &amp;&amp; cursor.moveToFirst()) &#123;</div><div class="line">                <span class="keyword">final</span> <span class="keyword">int</span> column_index = cursor.getColumnIndexOrThrow(column);</div><div class="line">                <span class="keyword">return</span> cursor.getString(column_index);</div><div class="line">            &#125;</div><div class="line">        &#125; <span class="keyword">finally</span> &#123;</div><div class="line">            <span class="keyword">if</span> (cursor != <span class="keyword">null</span>)</div><div class="line">                cursor.close();</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">/**</span></div><div class="line">     * Get a file path from a Uri. This will get the the path for Storage Access</div><div class="line">     * Framework Documents, as well as the _data field for the MediaStore and</div><div class="line">     * other file-based ContentProviders.</div><div class="line">     *</div><div class="line">     * <span class="doctag">@param</span> context The context.</div><div class="line">     * <span class="doctag">@param</span> uri The Uri to query.</div><div class="line">     * <span class="doctag">@author</span> paulburke</div><div class="line">     */</div><div class="line">    <span class="meta">@SuppressLint</span>(<span class="string">"NewApi"</span>)</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">getPath</span><span class="params">(<span class="keyword">final</span> Context context, <span class="keyword">final</span> Uri uri)</span> </span>&#123;</div><div class="line"></div><div class="line">        <span class="keyword">final</span> <span class="keyword">boolean</span> isKitKat = Build.VERSION.SDK_INT &gt;= Build.VERSION_CODES.KITKAT;</div><div class="line"></div><div class="line">        <span class="comment">// DocumentProvider</span></div><div class="line">        <span class="keyword">if</span> (isKitKat &amp;&amp; DocumentsContract.isDocumentUri(context, uri)) &#123;</div><div class="line">            <span class="comment">// ExternalStorageProvider</span></div><div class="line">            <span class="keyword">if</span> (isExternalStorageDocument(uri)) &#123;</div><div class="line">                <span class="keyword">final</span> String docId = DocumentsContract.getDocumentId(uri);</div><div class="line">                <span class="keyword">final</span> String[] split = docId.split(<span class="string">":"</span>);</div><div class="line">                <span class="keyword">final</span> String type = split[<span class="number">0</span>];</div><div class="line"></div><div class="line">                <span class="keyword">if</span> (<span class="string">"primary"</span>.equalsIgnoreCase(type)) &#123;</div><div class="line">                    <span class="keyword">return</span> Environment.getExternalStorageDirectory() + <span class="string">"/"</span> + split[<span class="number">1</span>];</div><div class="line">                &#125;</div><div class="line"></div><div class="line">                <span class="comment">// TODO handle non-primary volumes</span></div><div class="line">            &#125;</div><div class="line">            <span class="comment">// DownloadsProvider</span></div><div class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (isDownloadsDocument(uri)) &#123;</div><div class="line"></div><div class="line">                <span class="keyword">final</span> String id = DocumentsContract.getDocumentId(uri);</div><div class="line">                <span class="keyword">final</span> Uri contentUri = ContentUris.withAppendedId(</div><div class="line">                        Uri.parse(<span class="string">"content://downloads/public_downloads"</span>), Long.valueOf(id));</div><div class="line"></div><div class="line">                <span class="keyword">return</span> getDataColumn(context, contentUri, <span class="keyword">null</span>, <span class="keyword">null</span>);</div><div class="line">            &#125;</div><div class="line">            <span class="comment">// MediaProvider</span></div><div class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (isMediaDocument(uri)) &#123;</div><div class="line">                <span class="keyword">final</span> String docId = DocumentsContract.getDocumentId(uri);</div><div class="line">                <span class="keyword">final</span> String[] split = docId.split(<span class="string">":"</span>);</div><div class="line">                <span class="keyword">final</span> String type = split[<span class="number">0</span>];</div><div class="line"></div><div class="line">                Uri contentUri = <span class="keyword">null</span>;</div><div class="line">                <span class="keyword">if</span> (<span class="string">"image"</span>.equals(type)) &#123;</div><div class="line">                    contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;</div><div class="line">                &#125; <span class="keyword">else</span> <span class="keyword">if</span> (<span class="string">"video"</span>.equals(type)) &#123;</div><div class="line">                    contentUri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;</div><div class="line">                &#125; <span class="keyword">else</span> <span class="keyword">if</span> (<span class="string">"audio"</span>.equals(type)) &#123;</div><div class="line">                    contentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;</div><div class="line">                &#125;</div><div class="line"></div><div class="line">                <span class="keyword">final</span> String selection = <span class="string">"_id=?"</span>;</div><div class="line">                <span class="keyword">final</span> String[] selectionArgs = <span class="keyword">new</span> String[] &#123;</div><div class="line">                        split[<span class="number">1</span>]</div><div class="line">                &#125;;</div><div class="line"></div><div class="line">                <span class="keyword">return</span> getDataColumn(context, contentUri, selection, selectionArgs);</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        <span class="comment">// MediaStore (and general)</span></div><div class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (<span class="string">"content"</span>.equalsIgnoreCase(uri.getScheme())) &#123;</div><div class="line">            <span class="keyword">return</span> getDataColumn(context, uri, <span class="keyword">null</span>, <span class="keyword">null</span>);</div><div class="line">        &#125;</div><div class="line">        <span class="comment">// File</span></div><div class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (<span class="string">"file"</span>.equalsIgnoreCase(uri.getScheme())) &#123;</div><div class="line">            <span class="keyword">return</span> uri.getPath();</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>再有，即使获取的结果为null，也要传给web，即直接调用<code>mUploadMessage.onReceiveValue(null)</code>,否则网页会阻塞。</p>
+<p>最后，在打release包的时候，因为我们会混淆，要特别设置不要混淆WebChromeClient子类里面的openFileChooser方法，由于不是继承的方法，所以默认会被混淆，然后就无法选择文件了。</p>
+<p>就这样吧。</p>
+<blockquote>
+<p>原文地址：<a href="http://blog.isming.me/2015/12/21/android-webview-upload-file/">http://blog.isming.me/2015/12/21/android-webview-upload-file/</a>，转载请注明出处。</p>
+</blockquote>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;默认情况下情况下，使用Android的WebView是不能够支持上传文件的。而这个，也是在我们的前端工程师告知之后才了解的。因为Android的每个版本WebView的实现有差异，因此需要对不同版本去适配。花了一点时间，参考别人的代码，这个问题已经解决，这里把我踩过的坑分享出来。&lt;/p&gt;
+&lt;p&gt;主要思路是重写WebChromeClient，然后在WebViewActivity中接收选择到的文件Uri，传给页面去上传就可以了。&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="android" scheme="http://blog.isming.me/tags/android/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Android WebView使用的技巧与一些坑</title>
+    <link href="http://blog.isming.me/2015/10/18/webview-use/"/>
+    <id>http://blog.isming.me/2015/10/18/webview-use/</id>
+    <published>2015-10-18T09:10:09.000Z</published>
+    <updated>2017-05-16T02:31:11.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>随着手机性能的提高，以及iOS和Android两个平台的普及，更多的App都会选择两个平台的App都进行开发，在有些时候，为了更加快速的开发，我们会采用hybird方式开发，这个时候我们需要使用webview并且自己进行一些配置。Android的webview在低版本和高版本采用了不同的webkit版本内核，4.4后直接使用了chrome，因此问题很多，这里分享一些我使用过程的一些技巧和遇到的坑。</p>
+<a id="more"></a>
+<p>###webview配置###</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">mWebview.getSettings().setJavaScriptEnabled(<span class="keyword">true</span>); <span class="comment">//设置允许运行javascript</span></div><div class="line"><span class="comment">// HTML5 API flags</span></div><div class="line">mWebview.getSettings().setAppCacheEnabled(<span class="keyword">true</span>);  <span class="comment">//设置允许缓存</span></div><div class="line">mWebview.getSettings().setDatabaseEnabled(<span class="keyword">true</span>); <span class="comment">//设置允许使用localstore</span></div></pre></td></tr></table></figure>
+<p>上面webview.getSettings()会获得WebSettings对象，在这个对象中会保存Webview的一些设置，比如上面所设置的这些，更多的设置请查看WebSettings的api文档。</p>
+<p>通常我们还会使用WebViewClient和WebChromeClient这两个组件来辅助WebView。WebViewClient主要帮助处理各种通知请求事件等，比如页面开始加载，加载完成等。WebChromeClient主要辅助WebView处理javascript对话框，网站图标，网站标题，加载进度等等。<br>实际应该根据实际情况使用这两个组件，重写响应的方法，在其中执行自己的一些操作。</p>
+<p>###Javascript的使用###</p>
+<p>开启javascript的方法上面已经提到了。</p>
+<p>客户端调用网页中的js代码，或者执行相应的代码。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">evaluateJavascript</span><span class="params">(String js)</span> </span>&#123;  </div><div class="line">    <span class="keyword">if</span> (Build.VERSION.SDK_INT &gt;= Build.VERSION_CODES.KITKAT) &#123;</div><div class="line">        mWebview.evaluateJavascript(js, <span class="keyword">null</span>);</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">        mWebview.loadUrl(js);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>在android4.4开始系统提供了evaluateJavascript方法来执行js方法，并且可以进行回调。但是在低于4.4的版本并没有这个方法，我们需要只要直接通过loadUrl的方式来执行js，此时需要在js代码前加”javascript:”。</p>
+<p>另外可以在客户端定义一些javascript给网页中调用。<br>比如这样:</p>
+<p>首先定义一个给js执行的类：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">WebAppInterface</span> </span>&#123;</div><div class="line">    Context mContext;</div><div class="line"></div><div class="line">    <span class="comment">/** Instantiate the interface and set the context */</span></div><div class="line">    WebAppInterface(Context c) &#123;</div><div class="line">        mContext = c;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">/** Show a toast from the web page */</span></div><div class="line">    <span class="meta">@JavascriptInterface</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">showToast</span><span class="params">(String toast)</span> </span>&#123;</div><div class="line">        Toast.makeText(mContext, toast, Toast.LENGTH_SHORT).show();</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">webView.addJavascriptInterface(<span class="keyword">new</span> WebAppInterface(<span class="keyword">this</span>), <span class="string">"Android"</span>);</div></pre></td></tr></table></figure>
+<p>之后用*addJavascriptInterface&amp;设置到webview上，在js中就可以用<code>Android.showToast(“fdf&quot;)</code>调用了。</p>
+<p>需要注意的是，在我们给js的接口方法需要是public的，使用到了JavascriptInterface的注解，这个注解在Android4.2的时候添加,更新的android如果不加这个注解是不可以使用的。</p>
+<p>###硬件加速###<br>硬件加速是个大坑，请勿打开。<br>在android4.4后使用的chrome，系统会自行开启。</p>
+<p>###其他###</p>
+<p>以及使用WebView，给忘了给应用申请网络访问的权限。</p>
+<p>还有一些知识点没整理到，请参考webview的文档，更多的坑以后踩到再更新。</p>
+<p>另外JeremyHe总结的知识也不错，可以参考:<a href="http://zlv.me/posts/2015/01/14/08_Android-Webview%E4%BD%BF%E7%94%A8%E5%B0%8F%E7%BB%93/" target="_blank" rel="external">http://zlv.me/posts/2015/01/14/08_Android-Webview%E4%BD%BF%E7%94%A8%E5%B0%8F%E7%BB%93/</a></p>
+<blockquote>
+<p>原文地址：<a href="http://blog.isming.me/2015/10/18/webview-use/">http://blog.isming.me/2015/10/18/webview-use/</a>，转载请注明出处。</p>
+</blockquote>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;随着手机性能的提高，以及iOS和Android两个平台的普及，更多的App都会选择两个平台的App都进行开发，在有些时候，为了更加快速的开发，我们会采用hybird方式开发，这个时候我们需要使用webview并且自己进行一些配置。Android的webview在低版本和高版本采用了不同的webkit版本内核，4.4后直接使用了chrome，因此问题很多，这里分享一些我使用过程的一些技巧和遇到的坑。&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="android" scheme="http://blog.isming.me/tags/android/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>改变support中AlertDialog的样式</title>
+    <link href="http://blog.isming.me/2015/08/31/modify-alert-style/"/>
+    <id>http://blog.isming.me/2015/08/31/modify-alert-style/</id>
+    <published>2015-08-31T11:57:15.000Z</published>
+    <updated>2017-05-16T02:31:11.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>android最近的support库提供了AlertDialog，可以让我们在低于5.0的系统使用到跟5.0系统一样的Material Design风格的对话框，但是使用了一段时间想到一些办法去改变对话框按钮字体的颜色，都不生效。</p>
+<p>最近在网上找到了改变的方法，首先来说一下。</p>
+<a id="more"></a>
+<h3 id="改变AlertDialog的样式"><a href="#改变AlertDialog的样式" class="headerlink" title="改变AlertDialog的样式"></a>改变AlertDialog的样式</h3><p>在xml中定义一个主题：<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">style</span> <span class="attr">name</span>=<span class="string">"MyAlertDialogStyle"</span> <span class="attr">parent</span>=<span class="string">"Theme.AppCompat.Light.Dialog.Alert"</span>&gt;</span><span class="xml"></span></div><div class="line">    <span class="comment">&lt;!-- Used for the buttons --&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">item</span> <span class="attr">name</span>=<span class="string">"colorAccent"</span>&gt;</span>#FFC107<span class="tag">&lt;/<span class="name">item</span>&gt;</span></div><div class="line">    <span class="comment">&lt;!-- Used for the title and text --&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">item</span> <span class="attr">name</span>=<span class="string">"android:textColorPrimary"</span>&gt;</span>#FFFFFF<span class="tag">&lt;/<span class="name">item</span>&gt;</span></div><div class="line">    <span class="comment">&lt;!-- Used for the background --&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">item</span> <span class="attr">name</span>=<span class="string">"android:background"</span>&gt;</span>#4CAF50<span class="tag">&lt;/<span class="name">item</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">style</span>&gt;</span></div></pre></td></tr></table></figure></p>
+<p>样式如下图所示：</p>
+<p><img src="http://7mj53c.com1.z0.glb.clouddn.com/2015/modify_dialog_style.jpg" alt=""></p>
+<p>在创建的对话框的时候，这样创建就可以了。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">AlertDialog.Builder builder = <span class="keyword">new</span> AlertDialog.Builder(<span class="keyword">this</span>, R.style.MyAlertDialogStyle);</div><div class="line">builder.setTitle(<span class="string">"AppCompatDialog"</span>);</div><div class="line">builder.setMessage(<span class="string">"Lorem ipsum dolor..."</span>);</div><div class="line">builder.setPositiveButton(<span class="string">"OK"</span>, <span class="keyword">null</span>);</div><div class="line">builder.setNegativeButton(<span class="string">"Cancel"</span>, <span class="keyword">null</span>);</div><div class="line">builder.show();</div></pre></td></tr></table></figure></p>
+<p>这样的方法是每个地方使用的时候，都要在构造函数传我们的这个Dialog的Theme，我们也可以全局的定义对话框的样式。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">style</span> <span class="attr">name</span>=<span class="string">"MyTheme"</span> <span class="attr">parent</span>=<span class="string">"Base.Theme.AppCompat.Light"</span>&gt;</span><span class="xml"></span></div><div class="line">    <span class="tag">&lt;<span class="name">item</span> <span class="attr">name</span>=<span class="string">"alertDialogTheme"</span>&gt;</span>@style/MyAlertDialogStyle<span class="tag">&lt;/<span class="name">item</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">item</span> <span class="attr">name</span>=<span class="string">"colorAccent"</span>&gt;</span>@color/accent<span class="tag">&lt;/<span class="name">item</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">style</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>在我们的AndroidManifest.xml文件中声明application或者activity的时候设置theme为MyTheme即可，不过需要注意的一点是，我们的Activity需要继承自AppCompatActivity。</p>
+<h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h3><p>从上面改变对话框的样式，可以想到用同样的思路来实现应用的换肤，应用主题之类的功能。</p>
+<blockquote>
+<p>原文地址：<a href="http://blog.isming.me/2015/08/31/modify-alert-style/">http://blog.isming.me/2015/08/31/modify-alert-style/</a>，转载请注明出处。</p>
+</blockquote>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;android最近的support库提供了AlertDialog，可以让我们在低于5.0的系统使用到跟5.0系统一样的Material Design风格的对话框，但是使用了一段时间想到一些办法去改变对话框按钮字体的颜色，都不生效。&lt;/p&gt;
+&lt;p&gt;最近在网上找到了改变的方法，首先来说一下。&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="android" scheme="http://blog.isming.me/tags/android/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>一个上传apk到fir的gradle插件</title>
+    <link href="http://blog.isming.me/2015/08/01/gradle-fir-plugin/"/>
+    <id>http://blog.isming.me/2015/08/01/gradle-fir-plugin/</id>
+    <published>2015-08-01T15:19:07.000Z</published>
+    <updated>2017-05-16T02:31:11.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>声明，这不是广告，没有任何利益瓜葛。</p>
+<p>App内测需要把安装把安装包放在一个地方进行托管，方便内测人员下载。国内有蒲公英，fir，等等这些网站可以用。</p>
+<p>最近fir上了新版本了，上了新的api，新界面，本以为它们会提供gradle的上传工具，结果没有，而且它们新版本还不好用，原本的下载统计浏览统计都没有了，结果上传很慢，甚至上传不了，我便写了一个gradle的上传工具。</p>
+<a id="more"></a>
+<p>先介绍使用方法吧</p>
+<h3 id="使用方法"><a href="#使用方法" class="headerlink" title="使用方法"></a>使用方法</h3><p>插件目前只有唯一一个task</p>
+<blockquote>
+<p>uploadFir  –上传apk到fir</p>
+</blockquote>
+<p>集成插件本插件，你要按照如下方法使用</p>
+<h4 id="编辑build-gradle"><a href="#编辑build-gradle" class="headerlink" title="编辑build.gradle"></a>编辑build.gradle</h4><figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line">buildscript &#123;</div><div class="line">  repositories &#123;</div><div class="line">    jcenter()</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  dependencies &#123;</div><div class="line">        classpath <span class="string">'com.squareup.okhttp:okhttp:2.2.0'</span></div><div class="line">        classpath <span class="string">'com.squareup.okhttp:okhttp-urlconnection:2.2.0'</span></div><div class="line">        classpath <span class="string">'org.json:json:20090211'</span></div><div class="line">        classpath <span class="string">'me.isming:firup:0.4.1'</span></div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">apply <span class="string">plugin:</span> <span class="string">'me.isming.fir'</span></div><div class="line"></div><div class="line">fir &#123;</div><div class="line">    appId = <span class="string">""</span>   <span class="comment">//app的appid,在fir中可以找到</span></div><div class="line">    userToken = <span class="string">""</span>  <span class="comment">//fir用户的token，也在在fir中找到</span></div><div class="line"></div><div class="line">    apks &#123;</div><div class="line">        release &#123;</div><div class="line">            <span class="comment">// 要上传的apk的路径,类似下面</span></div><div class="line">            sourceFile  file(<span class="string">"/project/main/build/outputs/apk/xxx.apk"</span>)</div><div class="line">            name <span class="string">""</span>  <span class="comment">//app的名称</span></div><div class="line">            version <span class="string">"3.3.0"</span>  <span class="comment">//app的版本version</span></div><div class="line">            build <span class="string">"330"</span>   <span class="comment">//app的版本号</span></div><div class="line">            changelog <span class="string">""</span>  <span class="comment">//更新日志</span></div><div class="line">            icon file(<span class="string">"....../res/drawable-xxhdpi/icon_logo.png"</span>)  <span class="comment">//app的icon的路径</span></div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>####运行</p>
+<blockquote>
+<p>$ ./gradlew uploadFir</p>
+</blockquote>
+<p>你也可以在本任务的基础上，在你的build脚本中增加以下内容:</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">uploadFir.dependsOn assembleRelease  <span class="comment">//后面为你生成apk的任务</span></div></pre></td></tr></table></figure>
+<p>这样就可以在执行上传到fir之前首先会生成一个最新的安装包了</p>
+<p>本插件基于fir.im官方提供的api文档进行编写，时间匆忙，可能还有一些地方不够完善，还有许多地方可以优化，欢迎star，fork，共同完善。</p>
+<p>也可以给我提意见，我来优化。</p>
+<p>还有一些代优化的点没有做，后面有空会做，version，build，icon通过程序自动做，而不用手工填写。</p>
+<p>项目托管在github上面，生成的jar放在jcenter上面。</p>
+<p>github地址：<a href="https://github.com/sangmingming/gradle-fir-plugin" target="_blank" rel="external">https://github.com/sangmingming/gradle-fir-plugin</a></p>
+<blockquote>
+<p>原文地址：<a href="http://blog.isming.me/2015/08/01/gradle-fir-plugin/">http://blog.isming.me/2015/08/01/gradle-fir-plugin/</a>，转载请注明出处。</p>
+</blockquote>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;声明，这不是广告，没有任何利益瓜葛。&lt;/p&gt;
+&lt;p&gt;App内测需要把安装把安装包放在一个地方进行托管，方便内测人员下载。国内有蒲公英，fir，等等这些网站可以用。&lt;/p&gt;
+&lt;p&gt;最近fir上了新版本了，上了新的api，新界面，本以为它们会提供gradle的上传工具，结果没有，而且它们新版本还不好用，原本的下载统计浏览统计都没有了，结果上传很慢，甚至上传不了，我便写了一个gradle的上传工具。&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="android" scheme="http://blog.isming.me/tags/android/"/>
+    
+      <category term="gradle" scheme="http://blog.isming.me/tags/gradle/"/>
+    
+      <category term="android studio" scheme="http://blog.isming.me/tags/android-studio/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Android应用使用自定义字体的一些探究</title>
+    <link href="http://blog.isming.me/2015/07/07/android-custom-font/"/>
+    <id>http://blog.isming.me/2015/07/07/android-custom-font/</id>
+    <published>2015-07-07T11:04:22.000Z</published>
+    <updated>2017-05-16T02:31:11.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>最近团队里面在做程序界面统一的工作，因此希望统一字体，接到一个研究怎么自定义字体的任务。因为我们的开发模式，所以需要研究在界面内的字体自定义，以及webview的显示中的字体自定义。</p>
+<h3 id="android系统内置字体"><a href="#android系统内置字体" class="headerlink" title="android系统内置字体"></a>android系统内置字体</h3><p>android 系统本身内置了一些字体，可以在程序中使用，并且支持在xml配置textView的时候进行修改字体的样式。支持字段为<code>android:textStyle</code> ,<code>android:typeface</code>, <code>android:fontFamily</code>，系统内置了<code>normal|bold|italic</code>三种style, 内置了<code>normal</code>，<code>sans</code>,<code>serif</code>,<code>monospace</code>，几种字体（实测这几种字体仅英文有效），typace和fontFamily功能一样。</p>
+<a id="more"></a>
+<h3 id="使用自定义的字体"><a href="#使用自定义的字体" class="headerlink" title="使用自定义的字体"></a>使用自定义的字体</h3><p>以上的方式可以改变字体的样式，还不是真正的自定义。</p>
+<p>android系统支持TypeFace，即ttf的字体文件。</p>
+<p>我们可以在程序中放入ttf字体文件，在程序中使用Typeface设置字<br>体。</p>
+<p>第一步，在assets目录下新建fonts目录，把ttf字体文件放到这。<br>第二步，程序中调用：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">AssetManager mgr=getAssets();<span class="comment">//得到AssetManager</span></div><div class="line">Typeface tf=Typeface.createFromAsset(mgr, <span class="string">"fonts/ttf.ttf"</span>);<span class="comment">//根据路径得到Typeface</span></div><div class="line">tv.setTypeface(tf);<span class="comment">//设置字体</span></div></pre></td></tr></table></figure>
+<p>注意ttf文件命名不能使用中文,否则可能无法加载。</p>
+<p>对于需要使用比较多的地方，可以写一个TextView的子类来统一处理。</p>
+<h3 id="在webview中使用自定义地体"><a href="#在webview中使用自定义地体" class="headerlink" title="在webview中使用自定义地体"></a>在webview中使用自定义地体</h3><p>对于本地的网页，在asset目录放字体文件，并在css中添加以下内容，自定义一个字体face，并且在需要的地方使用这个字体face即可。</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">@<span class="keyword">font-face</span> &#123;</div><div class="line">	<span class="attribute">font-family</span>: <span class="string">"MyFont"</span>;</div><div class="line">	<span class="attribute">src</span>: <span class="built_in">url</span>(<span class="string">'file:///android_asset/fonts/ttf.ttf'</span>);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="selector-tag">h3</span> &#123; <span class="attribute">font-family</span>:<span class="string">"MyFont"</span>&#125;</div></pre></td></tr></table></figure>
+<p>对于在线的网页，则需要把字体文件放到服务器，使用同样的方式定义字体face,应用到每个地方。</p>
+<p>为了减少网页或者说服务器端的工作，可以使用本地注入的方式注入font-face的css，并对整个网页进行样式替换。</p>
+<p>给webview自定义webViewClient,重写<code>onPageFinish</code>,在其中添加如下内容：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line">view.loadUrl(<span class="string">"javascript:!function()&#123;"</span> +</div><div class="line">        <span class="string">"s=document.createElement('style');s.innerHTML="</span></div><div class="line">        + <span class="string">"\"@font-face&#123;font-family:myhyqh;src:url('**injection**/hyqh.ttf');&#125;*&#123;font-family:myhyqh !important;&#125;\";"</span></div><div class="line">        + <span class="string">"document.getElementsByTagName('head')[0].appendChild(s);"</span> +</div><div class="line">        <span class="string">"document.getElementsByTagName('body')[0].style.fontFamily = \"myhyqh\";&#125;()"</span>);</div><div class="line">``` </div><div class="line"></div><div class="line">由于网页上是没有权限访问本地的asset文件夹的，因此我们需要拦截请求来加载本地的文件，我这里替换了`file:<span class="comment">///android_assets/`为 `**injection**/`了，我们还需要重写</span></div><div class="line">`shouldInterceptRequest`</div><div class="line">在请求为我们这个字体文件的时候，加载本地文件：</div><div class="line"></div><div class="line">```java</div><div class="line"><span class="meta">@Override</span></div><div class="line"><span class="function"><span class="keyword">public</span> WebResourceResponse <span class="title">shouldInterceptRequest</span><span class="params">(WebView view, String url)</span> </span>&#123;</div><div class="line">    WebResourceResponse response =  <span class="keyword">super</span>.shouldInterceptRequest(view, url);</div><div class="line">    CLog.i(<span class="string">"load intercept request:"</span> + url);</div><div class="line">    <span class="keyword">if</span> (url != <span class="keyword">null</span> &amp;&amp; url.contains(<span class="string">"**injection**/"</span>)) &#123;</div><div class="line"></div><div class="line">        <span class="comment">//String assertPath = url.replace("**injection**/", "");</span></div><div class="line">        String assertPath = url.substring(url.indexOf(<span class="string">"**injection**/"</span>) + <span class="string">"**injection**/"</span>.length(), url.length());</div><div class="line">        <span class="keyword">try</span> &#123;</div><div class="line"></div><div class="line">            response = <span class="keyword">new</span> WebResourceResponse(<span class="string">"application/x-font-ttf"</span>,</div><div class="line">                    <span class="string">"UTF8"</span>, getAssets().open(assertPath)</div><div class="line">                    );</div><div class="line">        &#125; <span class="keyword">catch</span> (IOException e) &#123;</div><div class="line">            e.printStackTrace();</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> response;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>###问题</p>
+<p>使用字体统一界面，但是也遇到了一些问题，如下：</p>
+<ol>
+<li>运行速度变慢（毫秒级，用户觉查不到），由于需要读取自定义的字体文件，以及需要渲染，比使用系统字体要慢。</li>
+<li>emoji在5.0以下的系统会有问题。</li>
+<li>在网页，如果采用服务器文件的方法，会消耗用户的流量</li>
+<li>在网页，采用本地注入方式，因为是在onpagefinish后才开始加载字体，因此页面会重新渲染，影响效果。这样还会造成网页可能会出现样式错误。</li>
+</ol>
+<p>因为我们的程序中大量使用到emoji，以及考虑到性能的问题，决定还是使用系统自带的字体了。</p>
+<p>如果你在这方面有更好的方案，欢迎交流！</p>
+<blockquote>
+<p>原文地址：<a href="http://blog.isming.me/2015/07/07/android-custom-font/">http://blog.isming.me/2015/07/07/android-custom-font/</a>，转载请注明出处。</p>
+</blockquote>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;最近团队里面在做程序界面统一的工作，因此希望统一字体，接到一个研究怎么自定义字体的任务。因为我们的开发模式，所以需要研究在界面内的字体自定义，以及webview的显示中的字体自定义。&lt;/p&gt;
+&lt;h3 id=&quot;android系统内置字体&quot;&gt;&lt;a href=&quot;#android系统内置字体&quot; class=&quot;headerlink&quot; title=&quot;android系统内置字体&quot;&gt;&lt;/a&gt;android系统内置字体&lt;/h3&gt;&lt;p&gt;android 系统本身内置了一些字体，可以在程序中使用，并且支持在xml配置textView的时候进行修改字体的样式。支持字段为&lt;code&gt;android:textStyle&lt;/code&gt; ,&lt;code&gt;android:typeface&lt;/code&gt;, &lt;code&gt;android:fontFamily&lt;/code&gt;，系统内置了&lt;code&gt;normal|bold|italic&lt;/code&gt;三种style, 内置了&lt;code&gt;normal&lt;/code&gt;，&lt;code&gt;sans&lt;/code&gt;,&lt;code&gt;serif&lt;/code&gt;,&lt;code&gt;monospace&lt;/code&gt;，几种字体（实测这几种字体仅英文有效），typace和fontFamily功能一样。&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="android" scheme="http://blog.isming.me/tags/android/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>图片贴纸旋转缩放功能的实现</title>
+    <link href="http://blog.isming.me/2015/05/10/sticker-view/"/>
+    <id>http://blog.isming.me/2015/05/10/sticker-view/</id>
+    <published>2015-05-10T14:55:04.000Z</published>
+    <updated>2017-05-16T02:31:11.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>我们的项目包含图片编辑功能，特别是包含图片添加水印贴纸的功能，从最初的简单版可以添加一个图片并且移动位置，到现在添加的图片可以进行移动，以及缩放，旋转，已经是和其他的图片处理可以达到一样的很好的效果了。一直想要整理一下，分享一下实现的改进过程，一直没空，也由于我过于懒，没有动笔。今天正好有时间，分享一下。</p>
+<a id="more"></a>
+<h3 id="原始阶段：直接添加ImageView，并且设置其在父view中的位置"><a href="#原始阶段：直接添加ImageView，并且设置其在父view中的位置" class="headerlink" title="原始阶段：直接添加ImageView，并且设置其在父view中的位置"></a>原始阶段：直接添加ImageView，并且设置其在父view中的位置</h3><p>父视图为RelativeLayout,贴纸view就是一个ImageView,通过设置topMargin和leftMargin来设置在父视图中显示的位置，不支持缩放和旋转。功能快速实现，代码比较冗余。再有了新的需求不方便扩展。</p>
+<h3 id="新阶段：自定义View，通过matrix变换实现各种功能"><a href="#新阶段：自定义View，通过matrix变换实现各种功能" class="headerlink" title="新阶段：自定义View，通过matrix变换实现各种功能"></a>新阶段：自定义View，通过matrix变换实现各种功能</h3><p>主要是定义一个View，在使用的时候放到需要用到的地方，大小设置和目标图片相同大小。通过matrix对平移，旋转，缩放的操作进行映射，最终改变贴纸图片的绘制结果，因此实现目标功能。下面具体分析各个功能。</p>
+<p>首先创建的视图在设置完贴纸图片之后，要创建一个浮点型数组，用于保存默认未进行任何变换的时候贴纸图片的关键点，以及一个原始矩形用于保存一个默认绘制区域的矩形，用代码表示就是：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">float</span> imgWidth = mBitmap.getWidth();</div><div class="line"><span class="keyword">float</span> imgHeight = mBitmap.getHeight();</div><div class="line"><span class="keyword">float</span>[] originPoints = <span class="keyword">new</span> <span class="keyword">float</span>[]&#123;<span class="number">0</span>, <span class="number">0</span>, imgWidth,<span class="number">0</span>, imgWidth, imgHeight, <span class="number">0</span>, imgHeight, imgWidth/<span class="number">2</span>, imgHeight/<span class="number">2</span>&#125;; <span class="comment">//分别为矩形的四个点，与中心点</span></div><div class="line">RectF mOriginRect = <span class="keyword">new</span> RectF(<span class="number">0</span>, <span class="number">0</span>, imgWidth, imgHeight);</div></pre></td></tr></table></figure></p>
+<p>变换后的点通过Matrix.mapPoints(newPoints, originPoints)进行映射，变换后的矩形通过Matrix.mapRect(newRect, originRect)进行映射，可以通过这些新的点画一些附加元素。至于贴纸图，可以通过获取后的rect进行定位画，也可以直接使用canvas.drawBitmap(bitmap, matrix, paint)方法绘制。</p>
+<p>至于如何进行变换操作，如何进行变换，则是在onTouch中处理各种触摸事件，或者在dispatchTouchEvent。</p>
+<h4 id="平移"><a href="#平移" class="headerlink" title="平移"></a>平移</h4><p>通过判断ACTION_DOWN，ACTION_UP，判断触摸是否在我们的贴纸图片上面，然后计算手指滑动的距离，可以获取到x轴和y轴的平移距离，调用mMatrix.postTranslate(x,y)，然后重新映射绘图即可。</p>
+<h4 id="旋转"><a href="#旋转" class="headerlink" title="旋转"></a>旋转</h4><p>以贴纸图片的一个边缘点为旋转触摸点，以贴纸图片的中心（非贴纸view的中心），计算旋转的角度，调用mMatrix.postRotate(rotation, px, py)， px，py为贴纸图片的中心点（为上面映射后的点，而不是原始点）。</p>
+<h4 id="缩放"><a href="#缩放" class="headerlink" title="缩放"></a>缩放</h4><p>同样通过触摸位置计算两次滑动过程中的缩放比例，来通过Matrix.postScale(scale, scale, px, py)进行缩放。</p>
+<h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h3><p>开始的时候没有想到使用Matrix，进行了很多的尝试，没有很好的结果。最后使用了Matrix之后，则简单很多，只是在计算缩放和旋转的时候，因为数学没有学好，花了很久才把数学问题搞定。</p>
+<p>这里分享我自己的一个完整的贴纸View，开箱即用，<a href="https://github.com/sangmingming/StickerView" target="_blank" rel="external">https://github.com/sangmingming/StickerView</a> 。如果在这方面，你又更好的实现方式，也欢迎留言，与我进行交流。</p>
+<blockquote>
+<p>原文地址：<a href="http://blog.isming.me/2015/05/10/sticker-view/">http://blog.isming.me/2015/05/10/sticker-view/</a>，转载请注明出处。</p>
+</blockquote>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;我们的项目包含图片编辑功能，特别是包含图片添加水印贴纸的功能，从最初的简单版可以添加一个图片并且移动位置，到现在添加的图片可以进行移动，以及缩放，旋转，已经是和其他的图片处理可以达到一样的很好的效果了。一直想要整理一下，分享一下实现的改进过程，一直没空，也由于我过于懒，没有动笔。今天正好有时间，分享一下。&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="android" scheme="http://blog.isming.me/tags/android/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>打破Android应用65K方法数魔咒</title>
+    <link href="http://blog.isming.me/2015/05/01/android-multi-dex/"/>
+    <id>http://blog.isming.me/2015/05/01/android-multi-dex/</id>
+    <published>2015-04-30T16:33:08.000Z</published>
+    <updated>2017-05-16T02:31:11.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>近日，我们的应用，在编译的时候不幸的遇到这个错误</p>
+<blockquote>
+<p>Conversion to Dalvik format failed: Unable to execute dex: method ID not in [0, 0xffff]: 65536</p>
+</blockquote>
+<p>这才让我意识到原来我们的程序中，方法数已经超过了65536。在之前，已经知道了android系统的java虚拟机dalvik在执行java程序时，使用原生类型short来索引dex文件中的方法，因此方法数就呗限制在65536了。之前我一直以为，这个数量已经很大了，不会达到上限，结果今天就达到了。</p>
+<p>不过这个东西呢，我们也是很容易的进行解决的，因为，就在去年不久前，google官方提供了多dex的支持库，因此，我们可以很简单的解决这个问题。</p>
+<a id="more"></a>
+<h3 id="开发工具升级"><a href="#开发工具升级" class="headerlink" title="开发工具升级"></a>开发工具升级</h3><p>将android sdks build tools 和android support library要升级到最新的，这个使用android sdks manager很容易就完成了。</p>
+<h3 id="配置build-gradle"><a href="#配置build-gradle" class="headerlink" title="配置build.gradle"></a>配置build.gradle</h3><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">android &#123; </div><div class="line">compileSdkVersion 21 </div><div class="line">buildToolsVersion "21.1.0" </div><div class="line">defaultConfig &#123;     </div><div class="line">...     </div><div class="line">minSdkVersion 14     </div><div class="line">targetSdkVersion 21     </div><div class="line">...     </div><div class="line">// Enabling multidex support.     </div><div class="line">multiDexEnabled true </div><div class="line">&#125; </div><div class="line">... </div><div class="line">&#125; </div><div class="line">dependencies&#123; </div><div class="line">compile 'com.android.support:multidex:1.0.0’ //dependencies</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="让应用支持多dex"><a href="#让应用支持多dex" class="headerlink" title="让应用支持多dex"></a>让应用支持多dex</h3><p>androidManifest.xml中application中声明android.support.multidex.MultiDexApplication;</p>
+<p>或自己定义一个Application类，继承自MultiDexApplication；</p>
+<p>或者自己定义的Application类，在attachBaseContext()方法中，添加MultiDex.install(this);</p>
+<h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h3><p>通过上面的方法即可轻松完成多dex，不过在低版本的android系统（低于android4.0）可能会有bug出现，还要多进行测试。</p>
+<p>究其原因，其实我们的app，自己写的代码现在其实不是很多，代码中使用了大量的第三方sdk，以及其他的一些功能集成。</p>
+<p>下面，就要想办法，减少第三方的功能库了。这里跟大家分享一下解决方案。</p>
+<p>参考资料： <a href="http://developer.android.com/tools/building/multidex.html" target="_blank" rel="external">http://developer.android.com/tools/building/multidex.html</a></p>
+<blockquote>
+<p>原文地址：<a href="http://blog.isming.me/2015/05/01/android-multi-dex/">http://blog.isming.me/2015/05/01/android-multi-dex/</a>，转载请注明出处。</p>
+</blockquote>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;近日，我们的应用，在编译的时候不幸的遇到这个错误&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Conversion to Dalvik format failed: Unable to execute dex: method ID not in [0, 0xffff]: 65536&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;这才让我意识到原来我们的程序中，方法数已经超过了65536。在之前，已经知道了android系统的java虚拟机dalvik在执行java程序时，使用原生类型short来索引dex文件中的方法，因此方法数就呗限制在65536了。之前我一直以为，这个数量已经很大了，不会达到上限，结果今天就达到了。&lt;/p&gt;
+&lt;p&gt;不过这个东西呢，我们也是很容易的进行解决的，因为，就在去年不久前，google官方提供了多dex的支持库，因此，我们可以很简单的解决这个问题。&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="android" scheme="http://blog.isming.me/tags/android/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>加速Android Studio/Gradle构建</title>
+    <link href="http://blog.isming.me/2015/03/18/android-build-speed-up/"/>
+    <id>http://blog.isming.me/2015/03/18/android-build-speed-up/</id>
+    <published>2015-03-18T14:56:10.000Z</published>
+    <updated>2017-05-16T02:31:11.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>已经使用Android Studio进行开发超过一年，随着项目的增大，依赖库的增多，构建速度越来越慢，现在最慢要6分钟才能build一个release的安装包，在网上查找资料，发现可以通过一些配置可以加快速度，这里跟大家分享一下。</p>
+<h3 id="开启gradle单独的守护进程"><a href="#开启gradle单独的守护进程" class="headerlink" title="开启gradle单独的守护进程"></a>开启gradle单独的守护进程</h3><p>在下面的目录下面创建<code>gradle.properties</code>文件：</p>
+<ul>
+<li><code>/home/&lt;username&gt;/.gradle/</code> (Linux)     </li>
+<li><code>/Users/&lt;username&gt;/.gradle/</code> (Mac)</li>
+<li><code>C:\Users\&lt;username&gt;\.gradle</code> (Windows)</li>
+</ul>
+<p>并在文件中增加：<br><figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">org.gradle.daemon=<span class="literal">true</span></div></pre></td></tr></table></figure></p>
+<a id="more"></a>
+<p>同时修改项目下的<code>gradle.properties</code>文件也可以优化：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line"># Project-wide Gradle settings.</div><div class="line"></div><div class="line"># IDE (e.g. Android Studio) users:</div><div class="line"># Settings specified in this file will override any Gradle settings</div><div class="line"># configured through the IDE.</div><div class="line"></div><div class="line"># For more details on how to configure your build environment visit</div><div class="line"># http://www.gradle.org/docs/current/userguide/build_environment.html</div><div class="line"></div><div class="line"># The Gradle daemon aims to improve the startup and execution time of Gradle.</div><div class="line"># When set to true the Gradle daemon is to run the build.</div><div class="line"># TODO: disable daemon on CI, since builds should be clean and reliable on servers</div><div class="line">org.gradle.daemon=true</div><div class="line"></div><div class="line"># Specifies the JVM arguments used for the daemon process.</div><div class="line"># The setting is particularly useful for tweaking memory settings.</div><div class="line"># Default value: -Xmx10248m -XX:MaxPermSize=256m</div><div class="line">org.gradle.jvmargs=-Xmx2048m -XX:MaxPermSize=512m -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8</div><div class="line"></div><div class="line"># When configured, Gradle will run in incubating parallel mode.</div><div class="line"># This option should only be used with decoupled projects. More details, visit</div><div class="line"># http://www.gradle.org/docs/current/userguide/multi_project_builds.html#sec:decoupled_projects</div><div class="line">org.gradle.parallel=true</div><div class="line"></div><div class="line"># Enables new incubating mode that makes Gradle selective when configuring projects. </div><div class="line"># Only relevant projects are configured which results in faster builds for large multi-projects.</div><div class="line"># http://www.gradle.org/docs/current/userguide/multi_project_builds.html#sec:configuration_on_demand</div><div class="line">org.gradle.configureondemand=true</div></pre></td></tr></table></figure>
+<p>同时上面的这些参数也可以配置到前面的用户目录下的gradle.properties文件里，那样就不是针对一个项目生效，而是针对所有项目生效。</p>
+<p>上面的配置文件主要就是做， 增大gradle运行的java虚拟机的大小，让gradle在编译的时候使用独立进程，让gradle可以平行的运行。</p>
+<h3 id="修改android-studio配置"><a href="#修改android-studio配置" class="headerlink" title="修改android studio配置"></a>修改android studio配置</h3><p>在android studio的配置中，开启offline模式，以及修改配置。实际上的配置和上面的一大段一样，主要是在这个地方配置的只会在ide构建的时候生效，命令行构建不会生效。</p>
+<p><img src="http://isming.qiniudn.com/as_gradle_offline.png" alt="开启offline"></p>
+<p><img src="http://isming.qiniudn.com/as_gradle_config.png" alt="设置运行模式和VM配置"></p>
+<h3 id="命令行构建"><a href="#命令行构建" class="headerlink" title="命令行构建"></a>命令行构建</h3><p>基于上面的配置，命令行构建时在命令后面加上这个参数即可 <code>--daemon --parallel --offline</code>。</p>
+<h3 id="引入依赖库时使用aar"><a href="#引入依赖库时使用aar" class="headerlink" title="引入依赖库时使用aar"></a>引入依赖库时使用aar</h3><p>使用网上第三方的依赖库时尽量使用aar，可以在maven<a href="http://gradleplease.appspot.com/" target="_blank" rel="external">http://gradleplease.appspot.com/</a>或者githu<a href="https://github.com/Goddchen/mvn-repo" target="_blank" rel="external">https://github.com/Goddchen/mvn-repo</a>搜索。</p>
+<p>自己的库模块也可以打包成aar，关于这个可以参考stormzhang的文章<a href="http://www.stormzhang.com/android/2015/03/01/android-reference-local-aar/" target="_blank" rel="external">http://www.stormzhang.com/android/2015/03/01/android-reference-local-aar/</a>。</p>
+<h3 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h3><p>经过这样一番折腾，我原来需要4，5分钟才能构建完成的项目，现在只需要30秒左右就可以构建完成了。当然了，如果你这样还是不可以的话，那么，你应该换电脑了，ssd的硬盘，更大的内存，必须的上了。</p>
+<blockquote>
+<p>原文地址：<a href="http://blog.isming.me/2015/03/18/android-build-speed-up/">http://blog.isming.me/2015/03/18/android-build-speed-up/</a>，转载请注明出处。</p>
+</blockquote>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;已经使用Android Studio进行开发超过一年，随着项目的增大，依赖库的增多，构建速度越来越慢，现在最慢要6分钟才能build一个release的安装包，在网上查找资料，发现可以通过一些配置可以加快速度，这里跟大家分享一下。&lt;/p&gt;
+&lt;h3 id=&quot;开启gradle单独的守护进程&quot;&gt;&lt;a href=&quot;#开启gradle单独的守护进程&quot; class=&quot;headerlink&quot; title=&quot;开启gradle单独的守护进程&quot;&gt;&lt;/a&gt;开启gradle单独的守护进程&lt;/h3&gt;&lt;p&gt;在下面的目录下面创建&lt;code&gt;gradle.properties&lt;/code&gt;文件：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;/home/&amp;lt;username&amp;gt;/.gradle/&lt;/code&gt; (Linux)     &lt;/li&gt;
+&lt;li&gt;&lt;code&gt;/Users/&amp;lt;username&amp;gt;/.gradle/&lt;/code&gt; (Mac)&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;C:\Users\&amp;lt;username&amp;gt;\.gradle&lt;/code&gt; (Windows)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;并在文件中增加：&lt;br&gt;&lt;figure class=&quot;highlight groovy&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;div class=&quot;line&quot;&gt;1&lt;/div&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;div class=&quot;line&quot;&gt;org.gradle.daemon=&lt;span class=&quot;literal&quot;&gt;true&lt;/span&gt;&lt;/div&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="android" scheme="http://blog.isming.me/tags/android/"/>
+    
+      <category term="gradle" scheme="http://blog.isming.me/tags/gradle/"/>
+    
+      <category term="android studio" scheme="http://blog.isming.me/tags/android-studio/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>java注解</title>
+    <link href="http://blog.isming.me/2015/03/06/java-annotation/"/>
+    <id>http://blog.isming.me/2015/03/06/java-annotation/</id>
+    <published>2015-03-05T16:19:19.000Z</published>
+    <updated>2017-05-16T02:31:11.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>从java 5.0开始，为我们提供注解功能，通过注解可以限制代码的重载，过时，以及实现一些其他功能，这里，就来分析一下java的注解。</p>
+<h3 id="java-元注解"><a href="#java-元注解" class="headerlink" title="java 元注解"></a>java 元注解</h3><p>首先来看java元注解，分别是：</p>
+<a id="more"></a>
+<blockquote>
+<p>@Target</p>
+<p>@Retention</p>
+<p>@Documented</p>
+<p>@Inherited</p>
+</blockquote>
+<p>这些注解和他们所修饰的类在java.lang.annotation包中，代码都很简单，可以去查看一下。</p>
+<p>@Target 描述注解的使用范围，取值：</p>
+<blockquote>
+<p>ElementType.CONSTRUCTOR:描述构造器<br>ElementType.FIELD:描述成员变量<br>ElementType.VARIABLE: 描述局部变量<br>ElementType.METHOD: 描述方法<br>ElementType.PACKAGE: 描述包<br>ElementType.PARAMETER：描述方法的参数<br>ElementType.Type: 描述类，接口（包括注解类型）或enum声明.</p>
+</blockquote>
+<p>@Retention 注解的声明周期，即在什么级别保留，取值：</p>
+<blockquote>
+<p>RetentionPoicy.SOURCE :在源文件中有效（在.java文件中有效）<br>RetentionPoicy.CLASS: 在class文件中有效<br>RetentionPoicy.RUNTIME:在运行时有效</p>
+</blockquote>
+<p>@Documented 用于描述其他类型的annotation应该被作为被标注的程序成员的公共API，可以被javdoc的工具文档化，无成员。</p>
+<p>@Inherited 用于标注某个标注是被继承的，即父类中使用了一个Annotation，则子类继承父类的这个annotation，annotation需要标记为RUNTIME的才可以。</p>
+<h3 id="java内置注解"><a href="#java内置注解" class="headerlink" title="java内置注解"></a>java内置注解</h3><p>以上是元标记，再看java内置的标准注解，@Override，@Deprecated， @SuppressWarnings</p>
+<p>@Override</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Target</span>(ElementType.METHOD)</div><div class="line"><span class="meta">@Retention</span>(RetentionPolicy.SOURCE)</div><div class="line"><span class="keyword">public</span> <span class="meta">@interface</span> Override &#123;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>从前面的元注解介绍可以看到，Override用于标注方法，有效期是在源码期间。用于标注方法重写。</p>
+<p>@Deprecated</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Documented</span></div><div class="line"><span class="meta">@Retention</span>(RetentionPolicy.RUNTIME)</div><div class="line"><span class="keyword">public</span> <span class="meta">@interface</span> Deprecated &#123;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>标注 过时，或者不建议使用，也是会保留到运行时，添加了Documented元标签，这样在生成文档时候，就可以生成过时的标记。</p>
+<p>@SuppressWarnings</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Target</span>(&#123;TYPE, FIELD, METHOD, PARAMETER, CONSTRUCTOR, LOCAL_VARIABLE&#125;)</div><div class="line"><span class="meta">@Retention</span>(RetentionPolicy.SOURCE)</div><div class="line"><span class="keyword">public</span> <span class="meta">@interface</span> SuppressWarnings &#123;</div><div class="line">    String[] value();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>忽略错误报告，有效时是源码级。</p>
+<h3 id="自定义注解"><a href="#自定义注解" class="headerlink" title="自定义注解"></a>自定义注解</h3><p>我们再来看看如何自定义注解。自定义的注解就和java内置的注解类似，也需要用到元注解，通过远注解设置那些地方可以使用，设置作用域。比如：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Retention</span>(RetentionPolicy.RUNTIME)</div><div class="line"><span class="meta">@Target</span>(ElementType.METHOD)</div><div class="line"><span class="keyword">public</span> <span class="meta">@interface</span> MyAnnotation &#123;</div><div class="line">     <span class="function"><span class="keyword">int</span> <span class="title">value</span><span class="params">()</span> <span class="keyword">default</span></span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line"><span class="meta">@Retention</span>(RetentionPolicy.SOURCE)</div><div class="line"><span class="meta">@Target</span>(ElementType.METHOD)</div><div class="line"><span class="keyword">public</span> <span class="meta">@interface</span> MyNewAnnotation&#123;</div><div class="line">     <span class="function">String <span class="title">author</span><span class="params">()</span></span>;</div><div class="line">     <span class="function"><span class="keyword">int</span> <span class="title">version</span><span class="params">()</span> <span class="keyword">default</span> 1</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyClass</span> </span>&#123;</div><div class="line">     <span class="meta">@MyAnnotation</span>(<span class="number">12</span>)</div><div class="line">     <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isOK</span><span class="params">()</span> </span>&#123;</div><div class="line">         <span class="keyword">return</span> <span class="keyword">true</span>;</div><div class="line">     &#125;</div><div class="line"></div><div class="line">     <span class="meta">@MyNewAnnotation</span>(author=“sam”, version=<span class="number">2</span>)</div><div class="line">     <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getAge</span><span class="params">()</span> </span>&#123;</div><div class="line">         <span class="keyword">return</span> <span class="number">19</span>;</div><div class="line">     &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>上面前面的代码是定义注解，后面是使用。可以看到使用@interface来定义注解。</p>
+<p>注解配置参数名为注解类的方法名，并且方法没有方法体，没有参数没有修饰符，不可以抛异常。返回值只能是基本类型,String,Class,annotation,enumeration，或者他们的一维数组。只有一个默认属性，可以直接用value()函数，没有属性，则这个注解是标记注解。可以加default表示默认值。</p>
+<h3 id="Android内置注解"><a href="#Android内置注解" class="headerlink" title="Android内置注解"></a>Android内置注解</h3><p>作为android程序员，我们还是了解一下android中自带的注解，以及用法含义。</p>
+<p><code>@SuppressLint</code>： 指示lint检查时忽略注解元素的警告信息。<br><code>@TargetApi</code>:指示lint把当前这个注解元素的target api为指定值，而不是项目设置的target api。<br><code>@NonNull</code>:表示一个成员变量，或者参数，或者方法返回值永远不能为NULL。<br><code>@Nullable</code>:标识一个成员变量，或者参数，方法返回值，可以为NULL。               </p>
+<p>android.support.annotation包中还有更多的注解可以使用。</p>
+<p>另外，<a href="http://codekk.com/open-source-project-analysis/detail/Android/Trinea/%E5%85%AC%E5%85%B1%E6%8A%80%E6%9C%AF%E7%82%B9%E4%B9%8BJava%20%E6%B3%A8%E8%A7%A3%20Annotation" target="_blank" rel="external">http://codekk.com/open-source-project-analysis/detail/Android/Trinea/%E5%85%AC%E5%85%B1%E6%8A%80%E6%9C%AF%E7%82%B9%E4%B9%8BJava%20%E6%B3%A8%E8%A7%A3%20Annotation</a>对于注解的分析很好，推荐一下。</p>
+<blockquote>
+<p>原文地址：<a href="http://blog.isming.me/2015/03/06/java-annotation/">http://blog.isming.me/2015/03/06/java-annotation/</a>，转载请注明出处。</p>
+</blockquote>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;从java 5.0开始，为我们提供注解功能，通过注解可以限制代码的重载，过时，以及实现一些其他功能，这里，就来分析一下java的注解。&lt;/p&gt;
+&lt;h3 id=&quot;java-元注解&quot;&gt;&lt;a href=&quot;#java-元注解&quot; class=&quot;headerlink&quot; title=&quot;java 元注解&quot;&gt;&lt;/a&gt;java 元注解&lt;/h3&gt;&lt;p&gt;首先来看java元注解，分别是：&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="android" scheme="http://blog.isming.me/tags/android/"/>
+    
+      <category term="java" scheme="http://blog.isming.me/tags/java/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>android动画-View Animation</title>
+    <link href="http://blog.isming.me/2015/02/01/android-view-animation/"/>
+    <id>http://blog.isming.me/2015/02/01/android-view-animation/</id>
+    <published>2015-02-01T03:10:50.000Z</published>
+    <updated>2017-05-16T02:31:11.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>视图动画（View Animation）,又称补间动画（Tween Animation）,即给出两个关键帧，通过一些算法将给定属性值在给定的时间内在两个关键帧间渐变。本文首先讲解各种基本动画的使用，其实介绍View动画的工作过程。</p>
+<h3 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h3><p>视图动画只能作用于View对象，是对View的变换，默认支持的类型有：</p>
+<ul>
+<li>透明度变化(AlphaAnimation)</li>
+<li>缩放(ScaleAnimation)</li>
+<li>位移(TranslateAnimation)</li>
+<li>旋转(RotateAnimation)</li>
+</ul>
+<p>可以使用AnimationSet让多个动画集合在一起运行，使用插值器(Interpolator)设置动画的速度。</p>
+<a id="more"></a>
+<p>上面说到的几种动画，以及AnimationSet都是Animation的之类，因此Animation中有的属性，以及xml的配置属性，他们都有，因此，单独说每个动画的时候只说其特有的方法和属性。对于使用xml配置时需要放到res下面的animation文件夹下。</p>
+<h3 id="AlphaAnimation-透明度动画"><a href="#AlphaAnimation-透明度动画" class="headerlink" title="AlphaAnimation 透明度动画"></a>AlphaAnimation 透明度动画</h3><p>就是改变视图的透明度，可以实现淡入淡出等动画。这个动画比较简单只需要设置开始透明度和结束透明度即可。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Animation animation = <span class="keyword">new</span> AlphaAnimation(<span class="number">0.1f</span>, <span class="number">1.0f</span>); <span class="comment">//fromAlpha 0.1f   toAlpha 1.0f</span></div></pre></td></tr></table></figure>
+<p>或</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">alpha</span> <span class="attr">android:fromAlpha</span> = <span class="string">"0.1f"</span> <span class="attr">android:toAlpha</span>=<span class="string">"1.0f"</span> /&gt;</span></div></pre></td></tr></table></figure>
+<h3 id="ScaleAnimation-缩放"><a href="#ScaleAnimation-缩放" class="headerlink" title="ScaleAnimation 缩放"></a>ScaleAnimation 缩放</h3><p>缩放动画，支持设置开始x缩放（宽度缩放倍数），开始y缩放， 结束x缩放，结束y缩放，以及缩放基点x坐标，缩放基点y坐标。</p>
+<p>x缩放和y缩放都是相对于原始的宽度和高度的，1.0表示不缩放。</p>
+<p>坐标基点，同时有参数可以设置坐标基点类型，分别是：</p>
+<ul>
+<li><code>Animation.ABSOLUTE</code>(默认值) 相对于控件的0点的坐标值</li>
+<li><code>Animation.RELATIVE_TO_SELF</code> 相对于自己宽或者高的百分比（1.0表示100%）</li>
+<li><code>Animation.RELATIVE_TO_PARENT</code> 相对于父控件的宽或者高的百分比.</li>
+</ul>
+<p>默认基点是视图的0点，默认坐标基点类型是ABSOLUTE。</p>
+<p>有如下几种构造函数</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">ScaleAnimation(Context context, AttributeSet attrs)</div><div class="line">ScaleAnimation(<span class="keyword">float</span> fromX, <span class="keyword">float</span> toX, <span class="keyword">float</span> fromY, <span class="keyword">float</span> toY)</div><div class="line"><span class="keyword">new</span> ScaleAnimation(<span class="number">1.0f</span>, <span class="number">1.5f</span>, <span class="number">1.0f</span>, <span class="number">1.5f</span>);</div><div class="line">ScaleAnimation(<span class="keyword">float</span> fromX, <span class="keyword">float</span> toX, <span class="keyword">float</span> fromY, <span class="keyword">float</span> toY, <span class="keyword">float</span> pivotX, <span class="keyword">float</span> pivotY)</div><div class="line"><span class="keyword">new</span> ScaleAnimation(<span class="number">1.0f</span>, <span class="number">1.5f</span>, <span class="number">1.0f</span>, <span class="number">1.5f</span>, <span class="number">10</span>, <span class="number">10</span>);</div><div class="line">ScaleAnimation(<span class="keyword">float</span> fromX, <span class="keyword">float</span> toX, <span class="keyword">float</span> fromY, <span class="keyword">float</span> toY, <span class="keyword">int</span> pivotXType, <span class="keyword">float</span> pivotXValue, <span class="keyword">int</span> pivotYType, <span class="keyword">float</span> pivotYValue)</div><div class="line"><span class="keyword">new</span> ScaleAnimation(<span class="number">1.0f</span>, <span class="number">1.5f</span>, <span class="number">1.0f</span>, <span class="number">1.5f</span>, Animation.RELATIVE_TO_SELF, <span class="number">0.5f</span>, Animation.RELATIVE_TO_SELF, <span class="number">0.5f</span>); <span class="comment">//以中心点为基点</span></div></pre></td></tr></table></figure>
+<p>XML配置：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">scale</span></span></div><div class="line">        <span class="attr">android:fromXScale</span>=<span class="string">"float"</span></div><div class="line">        <span class="attr">android:toXScale</span>=<span class="string">"float"</span></div><div class="line">        <span class="attr">android:fromYScale</span>=<span class="string">"float"</span></div><div class="line">        <span class="attr">android:toYScale</span>=<span class="string">"float"</span></div><div class="line">        <span class="attr">android:pivotX</span>=<span class="string">"float"</span></div><div class="line">        <span class="attr">android:pivotY</span>=<span class="string">"float"</span> /&gt;</div></pre></td></tr></table></figure>
+<h3 id="TranslateAnimation-位移"><a href="#TranslateAnimation-位移" class="headerlink" title="TranslateAnimation 位移"></a>TranslateAnimation 位移</h3><p>平移支持x轴平移起点和y轴平移起点，以及设置结束点。同时每个点都可以设置type，type和上面缩放动画的基点类型一样,默认类型是ABSOLUTE.</p>
+<p>有以下几个构造函数：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">TranslateAnimation(Context context, AttributeSet attrs)</div><div class="line">TranslateAnimation(<span class="keyword">float</span> fromXDelta, <span class="keyword">float</span> toXDelta, <span class="keyword">float</span> fromYDelta, <span class="keyword">float</span> toYDelta)</div><div class="line">TranslateAnimation(<span class="keyword">int</span> fromXType, <span class="keyword">float</span> fromXValue, <span class="keyword">int</span> toXType, <span class="keyword">float</span> toXValue, <span class="keyword">int</span> fromYType, <span class="keyword">float</span> fromYValue, <span class="keyword">int</span> toYType, <span class="keyword">float</span> toYValue)</div></pre></td></tr></table></figure>
+<p>XML配置：<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">translate</span></span></div><div class="line">        <span class="attr">android:fromXDelta</span>=<span class="string">"float"</span></div><div class="line">        <span class="attr">android:toXDelta</span>=<span class="string">"float"</span></div><div class="line">        <span class="attr">android:fromYDelta</span>=<span class="string">"float"</span></div><div class="line">        <span class="attr">android:toYDelta</span>=<span class="string">"float"</span> /&gt;</div></pre></td></tr></table></figure></p>
+<h3 id="RoatationAnimation-旋转"><a href="#RoatationAnimation-旋转" class="headerlink" title="RoatationAnimation 旋转"></a>RoatationAnimation 旋转</h3><p>旋转支持设置旋转开始角度，和旋转结束角度，以及旋转基点，和旋转基点类型。类型同上面一样,默认旋转基点是（0，0），默认类型同上面一样，也不多说了。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">RotateAnimation(Context context, AttributeSet attrs)</div><div class="line">RotateAnimation(<span class="keyword">float</span> fromDegrees, <span class="keyword">float</span> toDegrees)</div><div class="line">RotateAnimation(<span class="keyword">float</span> fromDegrees, <span class="keyword">float</span> toDegrees, <span class="keyword">float</span> pivotX, <span class="keyword">float</span> pivotY)</div><div class="line">RotateAnimation(<span class="keyword">float</span> fromDegrees, <span class="keyword">float</span> toDegrees, <span class="keyword">int</span> pivotXType, <span class="keyword">float</span> pivotXValue, <span class="keyword">int</span> pivotYType, <span class="keyword">float</span> pivotYValue)</div></pre></td></tr></table></figure>
+<p>XML配置：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">rotate</span></span></div><div class="line">        <span class="attr">android:fromDegrees</span>=<span class="string">"float"</span></div><div class="line">        <span class="attr">android:toDegrees</span>=<span class="string">"float"</span></div><div class="line">        <span class="attr">android:pivotX</span>=<span class="string">"float"</span></div><div class="line">        <span class="attr">android:pivotY</span>=<span class="string">"float"</span> /&gt;</div></pre></td></tr></table></figure>
+<h3 id="AnimationSet-动画集合"><a href="#AnimationSet-动画集合" class="headerlink" title="AnimationSet 动画集合"></a>AnimationSet 动画集合</h3><p>动画集合就是可以让多个动画一起运行，或者依次运行。</p>
+<p>通过<code>addAnimation(Animation a)</code>向集合中添加动画，使用子动画的<code>setStartOffset(long offset)</code>设置延时，从而实现子动画之间的间隔。可以设置是否共享时间插值器。</p>
+<p>xml配置：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">set</span>&gt;</span></div><div class="line"><span class="comment">&lt;!--这里写子动画--&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">rotation</span> <span class="attr">....</span>/&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">alpha</span> <span class="attr">.....</span>/&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">set</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>属性动画(Property Animation)</p>
+<h3 id="Animation"><a href="#Animation" class="headerlink" title="Animation"></a>Animation</h3><p>单独把Animation拿出来说，是因为前面几个都是Animation,他们有一些属性都是从父类继承的。包括时常，插值器，是否重复，监听器等。</p>
+<p>setFillBefore(boolean)和setFillAfter(boolean)分别是动画开始前和动画结束后是否保持动画状态，默认前者为ture，后者为false;</p>
+<p>xml中可以配置的属性（这些在前面几个动画中省略了，也是可以使用的）：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">android:detachWallpaper</div><div class="line">android:duration</div><div class="line">android:fillAfter</div><div class="line">android:fillBefore</div><div class="line">android:fillEnabled</div><div class="line">android:interpolator</div><div class="line">android:repeatCount</div><div class="line">android:repeatMode   INFINTE(无限期)，RESTART（重新开始，默认值）</div><div class="line">android:startOffset</div><div class="line">android:zAdjustment   ZORDER_BOTTOM,ZORDER_NORMAL, ZORDER_TOP</div></pre></td></tr></table></figure>
+<h4 id="启动动画："><a href="#启动动画：" class="headerlink" title="启动动画："></a>启动动画：</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">view.startAnimation(animation);</div><div class="line"><span class="comment">//或者这样</span></div><div class="line">view.setAnimation(animation);</div><div class="line">animation.start();</div></pre></td></tr></table></figure>
+<h3 id="Interpolator-插值器"><a href="#Interpolator-插值器" class="headerlink" title="Interpolator 插值器"></a>Interpolator 插值器</h3><p>通过设置插值器可以改变动画的速度，以及最终效果。<br>android sdk提供了几种默认插值器，而且这些插值器在新的protery animation上仍然可以使用，这个后面再说。</p>
+<ul>
+<li>AccelerateDecelerateInterpolator 先加速后减速</li>
+<li>AccelerateInterpolator 加速</li>
+<li>AnticipateInterPolator </li>
+<li>AnticipateOvershootInterpolator</li>
+<li>BounceInterpolator</li>
+<li>CycleInterpolator</li>
+<li>LinearInterpolator</li>
+<li>OvershootInterpolator</li>
+<li>PathInterpolator</li>
+</ul>
+<p>当然，我们也可以自定义Interpolator,一般开始值为0，结束值为1.0，然后根据算法来改变值。</p>
+<h3 id="动画原理解析"><a href="#动画原理解析" class="headerlink" title="动画原理解析"></a>动画原理解析</h3><p>动画就是根据间隔时间，不停的去刷新界面，把时间分片，在那个时间片，通过传入插值器的值到Animation.applyTransformation（），来计算当前的值（比如旋转角度值，透明度等）.</p>
+<p>因此，我们也可以继承Animation,从写applyTransformation()来实现我们的其他的动画。</p>
+<h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h3><p>使用view动画时，如果需要用到类似基点类型和基点设置的，一定要注意设置对点，不然效果恨不如意。</p>
+<p>另外，view动画，若动画前view在a点，动画过程以及动画后，view变化了位置，则点击点仍然在原位置，这是个大问题，特别需要注意。</p>
+<p>在android apidemo中，有动画的使用，以及自定义动画，各种插值器效果，各位可以查看，我已经将其放到github上面了,地址：<a href="https://github.com/sangmingming/Android-ApiDemos" target="_blank" rel="external">https://github.com/sangmingming/Android-ApiDemos</a></p>
+<blockquote>
+<p>原文地址：<a href="http://blog.isming.me/2015/02/01/android-view-animation/">http://blog.isming.me/2015/02/01/android-view-animation/</a>，转载请注明出处。</p>
+</blockquote>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;视图动画（View Animation）,又称补间动画（Tween Animation）,即给出两个关键帧，通过一些算法将给定属性值在给定的时间内在两个关键帧间渐变。本文首先讲解各种基本动画的使用，其实介绍View动画的工作过程。&lt;/p&gt;
+&lt;h3 id=&quot;概述&quot;&gt;&lt;a href=&quot;#概述&quot; class=&quot;headerlink&quot; title=&quot;概述&quot;&gt;&lt;/a&gt;概述&lt;/h3&gt;&lt;p&gt;视图动画只能作用于View对象，是对View的变换，默认支持的类型有：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;透明度变化(AlphaAnimation)&lt;/li&gt;
+&lt;li&gt;缩放(ScaleAnimation)&lt;/li&gt;
+&lt;li&gt;位移(TranslateAnimation)&lt;/li&gt;
+&lt;li&gt;旋转(RotateAnimation)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;可以使用AnimationSet让多个动画集合在一起运行，使用插值器(Interpolator)设置动画的速度。&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="android" scheme="http://blog.isming.me/tags/android/"/>
+    
+      <category term="animation" scheme="http://blog.isming.me/tags/animation/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>android动画-Frame Animation</title>
+    <link href="http://blog.isming.me/2015/01/28/android-frame-animation/"/>
+    <id>http://blog.isming.me/2015/01/28/android-frame-animation/</id>
+    <published>2015-01-28T12:13:47.000Z</published>
+    <updated>2017-05-16T02:31:11.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>动画可以在视觉上增加程序的流畅度，我之前对于动画这一块，是会用，但是不全面，这里写下博客，全面梳理一下Android动画方面的知识。当然，关于动画这块，也有很多前人写了很多内容，大家可以去参考。</p>
+<p>3.0以前，android支持两种动画模式，<em>Tween Animation</em>,<em>Frame Animation</em>，在android3.0中又引入了一个新的动画系统：<em>Property Animation</em>，这三种动画模式在SDK中被称为<em>Property Animation</em>,<em>View Animation</em>,<em>Drawable Animation</em>。 可通过<a href="http://nineoldandroids.com/" target="_blank" rel="external">NineOldAndroids</a>项目在3.0之前的系统中使用Property Animation。另外呢，还有activity之间的过渡动画，android5.0增加的矢量动画，过渡效果等。</p>
+<p>本文首先来说Frame Animation.</p>
+<a id="more"></a>
+<p>帧动画,在android中又称Drawable Animation，就是通过一系列的Drawable依次显示来达到模拟动画的效果。<br>android中提供了<code>AnimationDrawable</code>类来实现帧动画，我们可以使用AnimationDrawable作为View的背景。我们通常可以使用xml来配置动画。</p>
+<h4 id="在项目的res-drawable-目录下面创建一个xml文件。"><a href="#在项目的res-drawable-目录下面创建一个xml文件。" class="headerlink" title="在项目的res/drawable/目录下面创建一个xml文件。"></a>在项目的res/drawable/目录下面创建一个xml文件。</h4><h4 id="文件中以-lt-animation-list-gt-作为根节点，-每一张图片作为一个-lt-item-gt-。"><a href="#文件中以-lt-animation-list-gt-作为根节点，-每一张图片作为一个-lt-item-gt-。" class="headerlink" title="文件中以&lt;animation-list&gt;作为根节点， 每一张图片作为一个&lt;item&gt;。"></a>文件中以<code>&lt;animation-list&gt;</code>作为根节点， 每一张图片作为一个<code>&lt;item&gt;</code>。</h4><p>如：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">animation-list</span> <span class="attr">xmlns:android</span>=<span class="string">"http://schemas.android.com/apk/res/android"</span></span></div><div class="line">    <span class="attr">android:oneshot</span>=<span class="string">"true"</span>&gt;</div><div class="line">    <span class="tag">&lt;<span class="name">item</span> <span class="attr">android:drawable</span>=<span class="string">"@drawable/rocket_thrust1"</span> <span class="attr">android:duration</span>=<span class="string">"200"</span> /&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">item</span> <span class="attr">android:drawable</span>=<span class="string">"@drawable/rocket_thrust2"</span> <span class="attr">android:duration</span>=<span class="string">"200"</span> /&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">item</span> <span class="attr">android:drawable</span>=<span class="string">"@drawable/rocket_thrust3"</span> <span class="attr">android:duration</span>=<span class="string">"200"</span> /&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">animation-list</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>上面代码中，<code>onshot</code>若为<code>true</code>，则动画只播放一次，否则动画会循环播放。item中的duration用于设置当前帧的停留时间。</p>
+<h4 id="在代码中获取并，启动动画。"><a href="#在代码中获取并，启动动画。" class="headerlink" title="在代码中获取并，启动动画。"></a>在代码中获取并，启动动画。</h4><p>如上面的xml文件为rocket_thrust.xml，则在代码中使用如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">AnimationDrawable rocketAnimation;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</div><div class="line">  <span class="keyword">super</span>.onCreate(savedInstanceState);</div><div class="line">  setContentView(R.layout.main);</div><div class="line"></div><div class="line">  ImageView rocketImage = (ImageView) findViewById(R.id.rocket_image);</div><div class="line">  rocketImage.setBackgroundResource(R.drawable.rocket_thrust);</div><div class="line">  rocketAnimation = (AnimationDrawable) rocketImage.getBackground();</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">onTouchEvent</span><span class="params">(MotionEvent event)</span> </span>&#123;</div><div class="line">  <span class="keyword">if</span> (event.getAction() == MotionEvent.ACTION_DOWN) &#123;</div><div class="line">    rocketAnimation.start();</div><div class="line">    <span class="keyword">return</span> <span class="keyword">true</span>;</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">return</span> <span class="keyword">super</span>.onTouchEvent(event);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>上面代码具体就是首先从资源中获取到我们的动画，然后设置为view的背景，之后启动动画。</p>
+<p><em>需要注意的是，动画的启动需要在view和window建立连接后才可以绘制，比如上面代码是在用户触摸后启动。如果我们需要打开界面就启动动画的话，则可以在Activity的<code>onWindowFocusChanged()</code>方法中启动。</em></p>
+<p>上面介绍的是在xml中定义动画，当然也可以在java代码中定义动画。如：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">AnimationDrawable rocketAnimation;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</div><div class="line">  <span class="keyword">super</span>.onCreate(savedInstanceState);</div><div class="line">  setContentView(R.layout.main);</div><div class="line"></div><div class="line">  ImageView rocketImage = (ImageView) findViewById(R.id.rocket_image);</div><div class="line"> </div><div class="line">  rocketAnimation = <span class="keyword">new</span> AnimationDrawable();</div><div class="line">  rocketAnimation.addFrame(getResources().getDrawable(R.drawable.rocket_thrust1, <span class="number">200</span>);</div><div class="line">  rocketAnimation.addFrame(getResources().getDrawable(R.drawable.rocket_thrust2, <span class="number">200</span>);</div><div class="line">  rocketAnimation.addFrame(getResources().getDrawable(R.drawable.rocket_thrust3, <span class="number">200</span>);</div><div class="line">rocketImage.setBackground(rocketAnimation);  </div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">onTouchEvent</span><span class="params">(MotionEvent event)</span> </span>&#123;</div><div class="line">  <span class="keyword">if</span> (event.getAction() == MotionEvent.ACTION_DOWN) &#123;</div><div class="line">    rocketAnimation.start();</div><div class="line">    <span class="keyword">return</span> <span class="keyword">true</span>;</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">return</span> <span class="keyword">super</span>.onTouchEvent(event);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>更多使用方法，可以去查看AnimationDrawable的api手册.</p>
+<p>另外，看了一下相关代码，AnimationDrawable代码不长，其父类是<code>DrawableContainer</code>，用于保存Drawable list，另外有一个数组保存每一帧的停顿时间。每隔一定时间，替换Drawable,重新刷新，实现动画。</p>
+<blockquote>
+<p>原文地址：<a href="http://blog.isming.me/2015/01/28/android-frame-animation/">http://blog.isming.me/2015/01/28/android-frame-animation/</a>，转载请注明出处。</p>
+</blockquote>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;动画可以在视觉上增加程序的流畅度，我之前对于动画这一块，是会用，但是不全面，这里写下博客，全面梳理一下Android动画方面的知识。当然，关于动画这块，也有很多前人写了很多内容，大家可以去参考。&lt;/p&gt;
+&lt;p&gt;3.0以前，android支持两种动画模式，&lt;em&gt;Tween Animation&lt;/em&gt;,&lt;em&gt;Frame Animation&lt;/em&gt;，在android3.0中又引入了一个新的动画系统：&lt;em&gt;Property Animation&lt;/em&gt;，这三种动画模式在SDK中被称为&lt;em&gt;Property Animation&lt;/em&gt;,&lt;em&gt;View Animation&lt;/em&gt;,&lt;em&gt;Drawable Animation&lt;/em&gt;。 可通过&lt;a href=&quot;http://nineoldandroids.com/&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;NineOldAndroids&lt;/a&gt;项目在3.0之前的系统中使用Property Animation。另外呢，还有activity之间的过渡动画，android5.0增加的矢量动画，过渡效果等。&lt;/p&gt;
+&lt;p&gt;本文首先来说Frame Animation.&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="android" scheme="http://blog.isming.me/tags/android/"/>
+    
+      <category term="animation" scheme="http://blog.isming.me/tags/animation/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>android反编译-如何防止反编译</title>
+    <link href="http://blog.isming.me/2015/01/18/android-anti-decompile/"/>
+    <id>http://blog.isming.me/2015/01/18/android-anti-decompile/</id>
+    <published>2015-01-17T17:35:53.000Z</published>
+    <updated>2017-05-16T02:31:11.000Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>前面介绍了怎样去反编译别人的代码。哈哈，这里居然又写进行防止反编译。但是，还是先来写写吧。</p>
+<h3 id="使用ProGuard"><a href="#使用ProGuard" class="headerlink" title="使用ProGuard"></a>使用ProGuard</h3><p>proguard android的sdk中就有提供，使用它可以对代码进行混淆和精简，处理后的代码，虽然仍然可以反编译，但是阅读起来相当困难，降低代码的可读性。操作简单，推荐使用。</p>
+<a id="more"></a>
+<p>proguard使用方法和配置，可以看我之前的博客： <a href="http://blog.isming.me/2014/05/31/use-proguard/">http://blog.isming.me/2014/05/31/use-proguard/</a></p>
+<p>另外网上有别人共享的proguard配置模板，也可以参考： <a href="https://github.com/krschultz/android-proguard-snippets" target="_blank" rel="external">https://github.com/krschultz/android-proguard-snippets</a></p>
+<p>如果大家有去proguard的官网，ProGuard的公司提供的DexGuard可以给android程序提供更多的优化和保护，不过这个软件收费的，有需要的也可以去了解以下（我不是广告，(^_^））。</p>
+<h3 id="代码转移到native"><a href="#代码转移到native" class="headerlink" title="代码转移到native"></a>代码转移到native</h3><p>代码放在native层的话，使用我前面的方法就没办法去反编译了，这时就需要借助反编译c的方法了，这个我没有研究过了。</p>
+<p>因此写在native层也是很安全的，但是因为native更难写，只建议偏重于专利，或者机密数据，等一些功能和逻辑写在native层。更加安全，也更快速。</p>
+<h3 id="使用第三方加密工具"><a href="#使用第三方加密工具" class="headerlink" title="使用第三方加密工具"></a>使用第三方加密工具</h3><p>国内现在也出现了很多apk加固工具，比如爱加密，梆梆加密等等。这些没有去使用过，但是看过网上的介绍，以及他们的自己的介绍，大致了解到，是在我们的apk之外加壳，对我们的dex文件进行加密来做的。</p>
+<p>使用这些工具可以来帮助提高软件的安全性，但是使用之前也要确保服务的可靠性，服务商的信誉。</p>
+<h3 id="个人之见"><a href="#个人之见" class="headerlink" title="个人之见"></a>个人之见</h3><p>以上只是本人想到的几种，比较可行的方案。同时肯定还有其他的方式，比如采用签名验证，插件开发等等机制。</p>
+<p>在我看来，软件的一定程度的混淆是有必要的，毕竟这个一个公司的财产（很多公司靠一个app营收），不过一些不是很特有的东西也是可以开源的。毕竟，现在网上的开源项目很多，我们也从中使用，借鉴了很多，也要回馈开源社区才行</p>
+<p>文章系本人拙见，如果这方面你有什么好的方法，或者有什么好的建议，也可以评论交流。</p>
+<blockquote>
+<p>原文地址：<a href="http://blog.isming.me/2015/01/18/android-anti-decompile/">http://blog.isming.me/2015/01/18/android-anti-decompile/</a>，转载请注明出处。</p>
+</blockquote>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h3 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h3&gt;&lt;p&gt;前面介绍了怎样去反编译别人的代码。哈哈，这里居然又写进行防止反编译。但是，还是先来写写吧。&lt;/p&gt;
+&lt;h3 id=&quot;使用ProGuard&quot;&gt;&lt;a href=&quot;#使用ProGuard&quot; class=&quot;headerlink&quot; title=&quot;使用ProGuard&quot;&gt;&lt;/a&gt;使用ProGuard&lt;/h3&gt;&lt;p&gt;proguard android的sdk中就有提供，使用它可以对代码进行混淆和精简，处理后的代码，虽然仍然可以反编译，但是阅读起来相当困难，降低代码的可读性。操作简单，推荐使用。&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="android" scheme="http://blog.isming.me/tags/android/"/>
+    
+      <category term="decompile" scheme="http://blog.isming.me/tags/decompile/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>android反编译-smali语法</title>
+    <link href="http://blog.isming.me/2015/01/14/android-decompile-smali/"/>
+    <id>http://blog.isming.me/2015/01/14/android-decompile-smali/</id>
+    <published>2015-01-14T15:52:44.000Z</published>
+    <updated>2017-05-16T02:31:11.000Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>前面我们有说过android反编译的工具，如何进行反编译。反编译后可以得到jar或者得到smali文件。Android采用的是java语言进行开发，但是Android系统有自己的虚拟机Dalvik,代码编译最终不是采用的java的class，而是使用的smali。我们反编译得到的代码，jar的话可能很多地方无法正确的解释出来，如果我们反编译的是smali则可以正确的理解程序的意思。因此，我们有必要熟悉smali语法。</p>
+<h3 id="类型的表示"><a href="#类型的表示" class="headerlink" title="类型的表示"></a>类型的表示</h3><p>java里面包含两种类型，原始类型和引用类型(包括对象)，同时映射到smali也是有这两大类型。</p>
+<a id="more"></a>
+<h5 id="原始类型"><a href="#原始类型" class="headerlink" title="原始类型"></a>原始类型</h5><blockquote>
+<p>V void (只能用于返回值类型)<br>Z boolean<br>B byte<br>S short<br>C char<br>I int<br>J long<br>F float<br>D Double</p>
+</blockquote>
+<h5 id="对象类型"><a href="#对象类型" class="headerlink" title="对象类型"></a>对象类型</h5><blockquote>
+<p>Lpackage/name/ObjectName; 相当于java中的package.name.ObjectName        </p>
+</blockquote>
+<p><em>L</em> 表示这是一个对象类型<br><em>package/name</em> 该对象所在的包<br><em>ObjectName</em> 对象名称<br><em>;</em> 标识对象名称的结束        </p>
+<h5 id="数组的表示"><a href="#数组的表示" class="headerlink" title="数组的表示"></a>数组的表示</h5><p><em>[I</em> 表示一个int型的一维数组，相当于int[]；<br>增加一个维度增加一个<em>[</em>,如<em>[[I</em>表示<em>int[][]</em></p>
+<p>数组每一个维度最多<em>255</em>个;</p>
+<p>对象数组表示也是类似，如String数组的表示是<em>[Ljava/lang/String</em>    </p>
+<h3 id="寄存器与变量"><a href="#寄存器与变量" class="headerlink" title="寄存器与变量"></a>寄存器与变量</h3><p>java中变量都是存放在内存中的，android为了提高性能，变量都是存放在寄存器中的，寄存器为32位，可以支持任何类型，其中long和double是64为的，需要使用两个寄存器保存。</p>
+<p>寄存器采用v和p来命名<br>v表示本地寄存器，p表示参数寄存器，关系如下</p>
+<p>如果一个方法有两个本地变量，有三个参数</p>
+<blockquote>
+<p>v0     第一个本地寄存器<br>v1        第二个本地寄存器<br>v2    p0     (this)<br>v3    p1    第一个参数<br>v4     p2    第二个参数<br>v5    p3    第三个参数</p>
+</blockquote>
+<p>当然，如果是静态方法的话就只有5个寄存器了，不需要存this了。</p>
+<p>.registers 使用这个指令指定方法中寄存器的总数<br>.locals 使用这个指定表明方法中非参寄存器的总数，放在方法的第一行。</p>
+<h3 id="方法和字段的表示"><a href="#方法和字段的表示" class="headerlink" title="方法和字段的表示"></a>方法和字段的表示</h3><h5 id="方法签名"><a href="#方法签名" class="headerlink" title="方法签名"></a>方法签名</h5><p>methodName(III)Lpackage/name/ObjectName;    </p>
+<p>如果做过ndk开发的对于这样的签名应该很熟悉的，就是这样来标识一个方法的。<br>上面methodName标识方法名，III表示三个整形参数，Lpackage/name/ObjectName;表示返回值的类型。</p>
+<h5 id="方法的表示"><a href="#方法的表示" class="headerlink" title="方法的表示"></a>方法的表示</h5><p>Lpackage/name/ObjectName;——&gt;methodName(III)Z<br>即 package.name.ObjectName中的 function boolean methondName(int a, int b, int c) 类似这样子</p>
+<h5 id="字段的表示"><a href="#字段的表示" class="headerlink" title="字段的表示"></a>字段的表示</h5><p>Lpackage/name/ObjectName;——&gt;FieldName:Ljava/lang/String;</p>
+<p>即表示： 包名，字段名和各字段类型</p>
+<h4 id="方法的定义"><a href="#方法的定义" class="headerlink" title="方法的定义"></a>方法的定义</h4><p>比如我下面的一个方法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">sum</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b)</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> a+b;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>使用编译后是这样</p>
+<figure class="highlight smali"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="keyword">.method</span><span class="keyword"> private</span><span class="keyword"> static</span> sum(II)I</div><div class="line"><span class="keyword">    .locals</span> 4   <span class="comment">#表示需要申请4个本地寄存器</span></div><div class="line"><span class="keyword">    .parameter</span></div><div class="line"><span class="keyword">    .parameter</span> <span class="comment">#这里表示有两个参数</span></div><div class="line"></div><div class="line"><span class="keyword">    .prologue</span></div><div class="line"><span class="keyword">    .line</span> 27 </div><div class="line">   <span class="built_in"> move </span>v0, p0</div><div class="line"></div><div class="line"><span class="keyword">    .local</span> v0, a:I</div><div class="line">   <span class="built_in"> move </span>v1, p1</div><div class="line"></div><div class="line"><span class="keyword">    .local</span> v1, b:I</div><div class="line">   <span class="built_in"> move </span>v2, v0</div><div class="line"></div><div class="line">   <span class="built_in"> move </span>v3, v1</div><div class="line"></div><div class="line">   <span class="built_in"> add-int/2addr </span>v2, v3</div><div class="line"></div><div class="line">   <span class="built_in"> move </span>v0, v2<span class="keyword"></span></div><div class="line"></div><div class="line">    .end local v0           <span class="comment">#a:I</span></div><div class="line">   <span class="built_in"> return </span>v0<span class="keyword"></span></div><div class="line">.end method</div></pre></td></tr></table></figure>
+<p>从上面可以看到函数声明使用<em>.method</em>开始 <em>.end method</em>结束，java中的关键词private,static 等都可以使用，同时使用签名来表示唯一的方法，这里是<em>sum(II)I</em>。</p>
+<h4 id="声明成员"><a href="#声明成员" class="headerlink" title="声明成员"></a>声明成员</h4><p>.field private name:Lpackage/name/ObjectName;<br>比如：private TextView mTextView;表示就是<br>.field private mTextView:Landroid/widget/TextView;<br>private int mCount;<br>.field private mCount:I        </p>
+<h3 id="指令执行"><a href="#指令执行" class="headerlink" title="指令执行"></a>指令执行</h3><p>smali字节码是类似于汇编的，如果你有汇编基础，理解起来是非常容易的。</p>
+<p>比如：<br>move v0, v3 #把v3寄存器的值移动到寄存器v0上.</p>
+<p>const v0， 0x1 #把值0x1赋值到寄存器v0上。</p>
+<p>invoke-static {v4, v5}, Lme/isming/myapplication/MainActivity;-&gt;sum(II)I   #执行方法sum(),v4,v5的值分别作为sum的参数。</p>
+<h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h3><p>通过前面我们可以看到，smali就是类似汇编，其中很多命令，我们可以去查它的手册来一一对应。学习时，我们可以自己写一个比较简单的java文件，然后转成smali文件来对照学习。</p>
+<p>下面，我贴一个我写的一个比较简单的java文件以及其对应的smali，其中包含if判断和for循环。</p>
+<p>java文件：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> me.isming.myapplication;</div><div class="line"></div><div class="line"><span class="keyword">import</span> android.support.v7.app.ActionBarActivity;</div><div class="line"><span class="keyword">import</span> android.os.Bundle;</div><div class="line"><span class="keyword">import</span> android.view.Menu;</div><div class="line"><span class="keyword">import</span> android.view.MenuItem;</div><div class="line"><span class="keyword">import</span> android.widget.TextView;</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MainActivity</span> <span class="keyword">extends</span> <span class="title">ActionBarActivity</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="keyword">private</span> TextView mTextView;</div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</div><div class="line">        <span class="keyword">super</span>.onCreate(savedInstanceState);</div><div class="line">        setContentView(R.layout.activity_main);</div><div class="line"></div><div class="line">        mTextView = (TextView) findViewById(R.id.text);</div><div class="line"></div><div class="line">        mTextView.setText(<span class="string">"a+b="</span> + sum(<span class="number">1</span>,<span class="number">2</span>) + <span class="string">"a&gt;b?"</span> + max(<span class="number">1</span>,<span class="number">2</span>) + <span class="string">"5 accumulate:"</span> + accumulate(<span class="number">5</span>));</div><div class="line"></div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">sum</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b)</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> a+b;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">boolean</span> <span class="title">max</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b)</span> </span>&#123;</div><div class="line">        <span class="keyword">if</span> (a &gt; b) &#123;</div><div class="line">            <span class="keyword">return</span> <span class="keyword">true</span>;</div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line">            <span class="keyword">return</span> <span class="keyword">false</span>;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">int</span> <span class="title">accumulate</span><span class="params">(<span class="keyword">int</span> a)</span> </span>&#123;</div><div class="line">        <span class="keyword">if</span> (a &lt;= <span class="number">0</span>) &#123;</div><div class="line">            <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">int</span> sum = <span class="number">0</span>;</div><div class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt;= a; i++) &#123;</div><div class="line">            sum += a;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> sum;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>对应的smali:</p>
+<figure class="highlight smali"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div><div class="line">146</div><div class="line">147</div><div class="line">148</div><div class="line">149</div><div class="line">150</div><div class="line">151</div><div class="line">152</div><div class="line">153</div><div class="line">154</div><div class="line">155</div><div class="line">156</div><div class="line">157</div><div class="line">158</div><div class="line">159</div><div class="line">160</div><div class="line">161</div><div class="line">162</div><div class="line">163</div><div class="line">164</div><div class="line">165</div><div class="line">166</div><div class="line">167</div><div class="line">168</div><div class="line">169</div><div class="line">170</div><div class="line">171</div><div class="line">172</div><div class="line">173</div><div class="line">174</div><div class="line">175</div><div class="line">176</div><div class="line">177</div><div class="line">178</div><div class="line">179</div><div class="line">180</div><div class="line">181</div><div class="line">182</div><div class="line">183</div><div class="line">184</div><div class="line">185</div><div class="line">186</div><div class="line">187</div><div class="line">188</div><div class="line">189</div><div class="line">190</div><div class="line">191</div><div class="line">192</div><div class="line">193</div><div class="line">194</div><div class="line">195</div><div class="line">196</div><div class="line">197</div><div class="line">198</div><div class="line">199</div><div class="line">200</div><div class="line">201</div><div class="line">202</div><div class="line">203</div><div class="line">204</div><div class="line">205</div><div class="line">206</div><div class="line">207</div><div class="line">208</div><div class="line">209</div><div class="line">210</div><div class="line">211</div><div class="line">212</div><div class="line">213</div><div class="line">214</div><div class="line">215</div><div class="line">216</div><div class="line">217</div><div class="line">218</div><div class="line">219</div><div class="line">220</div><div class="line">221</div><div class="line">222</div><div class="line">223</div><div class="line">224</div><div class="line">225</div><div class="line">226</div><div class="line">227</div><div class="line">228</div><div class="line">229</div><div class="line">230</div><div class="line">231</div><div class="line">232</div><div class="line">233</div><div class="line">234</div><div class="line">235</div><div class="line">236</div><div class="line">237</div><div class="line">238</div><div class="line">239</div><div class="line">240</div><div class="line">241</div><div class="line">242</div><div class="line">243</div><div class="line">244</div><div class="line">245</div><div class="line">246</div><div class="line">247</div><div class="line">248</div><div class="line">249</div><div class="line">250</div><div class="line">251</div><div class="line">252</div><div class="line">253</div><div class="line">254</div><div class="line">255</div><div class="line">256</div><div class="line">257</div><div class="line">258</div><div class="line">259</div><div class="line">260</div><div class="line">261</div><div class="line">262</div><div class="line">263</div><div class="line">264</div><div class="line">265</div><div class="line">266</div><div class="line">267</div><div class="line">268</div><div class="line">269</div><div class="line">270</div><div class="line">271</div><div class="line">272</div><div class="line">273</div><div class="line">274</div><div class="line">275</div><div class="line">276</div><div class="line">277</div><div class="line">278</div><div class="line">279</div><div class="line">280</div><div class="line">281</div><div class="line">282</div><div class="line">283</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">.class</span><span class="keyword"> public</span> <span class="class">Lme/isming/myapplication/MainActivity;</span></div><div class="line"><span class="keyword">.super</span> <span class="class">Landroid/support/v7/app/ActionBarActivity;</span></div><div class="line"><span class="keyword">.source</span> <span class="string">"MainActivity.java"</span></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment"># instance fields</span></div><div class="line"><span class="keyword">.field</span><span class="keyword"> private</span> mTextView:<span class="class">Landroid/widget/TextView;</span></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment"># direct methods</span></div><div class="line"><span class="keyword">.method</span><span class="keyword"> public</span><span class="keyword"> constructor</span> &lt;init&gt;()V</div><div class="line"><span class="keyword">    .locals</span> 2</div><div class="line"></div><div class="line"><span class="keyword">    .prologue</span></div><div class="line"><span class="keyword">    .line</span> 10</div><div class="line">   <span class="built_in"> move-object </span>v0, p0</div><div class="line"></div><div class="line"><span class="keyword">    .local</span> v0, this:<span class="class">Lme/isming/myapplication/MainActivity;</span></div><div class="line">   <span class="built_in"> move-object </span>v1, v0</div><div class="line"></div><div class="line">   <span class="built_in"> invoke-direct </span>&#123;v1&#125;, <span class="class">Landroid/support/v7/app/ActionBarActivity;</span>-&gt;&lt;init&gt;()V</div><div class="line"></div><div class="line">   <span class="built_in"> return-void</span></div><div class="line"><span class="keyword">.end method</span></div><div class="line"></div><div class="line"><span class="keyword">.method</span><span class="keyword"> private</span> accumulate(I)I</div><div class="line"><span class="keyword">    .locals</span> 6</div><div class="line"><span class="keyword">    .parameter</span></div><div class="line"></div><div class="line"><span class="keyword">    .prologue</span></div><div class="line"><span class="keyword">    .line</span> 39</div><div class="line">   <span class="built_in"> move-object </span>v0, p0</div><div class="line"></div><div class="line"><span class="keyword">    .local</span> v0, this:<span class="class">Lme/isming/myapplication/MainActivity;</span></div><div class="line">   <span class="built_in"> move </span>v1, p1</div><div class="line"></div><div class="line"><span class="keyword">    .local</span> v1, a:I</div><div class="line">   <span class="built_in"> move </span>v4, v1</div><div class="line"></div><div class="line">   <span class="built_in"> if-gtz </span>v4,<span class="keyword"> :cond_0</span></div><div class="line"></div><div class="line"><span class="keyword">    .line</span> 40</div><div class="line">   <span class="built_in"> const/4 </span>v4, 0x0</div><div class="line"></div><div class="line">   <span class="built_in"> move </span>v0, v4</div><div class="line"></div><div class="line"><span class="keyword">    .line</span> 46<span class="keyword"></span></div><div class="line">    .end local v0           <span class="comment">#this:Lme/isming/myapplication/MainActivity;</span></div><div class="line">   <span class="keyword"> :goto_0</span></div><div class="line">   <span class="built_in"> return </span>v0</div><div class="line"></div><div class="line"><span class="keyword">    .line</span> 42</div><div class="line"><span class="keyword">    .restart</span> local v0       <span class="comment">#this:Lme/isming/myapplication/MainActivity;</span></div><div class="line">   <span class="keyword"> :cond_0</span></div><div class="line">   <span class="built_in"> const/4 </span>v4, 0x0</div><div class="line"></div><div class="line">   <span class="built_in"> move </span>v2, v4</div><div class="line"></div><div class="line"><span class="keyword">    .line</span> 43</div><div class="line"><span class="keyword">    .local</span> v2, sum:I</div><div class="line">   <span class="built_in"> const/4 </span>v4, 0x0</div><div class="line"></div><div class="line">   <span class="built_in"> move </span>v3, v4</div><div class="line"></div><div class="line"><span class="keyword">    .local</span> v3, i:I</div><div class="line">   <span class="keyword"> :goto_1</span></div><div class="line">   <span class="built_in"> move </span>v4, v3</div><div class="line"></div><div class="line">   <span class="built_in"> move </span>v5, v1</div><div class="line"></div><div class="line">   <span class="built_in"> if-gt </span>v4, v5,<span class="keyword"> :cond_1</span></div><div class="line"></div><div class="line"><span class="keyword">    .line</span> 44</div><div class="line">   <span class="built_in"> move </span>v4, v2</div><div class="line"></div><div class="line">   <span class="built_in"> move </span>v5, v1</div><div class="line"></div><div class="line">   <span class="built_in"> add-int/2addr </span>v4, v5</div><div class="line"></div><div class="line">   <span class="built_in"> move </span>v2, v4</div><div class="line"></div><div class="line"><span class="keyword">    .line</span> 43</div><div class="line">   <span class="built_in"> add-int/lit8 </span>v3, v3, 0x1</div><div class="line"></div><div class="line">   <span class="built_in"> goto </span>:goto_1</div><div class="line"></div><div class="line"><span class="keyword">    .line</span> 46</div><div class="line">   <span class="keyword"> :cond_1</span></div><div class="line">   <span class="built_in"> move </span>v4, v2</div><div class="line"></div><div class="line">   <span class="built_in"> move </span>v0, v4</div><div class="line"></div><div class="line">   <span class="built_in"> goto </span>:goto_0<span class="keyword"></span></div><div class="line">.end method</div><div class="line"></div><div class="line"><span class="keyword">.method</span><span class="keyword"> private</span> max(II)Z</div><div class="line"><span class="keyword">    .locals</span> 5</div><div class="line"><span class="keyword">    .parameter</span></div><div class="line"><span class="keyword">    .parameter</span></div><div class="line"></div><div class="line"><span class="keyword">    .prologue</span></div><div class="line"><span class="keyword">    .line</span> 31</div><div class="line">   <span class="built_in"> move-object </span>v0, p0</div><div class="line"></div><div class="line"><span class="keyword">    .local</span> v0, this:<span class="class">Lme/isming/myapplication/MainActivity;</span></div><div class="line">   <span class="built_in"> move </span>v1, p1</div><div class="line"></div><div class="line"><span class="keyword">    .local</span> v1, a:I</div><div class="line">   <span class="built_in"> move </span>v2, p2</div><div class="line"></div><div class="line"><span class="keyword">    .local</span> v2, b:I</div><div class="line">   <span class="built_in"> move </span>v3, v1</div><div class="line"></div><div class="line">   <span class="built_in"> move </span>v4, v2</div><div class="line"></div><div class="line">   <span class="built_in"> if-le </span>v3, v4,<span class="keyword"> :cond_0</span></div><div class="line"></div><div class="line"><span class="keyword">    .line</span> 32</div><div class="line">   <span class="built_in"> const/4 </span>v3, 0x1</div><div class="line"></div><div class="line">   <span class="built_in"> move </span>v0, v3</div><div class="line"></div><div class="line"><span class="keyword">    .line</span> 34<span class="keyword"></span></div><div class="line">    .end local v0           <span class="comment">#this:Lme/isming/myapplication/MainActivity;</span></div><div class="line">   <span class="keyword"> :goto_0</span></div><div class="line">   <span class="built_in"> return </span>v0</div><div class="line"></div><div class="line"><span class="keyword">    .restart</span> local v0       <span class="comment">#this:Lme/isming/myapplication/MainActivity;</span></div><div class="line">   <span class="keyword"> :cond_0</span></div><div class="line">   <span class="built_in"> const/4 </span>v3, 0x0</div><div class="line"></div><div class="line">   <span class="built_in"> move </span>v0, v3</div><div class="line"></div><div class="line">   <span class="built_in"> goto </span>:goto_0<span class="keyword"></span></div><div class="line">.end method</div><div class="line"></div><div class="line"><span class="keyword">.method</span><span class="keyword"> private</span><span class="keyword"> static</span> sum(II)I</div><div class="line"><span class="keyword">    .locals</span> 4</div><div class="line"><span class="keyword">    .parameter</span></div><div class="line"><span class="keyword">    .parameter</span></div><div class="line"></div><div class="line"><span class="keyword">    .prologue</span></div><div class="line"><span class="keyword">    .line</span> 27</div><div class="line">   <span class="built_in"> move </span>v0, p0</div><div class="line"></div><div class="line"><span class="keyword">    .local</span> v0, a:I</div><div class="line">   <span class="built_in"> move </span>v1, p1</div><div class="line"></div><div class="line"><span class="keyword">    .local</span> v1, b:I</div><div class="line">   <span class="built_in"> move </span>v2, v0</div><div class="line"></div><div class="line">   <span class="built_in"> move </span>v3, v1</div><div class="line"></div><div class="line">   <span class="built_in"> add-int/2addr </span>v2, v3</div><div class="line"></div><div class="line">   <span class="built_in"> move </span>v0, v2<span class="keyword"></span></div><div class="line"></div><div class="line">    .end local v0           <span class="comment">#a:I</span></div><div class="line">   <span class="built_in"> return </span>v0<span class="keyword"></span></div><div class="line">.end method</div><div class="line"></div><div class="line"></div><div class="line"><span class="comment"># virtual methods</span></div><div class="line"><span class="keyword">.method</span><span class="keyword"> protected</span> onCreate(<span class="class">Landroid/os/Bundle;</span>)V</div><div class="line"><span class="keyword">    .locals</span> 8</div><div class="line"><span class="keyword">    .parameter</span></div><div class="line"></div><div class="line"><span class="keyword">    .prologue</span></div><div class="line"><span class="keyword">    .line</span> 16</div><div class="line">   <span class="built_in"> move-object </span>v0, p0</div><div class="line"></div><div class="line"><span class="keyword">    .local</span> v0, this:<span class="class">Lme/isming/myapplication/MainActivity;</span></div><div class="line">   <span class="built_in"> move-object </span>v1, p1</div><div class="line"></div><div class="line"><span class="keyword">    .local</span> v1, savedInstanceState:<span class="class">Landroid/os/Bundle;</span></div><div class="line">   <span class="built_in"> move-object </span>v2, v0</div><div class="line"></div><div class="line">   <span class="built_in"> move-object </span>v3, v1</div><div class="line"></div><div class="line">   <span class="built_in"> invoke-super </span>&#123;v2, v3&#125;, <span class="class">Landroid/support/v7/app/ActionBarActivity;</span>-&gt;onCreate(<span class="class">Landroid/os/Bundle;</span>)V</div><div class="line"></div><div class="line"><span class="keyword">    .line</span> 17</div><div class="line">   <span class="built_in"> move-object </span>v2, v0</div><div class="line"></div><div class="line">   <span class="built_in"> const </span>v3, 0x7f030017</div><div class="line"></div><div class="line">   <span class="built_in"> invoke-virtual </span>&#123;v2, v3&#125;, <span class="class">Lme/isming/myapplication/MainActivity;</span>-&gt;setContentView(I)V</div><div class="line"></div><div class="line"><span class="keyword">    .line</span> 19</div><div class="line">   <span class="built_in"> move-object </span>v2, v0</div><div class="line"></div><div class="line">   <span class="built_in"> move-object </span>v3, v0</div><div class="line"></div><div class="line">   <span class="built_in"> const </span>v4, 0x7f08003f</div><div class="line"></div><div class="line">   <span class="built_in"> invoke-virtual </span>&#123;v3, v4&#125;, <span class="class">Lme/isming/myapplication/MainActivity;</span>-&gt;findViewById(I)<span class="class">Landroid/view/View;</span></div><div class="line"></div><div class="line">   <span class="built_in"> move-result-object </span>v3</div><div class="line"></div><div class="line">   <span class="built_in"> check-cast </span>v3, <span class="class">Landroid/widget/TextView;</span></div><div class="line"></div><div class="line">   <span class="built_in"> iput-object </span>v3, v2, <span class="class">Lme/isming/myapplication/MainActivity;</span>-&gt;mTextView:<span class="class">Landroid/widget/TextView;</span></div><div class="line"></div><div class="line"><span class="keyword">    .line</span> 21</div><div class="line">   <span class="built_in"> move-object </span>v2, v0</div><div class="line"></div><div class="line">   <span class="built_in"> iget-object </span>v2, v2, <span class="class">Lme/isming/myapplication/MainActivity;</span>-&gt;mTextView:<span class="class">Landroid/widget/TextView;</span></div><div class="line"></div><div class="line">   <span class="built_in"> new-instance </span>v3, <span class="class">Ljava/lang/StringBuilder;</span></div><div class="line"></div><div class="line">   <span class="built_in"> move-object </span>v7, v3</div><div class="line"></div><div class="line">   <span class="built_in"> move-object </span>v3, v7</div><div class="line"></div><div class="line">   <span class="built_in"> move-object </span>v4, v7</div><div class="line"></div><div class="line">   <span class="built_in"> invoke-direct </span>&#123;v4&#125;, <span class="class">Ljava/lang/StringBuilder;</span>-&gt;&lt;init&gt;()V</div><div class="line"></div><div class="line">   <span class="built_in"> const-string </span>v4, <span class="string">"a+b="</span></div><div class="line"></div><div class="line">   <span class="built_in"> invoke-virtual </span>&#123;v3, v4&#125;, <span class="class">Ljava/lang/StringBuilder;</span>-&gt;append(<span class="class">Ljava/lang/String;</span>)<span class="class">Ljava/lang/StringBuilder;</span></div><div class="line"></div><div class="line">   <span class="built_in"> move-result-object </span>v3</div><div class="line"></div><div class="line">   <span class="built_in"> const/4 </span>v4, 0x1</div><div class="line"></div><div class="line">   <span class="built_in"> const/4 </span>v5, 0x2</div><div class="line"></div><div class="line">   <span class="built_in"> invoke-static </span>&#123;v4, v5&#125;, <span class="class">Lme/isming/myapplication/MainActivity;</span>-&gt;sum(II)I</div><div class="line"></div><div class="line">   <span class="built_in"> move-result </span>v4</div><div class="line"></div><div class="line">   <span class="built_in"> invoke-virtual </span>&#123;v3, v4&#125;, <span class="class">Ljava/lang/StringBuilder;</span>-&gt;append(I)<span class="class">Ljava/lang/StringBuilder;</span></div><div class="line"></div><div class="line">   <span class="built_in"> move-result-object </span>v3</div><div class="line"></div><div class="line">   <span class="built_in"> const-string </span>v4, <span class="string">"a&gt;b?"</span></div><div class="line"></div><div class="line">   <span class="built_in"> invoke-virtual </span>&#123;v3, v4&#125;, <span class="class">Ljava/lang/StringBuilder;</span>-&gt;append(<span class="class">Ljava/lang/String;</span>)<span class="class">Ljava/lang/StringBuilder;</span></div><div class="line"></div><div class="line">   <span class="built_in"> move-result-object </span>v3</div><div class="line"></div><div class="line">   <span class="built_in"> move-object </span>v4, v0</div><div class="line"></div><div class="line">   <span class="built_in"> const/4 </span>v5, 0x1</div><div class="line"></div><div class="line">   <span class="built_in"> const/4 </span>v6, 0x2</div><div class="line"></div><div class="line">   <span class="built_in"> invoke-direct </span>&#123;v4, v5, v6&#125;, <span class="class">Lme/isming/myapplication/MainActivity;</span>-&gt;max(II)Z</div><div class="line"></div><div class="line">   <span class="built_in"> move-result </span>v4</div><div class="line"></div><div class="line">   <span class="built_in"> invoke-virtual </span>&#123;v3, v4&#125;, <span class="class">Ljava/lang/StringBuilder;</span>-&gt;append(Z)<span class="class">Ljava/lang/StringBuilder;</span></div><div class="line"></div><div class="line">   <span class="built_in"> move-result-object </span>v3</div><div class="line"></div><div class="line">   <span class="built_in"> const-string </span>v4, <span class="string">"5 accumulate:"</span></div><div class="line"></div><div class="line">   <span class="built_in"> invoke-virtual </span>&#123;v3, v4&#125;, <span class="class">Ljava/lang/StringBuilder;</span>-&gt;append(<span class="class">Ljava/lang/String;</span>)<span class="class">Ljava/lang/StringBuilder;</span></div><div class="line"></div><div class="line">   <span class="built_in"> move-result-object </span>v3</div><div class="line"></div><div class="line">   <span class="built_in"> move-object </span>v4, v0</div><div class="line"></div><div class="line">   <span class="built_in"> const/4 </span>v5, 0x5</div><div class="line"></div><div class="line">   <span class="built_in"> invoke-direct </span>&#123;v4, v5&#125;, <span class="class">Lme/isming/myapplication/MainActivity;</span>-&gt;accumulate(I)I</div><div class="line"></div><div class="line">   <span class="built_in"> move-result </span>v4</div><div class="line"></div><div class="line">   <span class="built_in"> invoke-virtual </span>&#123;v3, v4&#125;, <span class="class">Ljava/lang/StringBuilder;</span>-&gt;append(I)<span class="class">Ljava/lang/StringBuilder;</span></div><div class="line"></div><div class="line">   <span class="built_in"> move-result-object </span>v3</div><div class="line"></div><div class="line">   <span class="built_in"> invoke-virtual </span>&#123;v3&#125;, <span class="class">Ljava/lang/StringBuilder;</span>-&gt;toString()<span class="class">Ljava/lang/String;</span></div><div class="line"></div><div class="line">   <span class="built_in"> move-result-object </span>v3</div><div class="line"></div><div class="line">   <span class="built_in"> invoke-virtual </span>&#123;v2, v3&#125;, <span class="class">Landroid/widget/TextView;</span>-&gt;setText(<span class="class">Ljava/lang/CharSequence;</span>)V</div><div class="line"></div><div class="line"><span class="keyword">    .line</span> 23</div><div class="line">   <span class="built_in"> return-void</span></div><div class="line"><span class="keyword">.end method</span></div></pre></td></tr></table></figure>
+<h3 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h3><p>最后附上一些参考资料：</p>
+<p><a href="http://pallergabor.uw.hu/androidblog/dalvik_opcodes.html" target="_blank" rel="external">http://pallergabor.uw.hu/androidblog/dalvik_opcodes.html</a>    </p>
+<p><a href="https://code.google.com/p/smali/w/list" target="_blank" rel="external">https://code.google.com/p/smali/w/list</a></p>
+<p><a href="http://www.miui.com/thread-409543-1-1.html" target="_blank" rel="external">http://www.miui.com/thread-409543-1-1.html</a></p>
+<blockquote>
+<p>原文地址：<a href="http://blog.isming.me/2015/01/14/android-decompile-smali/">http://blog.isming.me/2015/01/14/android-decompile-smali/</a>，转载请注明出处。</p>
+</blockquote>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h3 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h3&gt;&lt;p&gt;前面我们有说过android反编译的工具，如何进行反编译。反编译后可以得到jar或者得到smali文件。Android采用的是java语言进行开发，但是Android系统有自己的虚拟机Dalvik,代码编译最终不是采用的java的class，而是使用的smali。我们反编译得到的代码，jar的话可能很多地方无法正确的解释出来，如果我们反编译的是smali则可以正确的理解程序的意思。因此，我们有必要熟悉smali语法。&lt;/p&gt;
+&lt;h3 id=&quot;类型的表示&quot;&gt;&lt;a href=&quot;#类型的表示&quot; class=&quot;headerlink&quot; title=&quot;类型的表示&quot;&gt;&lt;/a&gt;类型的表示&lt;/h3&gt;&lt;p&gt;java里面包含两种类型，原始类型和引用类型(包括对象)，同时映射到smali也是有这两大类型。&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="android" scheme="http://blog.isming.me/tags/android/"/>
+    
+      <category term="decompile" scheme="http://blog.isming.me/tags/decompile/"/>
+    
+      <category term="smali" scheme="http://blog.isming.me/tags/smali/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>android反编译-反编译工具和方法</title>
+    <link href="http://blog.isming.me/2015/01/11/android-decompile-tools/"/>
+    <id>http://blog.isming.me/2015/01/11/android-decompile-tools/</id>
+    <published>2015-01-11T14:19:17.000Z</published>
+    <updated>2017-05-16T02:31:11.000Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>开发过程中有些时候会遇到一些功能，自己不知道该怎么做，然而别的软件里面已经有了，这个时候可以采用反编译的方式，解开其他的程序，来了解一些它的做法，同时啊，还可以借鉴别人的软件结构，资源文件，等等，哈哈。那我就来讲解一些关于反编译相关的知识，主要分三篇，第一篇介绍反编译的工具和方法，第二篇，介绍smali的语法,第三篇介绍如何防止反编译，主要通过这几篇文章，了解如何去做反编译和代码加固。<br><a id="more"></a></p>
+<h3 id="工具"><a href="#工具" class="headerlink" title="工具"></a>工具</h3><h4 id="apktools-目前最强大的反编译工具"><a href="#apktools-目前最强大的反编译工具" class="headerlink" title="apktools-目前最强大的反编译工具"></a>apktools-目前最强大的反编译工具</h4><p>轻松反编译apk，解析出资源文件，xml文件，生成smali文件，还可以把修改后的文件你想生成apk。</p>
+<p>支持windows,linux,mac。 </p>
+<p>下载地址:<a href="[https://code.google.com/p/android-apktool/downloads/list]">https://code.google.com/p/android-apktool/downloads/list</a> 请自备梯子</p>
+<h4 id="dex2jar"><a href="#dex2jar" class="headerlink" title="dex2jar"></a>dex2jar</h4><p>将apk中的dex文件转换成为jar文件，很多人不会看smali文件，还是看java类文件比较舒服，这个时候可以借助这个工具来转成java,也是支持windows,linux,mac。</p>
+<p>下载地址：<a href="http://code.google.com/p/dex2jar/downloads/list" target="_blank" rel="external">http://code.google.com/p/dex2jar/downloads/list</a></p>
+<h4 id="jd-gui"><a href="#jd-gui" class="headerlink" title="jd-gui"></a>jd-gui</h4><p>查看jar文件,基本可以看到java class文件了，也是支持mac,windows,linux。</p>
+<p>下载地址：<a href="http://jd.benow.ca/" target="_blank" rel="external">http://jd.benow.ca/</a></p>
+<h4 id="apktool的命令行综合工具推荐-apktool-plus"><a href="#apktool的命令行综合工具推荐-apktool-plus" class="headerlink" title="apktool的命令行综合工具推荐 apktool plus"></a>apktool的命令行综合工具推荐 apktool plus</h4><p>其实是别人写的一个工具，集合了apktool的功能，另外还支持给apk签名。最新版本是v9update6，只支持windows系统。</p>
+<p>下载地址：<a href="http://dl.dbank.com/c0jndlkbu4#" target="_blank" rel="external">http://dl.dbank.com/c0jndlkbu4#</a></p>
+<h3 id="进行反编译"><a href="#进行反编译" class="headerlink" title="进行反编译"></a>进行反编译</h3><h4 id="使用apktools"><a href="#使用apktools" class="headerlink" title="使用apktools"></a>使用apktools</h4><p>在apktools目录下执行以下命令</p>
+<blockquote>
+<p>./apktool d pathtoapk outdir #mac linux<br>apktool.bat d pathtoapk outdir #window    </p>
+</blockquote>
+<p>这样就可以反编译成功了，可以查看其中的资源文件，smali文件，当然有的app进行了特殊处理，不是全部可以反编译的。</p>
+<p>同时apktool还可以对反编译后的文件逆向成apk文件,格式如下。</p>
+<blockquote>
+<p>./apktool b apppath outpath</p>
+</blockquote>
+<p>逆向后的文件要是无签名的需要先签名才可以安装。</p>
+<h4 id="使用dex2jar"><a href="#使用dex2jar" class="headerlink" title="使用dex2jar"></a>使用dex2jar</h4><p>apk文件本身其实就是一个zip压缩包，先讲apk改成一个<em>.zip</em>文件解压后得到一个classes.dex。到dex2jar的目录，执行以下命令.</p>
+<blockquote>
+<p>./d2j-dex2jar.sh pathtoclasses.dex  #mac linux<br>d2j-dex2jar.bat pathtoclasses.dex #wind</p>
+</blockquote>
+<p>之后会生成一个jar文件，用jd-gui打开就可以看到其中的java代码了。</p>
+<h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h3><p>其实我们使用的反编译也就这些足够了，通常很多时候无法获取很多的代码，毕竟人家也有措施应对的。</p>
+<blockquote>
+<p>原文地址：<a href="http://blog.isming.me/2015/01/11/android-decompile-tools/">http://blog.isming.me/2015/01/11/android-decompile-tools/</a>，转载请注明出处。</p>
+</blockquote>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h3 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h3&gt;&lt;p&gt;开发过程中有些时候会遇到一些功能，自己不知道该怎么做，然而别的软件里面已经有了，这个时候可以采用反编译的方式，解开其他的程序，来了解一些它的做法，同时啊，还可以借鉴别人的软件结构，资源文件，等等，哈哈。那我就来讲解一些关于反编译相关的知识，主要分三篇，第一篇介绍反编译的工具和方法，第二篇，介绍smali的语法,第三篇介绍如何防止反编译，主要通过这几篇文章，了解如何去做反编译和代码加固。&lt;br&gt;
+    
+    </summary>
+    
+    
+      <category term="android" scheme="http://blog.isming.me/tags/android/"/>
+    
+      <category term="decompile" scheme="http://blog.isming.me/tags/decompile/"/>
+    
+      <category term="tools" scheme="http://blog.isming.me/tags/tools/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>2014年总结</title>
+    <link href="http://blog.isming.me/2015/01/05/2014-review/"/>
+    <id>http://blog.isming.me/2015/01/05/2014-review/</id>
+    <published>2015-01-05T14:24:37.000Z</published>
+    <updated>2017-05-16T02:31:11.000Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="14年总结"><a href="#14年总结" class="headerlink" title="14年总结"></a>14年总结</h3><p>又一年开始，网上也流散着许多的年终总结，往年我也会写写，都是流水的回忆。前两日，与小波电话聊天，突然想到问他一四年用三个词总结是什么？得到的是失恋，毕业，工作。让我说说2014的三个词，竟然一时无从说起。这两日一直思考这个问题，毕竟这一年过的比较平淡。用三个关键词形容2014，就是”踏实”, “责任”和”收获”吧。</p>
+<a id="more"></a>
+<p>2014年对于我来说,是很平淡的一年，没有什么大的波折，一些都还比较顺。这一年很踏实，这一年读了很多书(可能是我目前为止读书最多的一年)，第一年开始认真用心的写博客，同时从广州转战上海，心里上也很踏实。</p>
+<p>这一年奶奶去世了，家里还有几个老人，同时父母身体也不好，几次回家，都能感受到父母的担子。妹妹也来到上海开始新的学业，在这边也好有个照应。公司的项目，已经开始了基本单兵作战，要保证软件的质量，项目的工期。男子汉，要扛起责任。</p>
+<p>收获，怎么说呢,收获很多，包括个人成长，爱情，友情等等。读书写博，技术上有很多的成长。分享自己的知识以及代码，被别人阅读以及star,收获网上的朋友，同时也鼓励自己继续坚持下去。转战上海，结束异地，同时也离家更近了。能够更多的时间在一起。</p>
+<p>2014的最后应该还有一个词，”感谢”，感谢离开广州市，同事的教诲，冯佳的陪酒；感谢现在上级的知遇，同事的协助，小红书让我迈出了很多的第一次；感谢初到上海朋友的帮助，特别是袁义；感谢女友的包容，妹妹的谅解；感谢你的浏览😄😄。</p>
+<h3 id="展望15"><a href="#展望15" class="headerlink" title="展望15"></a>展望15</h3><p>其实上面的总结，在元旦那天已经发到QQ空间。不过，内容主要是对于14年的一些感想。仍然需要针对15年做一个规划，计划给自己一个执行的参照。主要是让自己能够在技术和知识的素养上有所提升，身体健康等能够提高。</p>
+<h4 id="多读书"><a href="#多读书" class="headerlink" title="多读书"></a>多读书</h4><p>相比之下，14年已经比以前任何一年读的书更多了，但是不够，需要读更多。暂时以下图书需要重读或者精读。</p>
+<blockquote>
+<p>重构改善既有代码的设计<br>java虚拟机设计规范<br>操作系统－精髓与设计原理<br>深入理解Android<br>设计模式<br>更多图书待补充    </p>
+</blockquote>
+<h4 id="知识深入"><a href="#知识深入" class="headerlink" title="知识深入"></a>知识深入</h4><p>对于Android和Java要更深入，学习java虚拟机，操作系统原理，android系统底层虚拟机等。</p>
+<h4 id="知识扩展"><a href="#知识扩展" class="headerlink" title="知识扩展"></a>知识扩展</h4><p>学习Python，JavaScript，这两门语言其实已经会了一点，但是要学习，保证工作能够顺利使用，毕竟现在客户端开发都需要服务端的支持，同时客户端Hybird开发h5和Javascript很重要。同时后端的一些技术，比如mongodb数据库，nginx服务器等。</p>
+<p>####　写博客</p>
+<p>坚持写博客。<br>2015年主要开发写，android各种组件的详细使用，帮助自己整理梳理知识。写android和设计模式，主要深入熟悉设计模式，同时写自己在工作中遇到的问题，欢迎提意见。</p>
+<h4 id="身体锻炼"><a href="#身体锻炼" class="headerlink" title="身体锻炼"></a>身体锻炼</h4><p>锻炼身体，今年刚到上海的时候，坚持了没走两次，天冷后就不跑了，身体已经胖了不少。15年要多跑步，锻炼身体了。</p>
+<h4 id="与人交流"><a href="#与人交流" class="headerlink" title="与人交流"></a>与人交流</h4><p>多参加一些技术技术交流，多与朋友进行联系。</p>
+<blockquote>
+<p>原文地址：<a href="http://blog.isming.me/2015/01/05/2014-review/">http://blog.isming.me/2015/01/05/2014-review/</a>，转载请注明出处。</p>
+</blockquote>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h3 id=&quot;14年总结&quot;&gt;&lt;a href=&quot;#14年总结&quot; class=&quot;headerlink&quot; title=&quot;14年总结&quot;&gt;&lt;/a&gt;14年总结&lt;/h3&gt;&lt;p&gt;又一年开始，网上也流散着许多的年终总结，往年我也会写写，都是流水的回忆。前两日，与小波电话聊天，突然想到问他一四年用三个词总结是什么？得到的是失恋，毕业，工作。让我说说2014的三个词，竟然一时无从说起。这两日一直思考这个问题，毕竟这一年过的比较平淡。用三个关键词形容2014，就是”踏实”, “责任”和”收获”吧。&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="乱弹" scheme="http://blog.isming.me/tags/%E4%B9%B1%E5%BC%B9/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>导入开源库到基于Android Studio构建的项目中</title>
+    <link href="http://blog.isming.me/2014/12/12/import-library-to-android-studio/"/>
+    <id>http://blog.isming.me/2014/12/12/import-library-to-android-studio/</id>
+    <published>2014-12-12T14:22:34.000Z</published>
+    <updated>2017-05-16T02:31:11.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>前两天，谷歌发布了Android Studio 1.0的正式版，也有更多的人开始迁移到Android Studio进行开发。然而，网上很多的开源库,控件等还是以前的基于Eclipse进行开发，很多人不知道怎么导入到自己的基于Android Studio项目中来，微博上也有人私信我，让我来写写，正好今天回来的比较早，就写写吧。主要介绍一下常见的一些导包的场景。</p>
+<a id="more"></a>
+<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">--project   <span class="comment">//项目目录</span></div><div class="line">  |</div><div class="line">  build.gradle  <span class="comment">//项目的gradle配置文件</span></div><div class="line">  |</div><div class="line">  settings.gradle　／／gradle设置，会保存所有的<span class="keyword">module</span></div><div class="line">  |</div><div class="line">  app    <span class="comment">//module　目录</span></div><div class="line">  |__build.gradle　<span class="keyword">module</span>的配置</div><div class="line">  |</div><div class="line">  module2  <span class="comment">//module2目录</span></div><div class="line">  |__build.gradle　<span class="keyword">module</span>的配置</div></pre></td></tr></table></figure>
+<p>同eclipse中的项目一样，gradle/android studio 构建也可以有module，将moudle放到项目目录下面,然后在settings.gradle中增加该module，最简单的方法是用文件夹名。比如我们上面的结构，build.gradle文件应该如下：<br><figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">include <span class="string">':app'</span>, <span class="string">':module2'</span></div></pre></td></tr></table></figure></p>
+<p>更多关于gralde的知识可以看我以前的文章:</p>
+<p><a href="http://blog.isming.me/2014/11/21/use-gradle-new/">使用gradle构建android项目（续）</a><br><a href="http://blog.isming.me/2014/05/20/android4gradle/">使用Gradle构建Android项目</a></p>
+<h3 id="导入Jar文件"><a href="#导入Jar文件" class="headerlink" title="导入Jar文件"></a>导入Jar文件</h3><p>这种可能很常见，可以下载到别人搞好的jar包，这样可以直接在自己的主module下创建libs文件夹(我这里这样，只是为了兼容eclipse方式),然后把jar文件放进去,然后在module的<code>build.gradle</code>文件中的<code>dependecies{}</code>添加如下代码：<br><figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">compile files(<span class="string">'libs/name.jar'</span>)</div></pre></td></tr></table></figure></p>
+<p>当libs文件夹下面有多个文件时，可以用一句代码包含这些包:<br><figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">compile fileTree(<span class="string">dir:</span> <span class="string">'libs'</span>, <span class="string">include:</span> [<span class="string">'*.jar'</span>])</div></pre></td></tr></table></figure></p>
+<p>当有文件不需要被包含时，可以这样:<br><figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">compile fileTree(<span class="string">dir:</span> <span class="string">'libs'</span>, <span class="string">exclude:</span> [<span class="string">'android-support*.jar'</span>], <span class="string">include:</span> [<span class="string">'*.jar'</span>])</div></pre></td></tr></table></figure></p>
+<p>从上面的代码中可以看到我们可以使用通配符, <code>+</code>表示一个字符，<code>*</code>表示０到多个字符。</p>
+<h3 id="导入maven中的库"><a href="#导入maven中的库" class="headerlink" title="导入maven中的库"></a>导入maven中的库</h3><p>如果开源库作者有将代码放到Maven库中，我们可以在gradle配置中直接引入,类似如下:<br><figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">compile <span class="string">'com.github.dmytrodanylyk.android-process-button:library:1.0.1'</span></div></pre></td></tr></table></figure></p>
+<p>一般我们可以在开源库的github页面上面看有没有这样一个地址，或者到maven库中根据包名搜索有没有,我们前面这个引入的项目分三个部分 <em>group:name:version</em>，我们引入其他的包也有遵守这个规则。</p>
+<h3 id="导入gradle构建的开源库"><a href="#导入gradle构建的开源库" class="headerlink" title="导入gradle构建的开源库"></a>导入gradle构建的开源库</h3><p>这种情况的比较少用到，因为这张的开源库，作者一般都有放到maven库中，但是偶尔也会用到这里也提一下。</p>
+<p>首先下载文件，将我们需要的这个库的module文件夹拷贝到我们的项目的目录下面，然后在setting.gradle文件中增加文件夹名称, 然后在我们需要依赖这个模块的module中的build.gradle文件中加入如下代码:<br><figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">compile project(<span class="string">':libmodule'</span>)</div></pre></td></tr></table></figure></p>
+<p>这样就可以了。</p>
+<h3 id="导入基于Eclipse构建的开源库"><a href="#导入基于Eclipse构建的开源库" class="headerlink" title="导入基于Eclipse构建的开源库"></a>导入基于Eclipse构建的开源库</h3><p>基于Eclipse构建的项目，和基于Android Studio构建的项目的很大区别是目录结构不同。<br>我们首先将module文件夹拷贝到我们的项目目录下面，然后在settings.gradle文件中增加这个module，然后在要使用的module中的build.gradle文件中引入依赖，这样看的话，似乎和引入基于gradle构建的没什么不同。但是，基于Eclipse构建的项目中，没有build.gradle文件，所以我们需要自己新建一个放到module下面,下面是一个模版：</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line">apply <span class="string">plugin:</span> <span class="string">'android-library'</span></div><div class="line"></div><div class="line">repositories &#123;</div><div class="line">    mavenCentral()</div><div class="line">&#125;</div><div class="line"></div><div class="line">android &#123;</div><div class="line">    compileSdkVersion <span class="number">19</span></div><div class="line">    buildToolsVersion <span class="string">"20.0.0"</span></div><div class="line"></div><div class="line">    defaultConfig &#123;</div><div class="line">        minSdkVersion <span class="number">9</span></div><div class="line">        targetSdkVersion <span class="number">19</span></div><div class="line">    &#125;</div><div class="line"></div><div class="line">    sourceSets &#123;</div><div class="line">        main &#123;</div><div class="line">            manifest.srcFile <span class="string">'AndroidManifest.xml'</span></div><div class="line">            java.srcDirs = [<span class="string">'src'</span>]</div><div class="line">            resources.srcDirs = [<span class="string">'src'</span>]</div><div class="line">            aidl.srcDirs = [<span class="string">'src'</span>]</div><div class="line">            res.srcDirs = [<span class="string">'res'</span>]</div><div class="line">            assets.srcDirs = [<span class="string">'assets'</span>]</div><div class="line">            jniLibs.srcDirs = [<span class="string">'libs'</span>]</div><div class="line">        &#125;</div><div class="line"></div><div class="line">    &#125;</div><div class="line"></div><div class="line">    lintOptions &#123;</div><div class="line">        abortOnError <span class="literal">false</span></div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div><div class="line"></div><div class="line">dependencies &#123;</div><div class="line">    compile fileTree(<span class="string">dir:</span> <span class="string">'libs'</span>, <span class="string">include:</span> [<span class="string">'*.jar'</span>])</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>当然，根据各自的sdk和buildtools版本等等，以及其他，配置会有变化，可以看我之前的文章。</p>
+<h4 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h4><p>以上就是主要的集中导入场景，自己可以根据自己的实际情况然后改变配置等等。</p>
+<p>另外,我们导入的仓库可能不是maven中心仓库，或者可能是我们自己搭建的仓库,我们可以自定义仓库地址的,修改build.gradle文件中的repositories就可以了，例如:<br><figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">buildscript &#123;</div><div class="line">    repositories &#123;</div><div class="line">        jcenter()</div><div class="line">        mavenCentral()</div><div class="line">        maven &#123;</div><div class="line">            url <span class="string">"https://oss.sonatype.org/content/repositories/snapshots"</span></div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>另外，project层的buildscript在module层也是会生效的，所以不用在每个module都配置。</p>
+<blockquote>
+<p>原文地址：<a href="http://blog.isming.me/2014/12/12/import-library-to-android-studio/">http://blog.isming.me/2014/12/12/import-library-to-android-studio/</a>，转载请注明出处。</p>
+</blockquote>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;前两天，谷歌发布了Android Studio 1.0的正式版，也有更多的人开始迁移到Android Studio进行开发。然而，网上很多的开源库,控件等还是以前的基于Eclipse进行开发，很多人不知道怎么导入到自己的基于Android Studio项目中来，微博上也有人私信我，让我来写写，正好今天回来的比较早，就写写吧。主要介绍一下常见的一些导包的场景。&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="android" scheme="http://blog.isming.me/tags/android/"/>
+    
+      <category term="gradle" scheme="http://blog.isming.me/tags/gradle/"/>
+    
+      <category term="android studio" scheme="http://blog.isming.me/tags/android-studio/"/>
+    
+  </entry>
+  
+</feed>

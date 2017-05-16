@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="theme-color" content="#778899">
+  
+  <title>Android中个人推崇的数据库使用方式 | 码农明明桑</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="手机应用开发中经常会使用到数据库存储一些资料或者进行数据缓存，android中为我们提供了一个轻量的数据库，在上层进行了一层封装，同时还为我们提供了ContentProvider的框架，方便我们进行数据操作，以及在不同的程序之间进行数据共享。本文介绍一下，我在使用数据库的一些我认为比较好的习惯，欢迎与我讨论。">
+<meta name="keywords" content="android,sqlite">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android中个人推崇的数据库使用方式">
+<meta property="og:url" content="http://blog.isming.me/2014/10/13/good-database-use/index.html">
+<meta property="og:site_name" content="码农明明桑">
+<meta property="og:description" content="手机应用开发中经常会使用到数据库存储一些资料或者进行数据缓存，android中为我们提供了一个轻量的数据库，在上层进行了一层封装，同时还为我们提供了ContentProvider的框架，方便我们进行数据操作，以及在不同的程序之间进行数据共享。本文介绍一下，我在使用数据库的一些我认为比较好的习惯，欢迎与我讨论。">
+<meta property="og:updated_time" content="2017-05-16T02:31:11.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android中个人推崇的数据库使用方式">
+<meta name="twitter:description" content="手机应用开发中经常会使用到数据库存储一些资料或者进行数据缓存，android中为我们提供了一个轻量的数据库，在上层进行了一层封装，同时还为我们提供了ContentProvider的框架，方便我们进行数据操作，以及在不同的程序之间进行数据共享。本文介绍一下，我在使用数据库的一些我认为比较好的习惯，欢迎与我讨论。">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="http://apps.bdimg.com/libs/jquery/1.9.0/jquery.min.js"></script>
+</head>
+
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			<img src="http://isming.qiniudn.com/my_avatar.jpg">
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">Sam</a></h1>
+		</hgroup>
+
+		
+		<p class="header-subtitle">技术路上的一些记录</p>
+		
+
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+							<li><a href="/links">朋友</a></li>
+				        
+							<li><a href="/about">关于</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="github" target="_blank" href="https://github.com/sangmingming" title="github">github</a>
+					        
+								<a class="weibo" target="_blank" href="http://weibo.com/mingmingsang" title="weibo">weibo</a>
+					        
+								<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				
+				
+
+				
+			</div>
+		</div>
+	</header>				
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">Sam</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+				<img src="http://isming.qiniudn.com/my_avatar.jpg">
+				<hgroup>
+				  <h1 class="header-author">Sam</h1>
+				</hgroup>
+			</div>
+			
+			<p class="header-subtitle">技术路上的一些记录</p>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+					<li><a href="/links">朋友</a></li>
+		        
+					<li><a href="/about">关于</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="https://github.com/sangmingming" title="github">github</a>
+			        
+						<a class="weibo" target="_blank" href="http://weibo.com/mingmingsang" title="weibo">weibo</a>
+			        
+						<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+      <div class="body-wrap"><article id="post-good-database-use" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2014/10/13/good-database-use/" class="article-date">
+  	<time datetime="2014-10-13T15:19:20.000Z" itemprop="datePublished">2014年10月13日</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Android中个人推崇的数据库使用方式
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android/">android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/sqlite/">sqlite</a></li></ul>
+	</div>
+
+        
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>手机应用开发中经常会使用到数据库存储一些资料或者进行数据缓存，android中为我们提供了一个轻量的数据库，在上层进行了一层封装，同时还为我们提供了ContentProvider的框架，方便我们进行数据操作，以及在不同的程序之间进行数据共享。本文介绍一下，我在使用数据库的一些我认为比较好的习惯，欢迎与我讨论。<br><a id="more"></a></p>
+<h3 id="关于框架"><a href="#关于框架" class="headerlink" title="关于框架"></a>关于框架</h3><p>通常网络操作，Json解析，我都会使用框架,这样可以很好的帮助我处理异常，处理异步操作。但是数据库操作我则使用自带的SQLiteHelper和ContentProvider，这样android系统在SQLite上为我们提供的一层封装。因此，我不再使用第三方的SQLite框架。SQLiteDatabase和ContentProvider为我们提供一下函数</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">query()  <span class="comment">//查询</span></div><div class="line">insert()　<span class="comment">//插入</span></div><div class="line">delete()  <span class="comment">//删除</span></div><div class="line">update()  <span class="comment">//更新</span></div><div class="line"><span class="comment">//参数和返回值我没有写</span></div></pre></td></tr></table></figure>
+<p>可以看到，android为我们提供的操作已经被封装了，很多地方和别的ORM框架也是有一些类似的。而且在android中我们通常不会存储非常复杂的数据结构，没必要给自己学习框架增加成本。</p>
+<p>###　数据库建库升级等原则</p>
+<p>先看一段代码 </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">private</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">DatabaseHelper</span> <span class="keyword">extends</span> <span class="title">SQLiteOpenHelper</span> </span>&#123;</div><div class="line">        <span class="function"><span class="keyword">public</span> <span class="title">DatabaseHelper</span><span class="params">(<span class="keyword">final</span> Context context)</span> </span>&#123;</div><div class="line">            <span class="keyword">super</span>(context, DB_NAME, <span class="keyword">null</span>, DB_VERSION);</div><div class="line">        &#125;</div><div class="line">        </div><div class="line">        <span class="comment">/**</span></div><div class="line">        * 1--&gt;2 add header table</div><div class="line">        * 2--&gt;3 update info</div><div class="line">        * 3--&gt; update info haha</div><div class="line">        *</div><div class="line">        */</div><div class="line">        <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> DB_VERSION = <span class="number">4</span>;</div><div class="line">        <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> String DB_NAME = <span class="string">"download"</span>;</div><div class="line"></div><div class="line">        <span class="comment">/**</span></div><div class="line">         * Creates database the first time we try to open it.</div><div class="line">         */</div><div class="line">        <span class="meta">@Override</span></div><div class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(<span class="keyword">final</span> SQLiteDatabase db)</span> </span>&#123;</div><div class="line">            <span class="keyword">if</span> (Constants.LOGVV) &#123;</div><div class="line">                Log.v(Constants.TAG, <span class="string">"populating new database"</span>);</div><div class="line">            &#125;</div><div class="line">            onUpgrade(db, <span class="number">0</span>, DB_VERSION);</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="comment">/**</span></div><div class="line">         * Updates the database format when a content provider is used</div><div class="line">         * with a database that was created with a different format.</div><div class="line">         *</div><div class="line">         * Note: to support downgrades, creating a table should always drop it first if it already</div><div class="line">         * exists.</div><div class="line">         */</div><div class="line">        <span class="meta">@Override</span></div><div class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onUpgrade</span><span class="params">(<span class="keyword">final</span> SQLiteDatabase db, <span class="keyword">int</span> oldV, <span class="keyword">final</span> <span class="keyword">int</span> newV)</span> </span>&#123;</div><div class="line"></div><div class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> version = oldV + <span class="number">1</span>; version &lt;= newV; version++) &#123;</div><div class="line">                upgradeTo(db, version);</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="comment">/**</span></div><div class="line">         * Upgrade database from (version - 1) to version.</div><div class="line">         */</div><div class="line">        <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">upgradeTo</span><span class="params">(SQLiteDatabase db, <span class="keyword">int</span> version)</span> </span>&#123;</div><div class="line">            <span class="keyword">switch</span> (version) &#123;</div><div class="line">                <span class="keyword">case</span> <span class="number">1</span>:</div><div class="line">                    createDownloadsTable(db);</div><div class="line">                    <span class="keyword">break</span>;</div><div class="line">                <span class="keyword">case</span> <span class="number">2</span>:</div><div class="line">                    createHeadersTable(db);</div><div class="line">                    <span class="keyword">break</span>;</div><div class="line">                <span class="keyword">case</span> <span class="number">3</span>:</div><div class="line">                    addColumn(db, DB_TABLE, Downloads.Impl.COLUMN_IS_PUBLIC_API,</div><div class="line">                              <span class="string">"INTEGER NOT NULL DEFAULT 0"</span>);</div><div class="line">                    addColumn(db, DB_TABLE, Downloads.Impl.COLUMN_ALLOW_ROAMING,</div><div class="line">                              <span class="string">"INTEGER NOT NULL DEFAULT 0"</span>);</div><div class="line">                    addColumn(db, DB_TABLE, Downloads.Impl.COLUMN_ALLOWED_NETWORK_TYPES,</div><div class="line">                              <span class="string">"INTEGER NOT NULL DEFAULT 0"</span>);</div><div class="line">                    <span class="keyword">break</span>;</div><div class="line">                <span class="keyword">case</span> <span class="number">103</span>:</div><div class="line">                    addColumn(db, DB_TABLE, Downloads.Impl.COLUMN_IS_VISIBLE_IN_DOWNLOADS_UI,</div><div class="line">                              <span class="string">"INTEGER NOT NULL DEFAULT 1"</span>);</div><div class="line">                    makeCacheDownloadsInvisible(db);</div><div class="line">                    <span class="keyword">break</span>;</div><div class="line">                <span class="keyword">case</span> <span class="number">4</span>:</div><div class="line">                    addColumn(db, DB_TABLE, Downloads.Impl.COLUMN_BYPASS_RECOMMENDED_SIZE_LIMIT,</div><div class="line">                            <span class="string">"INTEGER NOT NULL DEFAULT 0"</span>);</div><div class="line">                    <span class="keyword">break</span>;</div><div class="line">                <span class="keyword">default</span>:</div><div class="line">                    <span class="keyword">throw</span> <span class="keyword">new</span> IllegalStateException(<span class="string">"Don't know how to upgrade to "</span> + version);</div><div class="line">            &#125;</div><div class="line">        &#125;</div></pre></td></tr></table></figure>
+<p>以上代码是摘自android 中的DownloadProvider的DatabaseHelper代码。我在这里主要是像推荐这种数据库的建表，最初接触这种建表方式是在以前阅读DownloadManager的时候发现，发现android中这种设计真的是非常精妙。这种方式，方便数据库的升级，在update数据库和create数据库的时候，可以共用建表，修改数据表的代码，同时可以清晰看到数据库的变化。</p>
+<p>同时建议,在修改数据库版本的时候，在版本号上面增加注释，写上数据库升级的内容，方便自己以后看到数据库的变化，以及其他人在看代码时候，了解到数据库的变化。</p>
+<h3 id="数据库建表和数据存储建议"><a href="#数据库建表和数据存储建议" class="headerlink" title="数据库建表和数据存储建议"></a>数据库建表和数据存储建议</h3><p>一些简单的配置文件，不建议存到数据库，存到sharepreference中，方便存取，同时也提高访问速度。</p>
+<p>文件，图片等绝对不要存到数据库，存储文件路径到数据库中即可。</p>
+<p>一些很复杂的数据，建议直接转成json存到数据库即可。一些缓存也可以这样存储。</p>
+<h3 id="其他要说的"><a href="#其他要说的" class="headerlink" title="其他要说的"></a>其他要说的</h3><p>数据库操作时候，不要在主线程操作。这是耗时操作，容易造成ANR.</p>
+<p>在进行数据库中的数据显示时候，建议配合CursorLoader使用，这是android提供的异步数据加载，同时会在数据变化时候，自动重新刷新数据。</p>
+<p>其他，本文，本人乱扯。如有你有异议，欢迎回复讨论。</p>
+<blockquote>
+<p>原文地址：<a href="http://blog.isming.me/2014/10/13/good-database-use/">http://blog.isming.me/2014/10/13/good-database-use/</a>，转载请注明出处。</p>
+</blockquote>
+
+        
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2014/10/18/creating-android-app-with-material-design-one-theme/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption"><</strong>
+      <div class="article-nav-title">
+        
+          创建Material Design风格的Android应用--应用主题
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2014/09/26/git-rebase-merge/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">git中merge和rebase的区别</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share">
+
+<div class="bdsharebuttonbox">
+    <i>分享到：</i>
+    <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+    <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间"></a>
+    <a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博"></a>
+    <a href="#" class="bds_sqq" data-cmd="sqq" title="分享到QQ好友"></a>
+    <a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网"></a>
+    <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+    <a href="#" class="bds_more" data-cmd="more"></a>
+</div>
+
+    <script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"1","bdSize":"32"},"share":{"bdCustomStyle":"bdshare:"}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
+
+</div>
+
+
+
+
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" ></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"isming"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2017 Sam
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    <script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3Fc22f102f5fbaa79cf43b93add1805f4f' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/mobile.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+
+<! -- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="theme-color" content="#778899">
+  
+  <title>Android消息循环分析 | 码农明明桑</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="我们的常用的系统中，程序的工作通常是有事件驱动和消息驱动两种方式，在Android系统中，Java应用程序是靠消息驱动来工作的。 消息驱动的原理就是：        1. 有一个消息队列，可以往这个队列中投递消息;       2. 有一个消息循环，不断从消息队列中取出消息，然后进行处理。        在Android中通过Looper来封装消息循环，同时在其中封装了一个消息队列MessageQ">
+<meta name="keywords" content="android">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android消息循环分析">
+<meta property="og:url" content="http://blog.isming.me/2014/04/02/android-message-loop-analyze/index.html">
+<meta property="og:site_name" content="码农明明桑">
+<meta property="og:description" content="我们的常用的系统中，程序的工作通常是有事件驱动和消息驱动两种方式，在Android系统中，Java应用程序是靠消息驱动来工作的。 消息驱动的原理就是：        1. 有一个消息队列，可以往这个队列中投递消息;       2. 有一个消息循环，不断从消息队列中取出消息，然后进行处理。        在Android中通过Looper来封装消息循环，同时在其中封装了一个消息队列MessageQ">
+<meta property="og:updated_time" content="2017-05-16T02:31:11.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android消息循环分析">
+<meta name="twitter:description" content="我们的常用的系统中，程序的工作通常是有事件驱动和消息驱动两种方式，在Android系统中，Java应用程序是靠消息驱动来工作的。 消息驱动的原理就是：        1. 有一个消息队列，可以往这个队列中投递消息;       2. 有一个消息循环，不断从消息队列中取出消息，然后进行处理。        在Android中通过Looper来封装消息循环，同时在其中封装了一个消息队列MessageQ">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="http://apps.bdimg.com/libs/jquery/1.9.0/jquery.min.js"></script>
+</head>
+
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			<img src="http://isming.qiniudn.com/my_avatar.jpg">
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">Sam</a></h1>
+		</hgroup>
+
+		
+		<p class="header-subtitle">技术路上的一些记录</p>
+		
+
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+							<li><a href="/links">朋友</a></li>
+				        
+							<li><a href="/about">关于</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="github" target="_blank" href="https://github.com/sangmingming" title="github">github</a>
+					        
+								<a class="weibo" target="_blank" href="http://weibo.com/mingmingsang" title="weibo">weibo</a>
+					        
+								<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				
+				
+
+				
+			</div>
+		</div>
+	</header>				
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">Sam</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+				<img src="http://isming.qiniudn.com/my_avatar.jpg">
+				<hgroup>
+				  <h1 class="header-author">Sam</h1>
+				</hgroup>
+			</div>
+			
+			<p class="header-subtitle">技术路上的一些记录</p>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+					<li><a href="/links">朋友</a></li>
+		        
+					<li><a href="/about">关于</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="https://github.com/sangmingming" title="github">github</a>
+			        
+						<a class="weibo" target="_blank" href="http://weibo.com/mingmingsang" title="weibo">weibo</a>
+			        
+						<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+      <div class="body-wrap"><article id="post-android-message-loop-analyze" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2014/04/02/android-message-loop-analyze/" class="article-date">
+  	<time datetime="2014-04-02T15:53:59.000Z" itemprop="datePublished">2014年4月2日</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Android消息循环分析
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android/">android</a></li></ul>
+	</div>
+
+        
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>我们的常用的系统中，程序的工作通常是有事件驱动和消息驱动两种方式，在Android系统中，Java应用程序是靠消息驱动来工作的。</p>
+<p>消息驱动的原理就是：       </p>
+<pre><code>1. 有一个消息队列，可以往这个队列中投递消息;      
+2. 有一个消息循环，不断从消息队列中取出消息，然后进行处理。       
+</code></pre><p>在Android中通过Looper来封装消息循环，同时在其中封装了一个消息队列MessageQueue。<br>另外Android给我们提供了一个封装类，来执行消息的投递，消息的处理，即Handler。<br><a id="more"></a> </p>
+<h4 id="在我们的线程中实现消息循环时，需要创建Looper，如："><a href="#在我们的线程中实现消息循环时，需要创建Looper，如：" class="headerlink" title="在我们的线程中实现消息循环时，需要创建Looper，如："></a>在我们的线程中实现消息循环时，需要创建Looper，如：</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">class LooperThread extends Thread &#123;</div><div class="line">	public Handler mHandler;</div><div class="line">	public void run() &#123;</div><div class="line">		Looper.prepare(); //1.调用prepare</div><div class="line">		......</div><div class="line">		Looper.loop();	//2.进入消息循环</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>看上面的代码，其实就是先准备Looper，然后进入消息循环。     </p>
+<ol>
+<li>在prepare的时候，创建一个Looper，同时在Looper的构造方法中创建一个消息队列MessageQueue，同时将Looper保存到TLV中<code>（这个是关于ThreadLocal的，不太懂，以后研究了再说）</code>     </li>
+<li>调用loop进入消息循环，此处其实就是不断到MessageQueue中取消息<code>Message</code>，进行处理。     </li>
+</ol>
+<h4 id="然后再看我们如何借助Handler来发消息到队列和处理消息"><a href="#然后再看我们如何借助Handler来发消息到队列和处理消息" class="headerlink" title="然后再看我们如何借助Handler来发消息到队列和处理消息"></a>然后再看我们如何借助Handler来发消息到队列和处理消息</h4><p>Handler的成员(非全部)：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">final MessageQueue mQueue;    </div><div class="line">final Looper mLooper;    </div><div class="line">final Callback mCallback;</div></pre></td></tr></table></figure></p>
+<p>Message的成员(非全部)：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Handler target;            </div><div class="line">Runnable callback;</div></pre></td></tr></table></figure></p>
+<p>可以看到Handler的成员包含Looper，通过查看源代码，我们可以发现这个Looper是有两种方式获得的，1是在构造函数传进来，2是使用当前线程的Looper（如果当前线程无Looper，则会报错。我们在Activity中创建Handler不需要传Handler是因为Activity本身已经有一个Looper了），MessageQueue也就是Looper中的消息队列。</p>
+<p>然后我们看怎么向消息队列发送消息，Handler有很多方法发送队列（这个自己可以去查），比如我们看sendMessageDelayed（Message msg， long delayMillis）</p>
+<pre><code>public final boolean sendMessageDelayed(Message msg, long delayMillis) {
+    if (delayMillis &lt; 0) {    
+        delayMillis = 0;    
+    }
+    return sendMessageAtTime(msg, SystemClock.uptimeMillis() + delayMillis);      
+// SystemClock.uptimeMillis() 获取开机到现在的时间    
+} 
+    //最终所有的消息是通过这个发，uptimeMillis是绝对时间（从开机那一秒算起）
+public boolean sendMessageAtTime(Message msg, long uptimeMillis) {    
+    boolean sent = false;    
+    MessageQueue queue = mQueue;    
+    if (queue != null) {    
+        msg.target = this;    
+        sent = queue.enqueueMessage(msg, uptimeMillis);    
+    }   
+    return sent;   
+}
+</code></pre><p>看上面的的代码，可以看到Handler将自己设为Message的target，然后然后将msg放到队列中，并且指定执行时间。</p>
+<h4 id="消息处理"><a href="#消息处理" class="headerlink" title="消息处理"></a>消息处理</h4><p>处理消息，即Looper从MessageQueue中取出队列后，调用msg.target的dispatchMessage方法进行处理，此时会按照消息处理的优先级来处理：    </p>
+<ol>
+<li>若msg本身有callback，则交其处理;    </li>
+<li>若Handler有全局callback,则交由其处理;    </li>
+<li>以上两种都没有，则交给Handler子类实现的handleMessage处理，此时需要重载handleMessage。    </li>
+</ol>
+<p>我们通常采用第三种方式进行处理。</p>
+<h3 id="注意！！！！我们一般是采用多线程，当创建Handler时，LooperThread中可能还未完成Looper的创建，此时，Handler中无Looper，操作会报错。"><a href="#注意！！！！我们一般是采用多线程，当创建Handler时，LooperThread中可能还未完成Looper的创建，此时，Handler中无Looper，操作会报错。" class="headerlink" title="注意！！！！我们一般是采用多线程，当创建Handler时，LooperThread中可能还未完成Looper的创建，此时，Handler中无Looper，操作会报错。"></a>注意！！！！我们一般是采用多线程，当创建Handler时，LooperThread中可能还未完成Looper的创建，此时，Handler中无Looper，操作会报错。</h3><p>我们可以采用Android为我们提供的HandlerThread来解决，该类已经创建了Looper，并且通过wait/notifyAll来避免错误的发生，减少我们重复造车的事情。我们创建该对象后，调用getLooper（）即可获得Looper（Looper未创建时会等待）。</p>
+<h4 id="补充"><a href="#补充" class="headerlink" title="补充"></a>补充</h4><p>本文所属为Android中java层的消息循环机制，其在Native层还有消息循环，有单独的Looper。并且2.3以后MessageQueue的核心向Native层下移，native层java层均可以使用。这个我没有过多的研究了！哈哈</p>
+<h6 id="PS：本文参考《深入理解Android：卷I》"><a href="#PS：本文参考《深入理解Android：卷I》" class="headerlink" title="PS：本文参考《深入理解Android：卷I》"></a>PS：本文参考《深入理解Android：卷I》</h6>
+        
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2014/04/09/use-git-rsync-site/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption"><</strong>
+      <div class="article-nav-title">
+        
+          使用git同步网站代码
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2014/03/25/manage-activityde-lifecycle/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">管理Activity的生命周期</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share">
+
+<div class="bdsharebuttonbox">
+    <i>分享到：</i>
+    <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+    <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间"></a>
+    <a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博"></a>
+    <a href="#" class="bds_sqq" data-cmd="sqq" title="分享到QQ好友"></a>
+    <a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网"></a>
+    <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+    <a href="#" class="bds_more" data-cmd="more"></a>
+</div>
+
+    <script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"1","bdSize":"32"},"share":{"bdCustomStyle":"bdshare:"}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
+
+</div>
+
+
+
+
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" ></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"isming"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2017 Sam
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    <script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3Fc22f102f5fbaa79cf43b93add1805f4f' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/mobile.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+
+<! -- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+
+  </div>
+</body>
+</html>

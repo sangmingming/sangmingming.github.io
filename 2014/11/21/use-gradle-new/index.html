@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="theme-color" content="#778899">
+  
+  <title>使用gradle构建android项目（续） | 码农明明桑</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="在几个月之前，我已经写过一篇使用gradle构建android项目的博客了http://blog.isming.me/2014/05/20/android4gradle/,那篇文章已经介绍了如何使用gradle进行项目构建，以及为谷歌会推荐使用gradle。当时android的gradle插件是0.11.0,现在插件的版本已经是0.14.3了，对于一些老的方法和api，有一些已经被移除，无法使用。">
+<meta name="keywords" content="android,gradle,android studio">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用gradle构建android项目（续）">
+<meta property="og:url" content="http://blog.isming.me/2014/11/21/use-gradle-new/index.html">
+<meta property="og:site_name" content="码农明明桑">
+<meta property="og:description" content="在几个月之前，我已经写过一篇使用gradle构建android项目的博客了http://blog.isming.me/2014/05/20/android4gradle/,那篇文章已经介绍了如何使用gradle进行项目构建，以及为谷歌会推荐使用gradle。当时android的gradle插件是0.11.0,现在插件的版本已经是0.14.3了，对于一些老的方法和api，有一些已经被移除，无法使用。">
+<meta property="og:image" content="http://isming.qiniudn.com/android_studio_new_splash.png">
+<meta property="og:updated_time" content="2017-05-16T02:31:11.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="使用gradle构建android项目（续）">
+<meta name="twitter:description" content="在几个月之前，我已经写过一篇使用gradle构建android项目的博客了http://blog.isming.me/2014/05/20/android4gradle/,那篇文章已经介绍了如何使用gradle进行项目构建，以及为谷歌会推荐使用gradle。当时android的gradle插件是0.11.0,现在插件的版本已经是0.14.3了，对于一些老的方法和api，有一些已经被移除，无法使用。">
+<meta name="twitter:image" content="http://isming.qiniudn.com/android_studio_new_splash.png">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="http://apps.bdimg.com/libs/jquery/1.9.0/jquery.min.js"></script>
+</head>
+
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			<img src="http://isming.qiniudn.com/my_avatar.jpg">
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">Sam</a></h1>
+		</hgroup>
+
+		
+		<p class="header-subtitle">技术路上的一些记录</p>
+		
+
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+							<li><a href="/links">朋友</a></li>
+				        
+							<li><a href="/about">关于</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="github" target="_blank" href="https://github.com/sangmingming" title="github">github</a>
+					        
+								<a class="weibo" target="_blank" href="http://weibo.com/mingmingsang" title="weibo">weibo</a>
+					        
+								<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				
+				
+
+				
+			</div>
+		</div>
+	</header>				
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">Sam</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+				<img src="http://isming.qiniudn.com/my_avatar.jpg">
+				<hgroup>
+				  <h1 class="header-author">Sam</h1>
+				</hgroup>
+			</div>
+			
+			<p class="header-subtitle">技术路上的一些记录</p>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+					<li><a href="/links">朋友</a></li>
+		        
+					<li><a href="/about">关于</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="https://github.com/sangmingming" title="github">github</a>
+			        
+						<a class="weibo" target="_blank" href="http://weibo.com/mingmingsang" title="weibo">weibo</a>
+			        
+						<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+      <div class="body-wrap"><article id="post-use-gradle-new" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2014/11/21/use-gradle-new/" class="article-date">
+  	<time datetime="2014-11-21T14:09:44.000Z" itemprop="datePublished">2014年11月21日</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      使用gradle构建android项目（续）
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android/">android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android-studio/">android studio</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/gradle/">gradle</a></li></ul>
+	</div>
+
+        
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在几个月之前，我已经写过一篇使用gradle构建android项目的博客了<a href="http://blog.isming.me/2014/05/20/android4gradle/">http://blog.isming.me/2014/05/20/android4gradle/</a>,那篇文章已经介绍了如何使用gradle进行项目构建，以及为谷歌会推荐使用gradle。当时android的gradle插件是0.11.0,现在插件的版本已经是0.14.3了，对于一些老的方法和api，有一些已经被移除，无法使用。因此有必要再写一篇博客介绍这些被移除的部分和替代方案。同时由于个人学识原因，当时没有介绍的一些技巧，其他功能，也会在本文中进行介绍。</p>
+<p><img src="http://isming.qiniudn.com/android_studio_new_splash.png" alt="android studio 最新闪屏"></p>
+<a id="more"></a>
+<h3 id="和上一篇文章相比不兼容的地方"><a href="#和上一篇文章相比不兼容的地方" class="headerlink" title="和上一篇文章相比不兼容的地方"></a>和上一篇文章相比不兼容的地方</h3><p>没有看过我另一篇文章的，建议去看一下。</p>
+<p>以下这些属性改名，原先的不能用:</p>
+<blockquote>
+<p>runProguard  -&gt;  minifyEnabled (是否混淆)<br>zipAlign     -&gt;  zipALignEnabled (是否zip对齐)<br>packageName  -&gt;  applicationId<br>jniDebugBuild-&gt;  jniDebuggable<br>renderscriptDebug-&gt;renderscriptDebuggable<br>renderscriptSupportMode-&gt;renderscriptSupportModeEnabled<br>renderscriptNdkMode-&gt;renderscriptNdkModeEnabled<br>Variant.packageApplication/zipAlign/createZipAlignTask/outputFile/processResources/processManifest使用variant.out代替，具体使用，看后面代码   </p>
+</blockquote>
+<p>这些被移除替换的，在最新版的gradle插件中，已经不会提示过时，直接报错，请警惕啊！！！！</p>
+<h3 id="新功能"><a href="#新功能" class="headerlink" title="新功能"></a>新功能</h3><h4 id="multiDexEnabled-多dex支持"><a href="#multiDexEnabled-多dex支持" class="headerlink" title="multiDexEnabled 多dex支持"></a>multiDexEnabled 多dex支持</h4><h4 id="shrinkResources-移除未使用的资源"><a href="#shrinkResources-移除未使用的资源" class="headerlink" title="shrinkResources 移除未使用的资源"></a>shrinkResources 移除未使用的资源</h4><h4 id="支持定义BuildConfig值和res的值-比如："><a href="#支持定义BuildConfig值和res的值-比如：" class="headerlink" title="支持定义BuildConfig值和res的值,比如："></a>支持定义BuildConfig值和res的值,比如：</h4><figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">applicationVariants.all &#123; variant -&gt;</div><div class="line">    variant.buildConfigField <span class="string">"int"</span>, <span class="string">"VALUE"</span>, <span class="string">"1"</span></div><div class="line">    variant.resValue <span class="string">"string"</span>, <span class="string">"name"</span>, <span class="string">"value"</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>还可以在<code>defaultConfig</code>,<code>buildType</code>,<code>productFlavors</code>中定义,比如：</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">buildTypes &#123;</div><div class="line">        debug &#123;</div><div class="line">            applicationIdSuffix <span class="string">".debug"</span></div><div class="line">            signingConfig signingConfigs.myConfig</div><div class="line"></div><div class="line">            buildConfigField <span class="string">"String"</span>, <span class="string">"FOO"</span>, <span class="string">"\"bar1\""</span></div><div class="line">            buildConfigField <span class="string">"String"</span>, <span class="string">"FOO"</span>, <span class="string">"\"bar\""</span></div><div class="line"></div><div class="line">            resValue <span class="string">"string"</span>, <span class="string">"foo"</span>, <span class="string">"foo2"</span></div><div class="line"></div><div class="line">        &#125;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<p>通过这样，我们可以对我们生成的最终程序，进行多样划的定制了。</p>
+<h4 id="Manifest文件内容占位符"><a href="#Manifest文件内容占位符" class="headerlink" title="Manifest文件内容占位符"></a>Manifest文件内容占位符</h4><p>这样可以打包的时候，对Manifest进行自定义配置,使用方法:</p>
+<ol>
+<li><p>在Manifest文件中定义一个占位符，比如以我们之前写的umeng打包的例子为例，${UMENG_CHANNEL}，这种格式.</p>
+</li>
+<li><p>在gradle配置文件中加替换,可以在<code>defaultConfig</code>,<code>buildType</code>,<code>productFlavors</code>中配置，比如:</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">defaultConfig &#123;</div><div class="line">    manifestPlaceholders = [ <span class="string">UMENG_CHANNEL:</span><span class="string">"defaultName"</span>]</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>同时，还可以直接在Manifest文件中加包名的替换，直接使用<code>${applicationId}</code>即可。</p>
+<p>###　其他技巧免费附送</p>
+<p>如果使用过程中经常出现OOM,那么在<code>gradle.properties</code>文件中增加一下内存，让gradle可以使用更多内存:</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">org.gradle.jvmargs=-Xmx2048m -XX:MaxPermSize=512m -XX:+HeapDumpOnOutOfMemoryError</div><div class="line">```  </div><div class="line"></div><div class="line">如果因为中文问题，出现错误，最好在org.gradle.jvmargs后面再加上`-Dfile.encoding=UTF-8`,那么这个时候和在一起就是：</div><div class="line">```xml</div><div class="line">org.gradle.jvmargs=-Xmx2048m -XX:MaxPermSize=512m -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8</div></pre></td></tr></table></figure>
+<p>如果，因为一些错误，不得不终止，再进来之后，无法进行编译,去<code>projectpath/.gradle/&lt;gradle-version&gt;/taskArtifacts/</code>目录下看有没有<code>*.lock</code>的文件，删掉再重试。</p>
+<h3 id="关于android-studio和gradle"><a href="#关于android-studio和gradle" class="headerlink" title="关于android studio和gradle"></a>关于android studio和gradle</h3><p>android studio（以下简称as）今天发布了1.0RC版，意味着正式版本的即将到来，同时在社区，QQ群也可以看到越来越多的人开始在使用android studio。经常也有很多人会问到升级的时候会遇到一些问题，主要原因就是android studio的一些大版本升级后，一般有一个推荐gradle插件的版本,比如,as0.9要求0.14.+版本，as0.8要求0.12+版本。两者是互相依赖的，gradle插件的版本同时对于as也有最低版本要求。这样，我们升级as后也必须修改gradle的配置文件，提高插件版本，同时一些不能向下兼容的配置也需要修改。</p>
+<p>在升级gradle和插件版本后，一般都会重新下载gradle，这样会消耗你一点时间。</p>
+<h3 id="最后，福利"><a href="#最后，福利" class="headerlink" title="最后，福利"></a>最后，福利</h3><p>奉上我最近的妹子图的gradle配置:</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div></pre></td><td class="code"><pre><div class="line">buildscript &#123;</div><div class="line">    repositories &#123;</div><div class="line">        mavenCentral()</div><div class="line">    &#125;</div><div class="line">    dependencies &#123;</div><div class="line">        classpath <span class="string">'com.android.tools.build:gradle:0.14.+'</span></div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">apply <span class="string">plugin:</span> <span class="string">'com.android.application'</span></div><div class="line"></div><div class="line">android &#123;</div><div class="line">    compileSdkVersion <span class="number">21</span></div><div class="line">    buildToolsVersion <span class="string">"21.1.0"</span></div><div class="line"></div><div class="line">    defaultConfig &#123;</div><div class="line">        minSdkVersion <span class="number">9</span></div><div class="line">        targetSdkVersion <span class="number">21</span></div><div class="line">        versionCode <span class="number">3</span></div><div class="line">        versionName <span class="string">"1.1.1"</span></div><div class="line">        multiDexEnabled <span class="literal">false</span></div><div class="line">        manifestPlaceholders = [ <span class="string">UMENG_CHANNEL_VALUE:</span><span class="string">"default_channel"</span> ]</div><div class="line">        buildConfigField <span class="string">"boolean"</span>, <span class="string">"ISDEBUG"</span>, <span class="string">"true"</span></div><div class="line">    &#125;</div><div class="line"></div><div class="line">    lintOptions &#123;</div><div class="line">        abortOnError <span class="literal">false</span></div><div class="line">    &#125;</div><div class="line"></div><div class="line"><span class="comment">//签名</span></div><div class="line">    signingConfigs &#123;</div><div class="line">        debug &#123;</div><div class="line">            <span class="comment">//storeFile file("/home/sam/.android/debug.keystore")</span></div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="comment">//你自己的keystore信息</span></div><div class="line">        release &#123;</div><div class="line">            <span class="comment">//storeFile file("/home/sam/sangmingming.keystore")</span></div><div class="line">            <span class="comment">//storePassword ""</span></div><div class="line">            <span class="comment">//keyAlias "sam"</span></div><div class="line">            <span class="comment">//keyPassword ""</span></div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    buildTypes &#123;</div><div class="line"></div><div class="line">        debug &#123;</div><div class="line">            signingConfig signingConfigs.debug</div><div class="line">            buildConfigField <span class="string">"boolean"</span>, <span class="string">"ISDEBUG"</span>, <span class="string">"true"</span></div><div class="line">        &#125;</div><div class="line"></div><div class="line">        release &#123;</div><div class="line">            buildConfigField <span class="string">"boolean"</span>, <span class="string">"ISDEBUG"</span>, <span class="string">"true"</span></div><div class="line">            signingConfig signingConfigs.release</div><div class="line">            minifyEnabled <span class="literal">true</span></div><div class="line">            zipAlignEnabled <span class="literal">true</span></div><div class="line">            proguardFiles getDefaultProguardFile(<span class="string">'proguard-android.txt'</span>), <span class="string">'proguard-rules.txt'</span></div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">//渠道Flavors，我这里写了一些常用的，你们自己改</span></div><div class="line">    productFlavors &#123;</div><div class="line">        <span class="comment">//GooglePlay&#123;&#125;</span></div><div class="line">        <span class="comment">//NDuo&#123;&#125;</span></div><div class="line">        xiaomi &#123;&#125;</div><div class="line">        umeng &#123;&#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line"></div><div class="line">    compileOptions &#123;</div><div class="line">        sourceCompatibility JavaVersion.VERSION_1_7</div><div class="line">        targetCompatibility JavaVersion.VERSION_1_7</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    productFlavors.all &#123; flavor -&gt;</div><div class="line">        flavor.manifestPlaceholders = [ <span class="string">UMENG_CHANNEL_VALUE:</span>name ]</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    applicationVariants.all &#123; variant -&gt;</div><div class="line"></div><div class="line">        variant.outputs.each &#123; output -&gt;</div><div class="line">            <span class="keyword">def</span> outputFile = output.outputFile</div><div class="line">            <span class="keyword">if</span> (outputFile != <span class="literal">null</span> &amp;&amp; outputFile.name.endsWith(<span class="string">'.apk'</span>)) &#123;</div><div class="line">                <span class="keyword">def</span> fileName = outputFile.name.replace(<span class="string">".apk"</span>, <span class="string">"-$&#123;defaultConfig.versionName&#125;.apk"</span>)</div><div class="line">                output.outputFile = <span class="keyword">new</span> File(outputFile.parent, fileName)</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line">dependencies &#123;</div><div class="line">    compile fileTree(<span class="string">dir:</span> <span class="string">'libs'</span>, <span class="string">include:</span> [<span class="string">'*.jar'</span>])</div><div class="line">    compile <span class="string">'com.android.support:appcompat-v7:21.+'</span></div><div class="line">    compile <span class="string">'com.android.support:support-v4:21.+'</span></div><div class="line">    compile <span class="string">'com.android.support:cardview-v7:21.+'</span></div><div class="line">    compile <span class="string">'com.android.support:recyclerview-v7:21.+'</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>然后，我把谷歌最新的gradle配置的示例也拿回来了，分享给大家：<a href="http://isming.qiniudn.com/gradle-samples-0.14.4.zip" target="_blank" rel="external">点击下载</a></p>
+<p>参考资料：<a href="http://tools.android.com/tech-docs/new-build-system" target="_blank" rel="external">http://tools.android.com/tech-docs/new-build-system</a></p>
+<blockquote>
+<p>原文地址：<a href="http://blog.isming.me/2014/11/21/use-gradle-new/">http://blog.isming.me/2014/11/21/use-gradle-new/</a>，转载请注明出处。</p>
+</blockquote>
+
+        
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2014/12/12/import-library-to-android-studio/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption"><</strong>
+      <div class="article-nav-title">
+        
+          导入开源库到基于Android Studio构建的项目中
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2014/11/17/material-design-for-pre-lollipop-android/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">在低版本android系统上实现Material设计应用</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share">
+
+<div class="bdsharebuttonbox">
+    <i>分享到：</i>
+    <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+    <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间"></a>
+    <a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博"></a>
+    <a href="#" class="bds_sqq" data-cmd="sqq" title="分享到QQ好友"></a>
+    <a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网"></a>
+    <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+    <a href="#" class="bds_more" data-cmd="more"></a>
+</div>
+
+    <script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"1","bdSize":"32"},"share":{"bdCustomStyle":"bdshare:"}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
+
+</div>
+
+
+
+
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" ></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"isming"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2017 Sam
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    <script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3Fc22f102f5fbaa79cf43b93add1805f4f' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/mobile.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+
+<! -- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="theme-color" content="#778899">
+  
+  <title>在android中画圆形图片的几种办法 | 码农明明桑</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="在开发中经常会有一些需求,比如显示头像，显示一些特殊的需求,将图片显示成圆角或者圆形或者其他的一些形状。但是往往我们手上的图片或者从服务器获取到的图片都是方形的。这时候就需要我们自己进行处理，将图片处理成所需要的形状。正如茴香豆的的“茴”写法大于一种，经过我的研究，画出特殊图片的方法也不是一种，我发现了三种，且听我一一道来。">
+<meta name="keywords" content="android">
+<meta property="og:type" content="article">
+<meta property="og:title" content="在android中画圆形图片的几种办法">
+<meta property="og:url" content="http://blog.isming.me/2014/09/19/draw-circle-image-in-android/index.html">
+<meta property="og:site_name" content="码农明明桑">
+<meta property="og:description" content="在开发中经常会有一些需求,比如显示头像，显示一些特殊的需求,将图片显示成圆角或者圆形或者其他的一些形状。但是往往我们手上的图片或者从服务器获取到的图片都是方形的。这时候就需要我们自己进行处理，将图片处理成所需要的形状。正如茴香豆的的“茴”写法大于一种，经过我的研究，画出特殊图片的方法也不是一种，我发现了三种，且听我一一道来。">
+<meta property="og:image" content="http://isming.qiniudn.com/xfermode_use.png">
+<meta property="og:updated_time" content="2017-05-16T02:31:11.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="在android中画圆形图片的几种办法">
+<meta name="twitter:description" content="在开发中经常会有一些需求,比如显示头像，显示一些特殊的需求,将图片显示成圆角或者圆形或者其他的一些形状。但是往往我们手上的图片或者从服务器获取到的图片都是方形的。这时候就需要我们自己进行处理，将图片处理成所需要的形状。正如茴香豆的的“茴”写法大于一种，经过我的研究，画出特殊图片的方法也不是一种，我发现了三种，且听我一一道来。">
+<meta name="twitter:image" content="http://isming.qiniudn.com/xfermode_use.png">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="http://apps.bdimg.com/libs/jquery/1.9.0/jquery.min.js"></script>
+</head>
+
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			<img src="http://isming.qiniudn.com/my_avatar.jpg">
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">Sam</a></h1>
+		</hgroup>
+
+		
+		<p class="header-subtitle">技术路上的一些记录</p>
+		
+
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+							<li><a href="/links">朋友</a></li>
+				        
+							<li><a href="/about">关于</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="github" target="_blank" href="https://github.com/sangmingming" title="github">github</a>
+					        
+								<a class="weibo" target="_blank" href="http://weibo.com/mingmingsang" title="weibo">weibo</a>
+					        
+								<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				
+				
+
+				
+			</div>
+		</div>
+	</header>				
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">Sam</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+				<img src="http://isming.qiniudn.com/my_avatar.jpg">
+				<hgroup>
+				  <h1 class="header-author">Sam</h1>
+				</hgroup>
+			</div>
+			
+			<p class="header-subtitle">技术路上的一些记录</p>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+					<li><a href="/links">朋友</a></li>
+		        
+					<li><a href="/about">关于</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="https://github.com/sangmingming" title="github">github</a>
+			        
+						<a class="weibo" target="_blank" href="http://weibo.com/mingmingsang" title="weibo">weibo</a>
+			        
+						<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+      <div class="body-wrap"><article id="post-draw-circle-image-in-android" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2014/09/19/draw-circle-image-in-android/" class="article-date">
+  	<time datetime="2014-09-19T14:48:47.000Z" itemprop="datePublished">2014年9月19日</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      在android中画圆形图片的几种办法
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android/">android</a></li></ul>
+	</div>
+
+        
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在开发中经常会有一些需求,比如显示头像，显示一些特殊的需求,将图片显示成圆角或者圆形或者其他的一些形状。但是往往我们手上的图片或者从服务器获取到的图片都是方形的。这时候就需要我们自己进行处理，将图片处理成所需要的形状。正如茴香豆的的“茴”写法大于一种，经过我的研究，画出特殊图片的方法也不是一种，我发现了三种，且听我一一道来。</p>
+<a id="more"></a>
+<h3 id="使用Xfermode-两图相交方式"><a href="#使用Xfermode-两图相交方式" class="headerlink" title="使用Xfermode 两图相交方式"></a>使用Xfermode 两图相交方式</h3><p>通过查找资料发现android中可以设置画笔的Xfermode即相交模式，从而设置两张图相交之后的显示方式，具体模式见下图，源码可以去android apidemo。(SRC 为我们要画到目标图上的图即原图，DST为目标图)</p>
+<p><img src="http://isming.qiniudn.com/xfermode_use.png" alt=""></p>
+<p>由上图可以看到，如果我们需要画一个圆形的图，可以在画布上面先画一个跟目标大小一样的圆，然后xfermode选择SRC_IN，再讲我们的头像或者其他图画上去就可以了。同样也可以先画我们的图，再画圆，不过xfermode要选择DST_IN。两种都可以实现我们需要的效果。示例代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">Paint p = <span class="keyword">new</span> Paint();</div><div class="line">p.setAntiAlias(<span class="keyword">true</span>); <span class="comment">//去锯齿</span></div><div class="line">p.setColor(Color.BLACK);</div><div class="line">p.setStyle(Paint.Style.STROKE);</div><div class="line">Canvas canvas = <span class="keyword">new</span> Canvas(bitmap);  <span class="comment">//bitmap就是我们原来的图,比如头像</span></div><div class="line">p.setXfermode(<span class="keyword">new</span> PorterDuffXfermode(Mode.DST_IN));  <span class="comment">//因为我们先画了图所以DST_IN</span></div><div class="line"><span class="keyword">int</span> radius = bitmap.getWidth; <span class="comment">//假设图片是正方形的</span></div><div class="line">canvas.drawCircle(radius, radius, radius, p); <span class="comment">//r=radius, 圆心(r,r)</span></div></pre></td></tr></table></figure>
+<p>以上就是简单的示例，根据以上的16种模式你其实还可以做出更多效果。另外，只要你给一张相交图，那张图形状什么样，我们的图就可以显示成什么样。</p>
+<h3 id="通过裁剪画布区域实现指定形状的图形"><a href="#通过裁剪画布区域实现指定形状的图形" class="headerlink" title="通过裁剪画布区域实现指定形状的图形"></a>通过裁剪画布区域实现指定形状的图形</h3><p>Android中Canvas提供了ClipPath, ClipRect, ClipRegion 等方法来裁剪，通过Path, Rect ,Region 的不同组合，Android几乎可以支持任意形状的裁剪区域。因此，我们几乎可以获取任意形状的区域，然后在这个区域上画图，就可以获得，我们要的图片了，直接看示例。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">int</span> radius = src.getWidth() / <span class="number">2</span>;　<span class="comment">//src为我们要画上去的图，跟上一个示例中的bitmap一样。</span></div><div class="line">Bitmap dest = Bitmap.createBitmap(src.getWidth(), src.getHeight(), Bitmap.Config.ARGB_8888);</div><div class="line">Canvas c = <span class="keyword">new</span> Canvas(dest);</div><div class="line">Paint paint = <span class="keyword">new</span> Paint();</div><div class="line">paint.setColor(Color.BLACK);</div><div class="line">paint.setAntiAlias(<span class="keyword">true</span>);</div><div class="line">Path path = <span class="keyword">new</span> Path();</div><div class="line">path.addCircle(radius, radius, radius, Path.Direction.CW);</div><div class="line">c.clipPath(path);   <span class="comment">//裁剪区域</span></div><div class="line">c.drawBitmap(src, <span class="number">0</span>, <span class="number">0</span>, paint);　　<span class="comment">//把图画上去</span></div></pre></td></tr></table></figure>
+<h3 id="使用BitmapShader"><a href="#使用BitmapShader" class="headerlink" title="使用BitmapShader"></a>使用BitmapShader</h3><p>直接先看示例<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">int</span> radius = src.getWidth() / <span class="number">2</span>;</div><div class="line">BitmapShader bitmapShader = <span class="keyword">new</span> BitmapShader(src, Shader.TileMode.REPEAT,</div><div class="line">                Shader.TileMode.REPEAT);</div><div class="line">Bitmap dest = Bitmap.createBitmap(src.getWidth(), src.getHeight(), Bitmap.Config.ARGB_8888);</div><div class="line">Canvas c = <span class="keyword">new</span> Canvas(dest);</div><div class="line">Paint paint = <span class="keyword">new</span> Paint();</div><div class="line">paint.setAntiAlias(<span class="keyword">true</span>);</div><div class="line">paint.setShader(bitmapShader);</div><div class="line">c.drawCircle(radius,radius, radius, paint);</div></pre></td></tr></table></figure></p>
+<p>Shader就是画笔的渲染器，本质上这中方法其实是画圆，但是渲染采用了我们的图片，然后就可以获得指定的形状了。但是我觉得，这个不适合画很复杂的图形，但是在内存消耗上，应该比第一种小很多。同时呢，设置Shader.TileMode.MIRROR，还可以实现镜面效果，也是极好的。</p>
+<p>上面就是实现的三种方法，三种方法都可以画很多的形状，当然遇到非常非常非常非常复杂的情况，我是建议使用第一种，这时候可以让美工给一张末班形状图，省自己去代码绘制了。大家根据自己的需求选择。</p>
+<p>在github上面<a href="https://github.com/MostafaGazar/CustomShapeImageView" target="_blank" rel="external">CustomShapeImageView</a>就是用了我们所说的第一种方法绘制。<a href="https://github.com/vinc3m1/RoundedImageView" target="_blank" rel="external">RoundedImageView</a> 和<a href="https://github.com/hdodenhof/CircleImageView" target="_blank" rel="external">CircleImageView</a>则使用bitmapshader完成,当然可能还有一些其他的控件，也许还有其他的一些实现方法，如果你知道，可以回复告诉我＾＿＾。</p>
+<blockquote>
+<p>原文地址：<a href="http://blog.isming.me/2014/09/19/draw-circle-image-in-android/">http://blog.isming.me/2014/09/19/draw-circle-image-in-android/</a>，转载请注明出处。</p>
+</blockquote>
+
+        
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2014/09/26/git-rebase-merge/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption"><</strong>
+      <div class="article-nav-title">
+        
+          git中merge和rebase的区别
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2014/09/16/intents-filters/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">intent和intent过滤以及匹配规则</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share">
+
+<div class="bdsharebuttonbox">
+    <i>分享到：</i>
+    <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+    <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间"></a>
+    <a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博"></a>
+    <a href="#" class="bds_sqq" data-cmd="sqq" title="分享到QQ好友"></a>
+    <a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网"></a>
+    <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+    <a href="#" class="bds_more" data-cmd="more"></a>
+</div>
+
+    <script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"1","bdSize":"32"},"share":{"bdCustomStyle":"bdshare:"}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
+
+</div>
+
+
+
+
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" ></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"isming"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2017 Sam
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    <script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3Fc22f102f5fbaa79cf43b93add1805f4f' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/mobile.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+
+<! -- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+
+  </div>
+</body>
+</html>

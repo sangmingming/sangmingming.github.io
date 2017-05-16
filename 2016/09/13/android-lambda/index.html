@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="theme-color" content="#778899">
+  
+  <title>聊聊Android N开始支持的Lambda | 码农明明桑</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Android N 正式版已经发布了。对于开发者来说一个重大的更新是对于Java支持到了Java8，其中一点就是支持Lambda。我们就来聊聊什么是lambda，怎么在Android中使用。 什么是lambdaLambda 可以理解为匿名函数,帮助我们写出更加简洁的代码。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="聊聊Android N开始支持的Lambda">
+<meta property="og:url" content="http://blog.isming.me/2016/09/13/android-lambda/index.html">
+<meta property="og:site_name" content="码农明明桑">
+<meta property="og:description" content="Android N 正式版已经发布了。对于开发者来说一个重大的更新是对于Java支持到了Java8，其中一点就是支持Lambda。我们就来聊聊什么是lambda，怎么在Android中使用。 什么是lambdaLambda 可以理解为匿名函数,帮助我们写出更加简洁的代码。">
+<meta property="og:updated_time" content="2017-05-16T02:31:11.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="聊聊Android N开始支持的Lambda">
+<meta name="twitter:description" content="Android N 正式版已经发布了。对于开发者来说一个重大的更新是对于Java支持到了Java8，其中一点就是支持Lambda。我们就来聊聊什么是lambda，怎么在Android中使用。 什么是lambdaLambda 可以理解为匿名函数,帮助我们写出更加简洁的代码。">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="http://apps.bdimg.com/libs/jquery/1.9.0/jquery.min.js"></script>
+</head>
+
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			<img src="http://isming.qiniudn.com/my_avatar.jpg">
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">Sam</a></h1>
+		</hgroup>
+
+		
+		<p class="header-subtitle">技术路上的一些记录</p>
+		
+
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+							<li><a href="/links">朋友</a></li>
+				        
+							<li><a href="/about">关于</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="github" target="_blank" href="https://github.com/sangmingming" title="github">github</a>
+					        
+								<a class="weibo" target="_blank" href="http://weibo.com/mingmingsang" title="weibo">weibo</a>
+					        
+								<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				
+				
+
+				
+			</div>
+		</div>
+	</header>				
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">Sam</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+				<img src="http://isming.qiniudn.com/my_avatar.jpg">
+				<hgroup>
+				  <h1 class="header-author">Sam</h1>
+				</hgroup>
+			</div>
+			
+			<p class="header-subtitle">技术路上的一些记录</p>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+					<li><a href="/links">朋友</a></li>
+		        
+					<li><a href="/about">关于</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="https://github.com/sangmingming" title="github">github</a>
+			        
+						<a class="weibo" target="_blank" href="http://weibo.com/mingmingsang" title="weibo">weibo</a>
+			        
+						<a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+      <div class="body-wrap"><article id="post-android-lambda" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/09/13/android-lambda/" class="article-date">
+  	<time datetime="2016-09-13T12:39:03.000Z" itemprop="datePublished">2016年9月13日</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      聊聊Android N开始支持的Lambda
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info">
+        
+        
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Android N 正式版已经发布了。对于开发者来说一个重大的更新是对于Java支持到了Java8，其中一点就是支持Lambda。我们就来聊聊什么是lambda，怎么在Android中使用。</p>
+<h3 id="什么是lambda"><a href="#什么是lambda" class="headerlink" title="什么是lambda"></a>什么是lambda</h3><p>Lambda 可以理解为匿名函数,帮助我们写出更加简洁的代码。</p>
+<a id="more"></a>
+<p>给view设置一个clicklistener，原本你需要写出这样的代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">v.setOnClickListener(<span class="keyword">new</span> View.OnClickListener(View v) &#123;</div><div class="line"> <span class="meta">@Override</span></div><div class="line"> <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onClick</span><span class="params">(View v)</span> </span>&#123;</div><div class="line"> Toast.makeText(getActivity(), <span class="string">"clicked"</span>, Toast.LENGTH_LONG).show()</div><div class="line"> &#125;</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>使用lambda之后:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">.setOnClickListener(v -&gt; Toast.makeText(getActivity(), <span class="string">"clicked"</span>, Toast.LENGTH_LONG).show());</div></pre></td></tr></table></figure>
+<p>是不是代码量爆减。这里再看下怎么写lambda。</p>
+<p>在JavaScript，python等语言中函数是一等公民，但是Java中类才是。使用lambda时候，lambda其实应该是一个对象，依附于函数式接口（只包含一个抽象方法声明的接口，例如刚刚我们举例的<code>OnClickListener</code>就是,在Java 8 需要使用<code>@FunctionalInterface</code>这样保证在编译的时候一个接口只有一个抽象注解）。</p>
+<p>写法的基本规则是这样:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">(arguments) -&gt; &#123;body&#125;</div></pre></td></tr></table></figure>
+<p>arguments 是参数列表，0~n个， 参数为一个时候，可以不要括号<br>body 为具体代码部分，如果代码只有一句的话可以不要大括号<br>返回值会自动推导出类型    </p>
+<p>一些写法实例：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">(<span class="keyword">int</span> a, <span class="keyword">int</span> b) -&gt; &#123;  <span class="keyword">return</span> a + b; &#125;</div><div class="line"></div><div class="line">() -&gt; System.out.println(<span class="string">"Hello World"</span>);</div><div class="line"></div><div class="line">(String s) -&gt; System.out.println(s);</div><div class="line"></div><div class="line">() -&gt; <span class="number">42</span></div><div class="line"></div><div class="line">() -&gt; &#123; <span class="keyword">return</span> <span class="number">3.1415</span> &#125;;</div><div class="line">(a, b) -&gt; &#123;<span class="keyword">return</span> a+b;&#125;</div></pre></td></tr></table></figure>
+<p>另外一点需要注意的是，在我们的lambda表达式中<code>this</code>关键指的是外部对象，而不是我们以为的lambda这个对象。在语法糖的实现过程中，lambda表达式最后会被变为类的私有方法，因此可以放心的使用this。</p>
+<h3 id="使用retrolambda"><a href="#使用retrolambda" class="headerlink" title="使用retrolambda"></a>使用retrolambda</h3><p>目前有个比较成熟的解决方案，使用<code>retrolambd</code>,接入的配置如下：</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">apply <span class="string">plugin:</span> <span class="string">'com.android.application'</span> </div><div class="line">apply <span class="string">plugin:</span><span class="string">'me.tatarka.retrolambda'</span></div><div class="line"></div><div class="line">buildscript &#123;</div><div class="line">    repositories &#123;</div><div class="line">        mavenCentral()</div><div class="line">    &#125;</div><div class="line"></div><div class="line"> dependencies &#123;</div><div class="line">     classpath <span class="string">'me.tatarka:gradle-retrolambda:3.2.5'</span></div><div class="line"> &#125; </div><div class="line">&#125;</div><div class="line">  <span class="comment">// Required because retrolambda is on maven central</span></div><div class="line">repositories &#123;</div><div class="line">    mavenCentral() </div><div class="line">&#125;</div><div class="line"> android &#123;   </div><div class="line">     compileOptions &#123;</div><div class="line">        sourceCompatibility JavaVersion.VERSION_1_8</div><div class="line">        targetCompatibility JavaVersion.VERSION_1_8   </div><div class="line">        &#125;</div><div class="line">&#125;</div><div class="line"><span class="comment">//指定将源码编译的级别，以下会将代码编译到1.7的自己码格式</span></div><div class="line">retrolambda &#123;</div><div class="line">	javaVersion JavaVersion.VERSION_1_7</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>当前，retrolambda对于android gradle插件是有依赖的，需要使用1.5+的插件才可以。</p>
+<p>retrolambda的原理是在编译的过程中，给class文件增加包裹，转成java 1.7支持的格式。</p>
+<h3 id="使用jack"><a href="#使用jack" class="headerlink" title="使用jack"></a>使用jack</h3><p>在Android N，支持使用Java 8， google给我们提供了新的编译工具<code>jack</code>,因此可以直接支持lambda，为了支持低版本的Android也可以用lambda，我们需要将<code>targetSdkVersion</code>和<code>compileSdkVersion</code>设置为23或者更小。启用jack，修改<code>build.gradle</code>如下。</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">android &#123;</div><div class="line">  ...</div><div class="line">  defaultConfig &#123;</div><div class="line">    ...</div><div class="line">    jackOptions &#123;</div><div class="line">      enabled <span class="literal">true</span></div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">  compileOptions &#123;</div><div class="line">    sourceCompatibility JavaVersion.VERSION_1_8</div><div class="line">    targetCompatibility JavaVersion.VERSION_1_8</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>jack工具链会的编译步骤如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Jack (.java --&gt; .jack --&gt; .dex)</div></pre></td></tr></table></figure></p>
+<p>和之前相比，将中间转换为class文件的步骤省略了，不需要多个工具链。<br>在低版本兼容lambda，也同样是使用的语法糖来实现。</p>
+<h3 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h3><p>如上两种工具都可以让我们在进行Android开发的时候来使用lambda，retrolambda出来的时间更早，经过很多次的迭代，目前也有一些app在使用，相比较来说更加成熟。jack则是google开发，减少了对javac的依赖，更多谷歌的自主性，相信后面谷歌大力推广的，但是出于刚刚开发出来因此还不够成熟，对于lint，proguard，instant run还有很多地方支持不好的地方，我们相信以后jack会是趋势。</p>
+<p>出于尝鲜，还是可以来使用的，但是在大的项目里面还是不建议使用的，毕竟万一出了问题还是很难排查的。</p>
+<p>另外，如果想要在android开发更爽快的使用lambda，也可以去试试<code>kotlin</code>这个语言。</p>
+<p>参考资料:      </p>
+<ol>
+<li><a href="http://viralpatel.net/blogs/Lambda-expressions-java-tutorial/" target="_blank" rel="external">http://viralpatel.net/blogs/Lambda-expressions-java-tutorial/</a>       </li>
+<li><a href="https://developer.android.com/guide/platform/j8-jack.html" target="_blank" rel="external">https://developer.android.com/guide/platform/j8-jack.html</a>     </li>
+<li><a href="https://github.com/evant/gradle-retrolambda" target="_blank" rel="external">https://github.com/evant/gradle-retrolambda</a></li>
+</ol>
+<blockquote>
+<p>原文地址：<a href="http://blog.isming.me/2016/09/13/android-lambda/">http://blog.isming.me/2016/09/13/android-lambda/</a>，转载请注明出处。</p>
+</blockquote>
+
+        
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2016/08/08/red-android-evolution/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">小红书Android客户端演进之路</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share">
+
+<div class="bdsharebuttonbox">
+    <i>分享到：</i>
+    <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+    <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间"></a>
+    <a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博"></a>
+    <a href="#" class="bds_sqq" data-cmd="sqq" title="分享到QQ好友"></a>
+    <a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网"></a>
+    <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+    <a href="#" class="bds_more" data-cmd="more"></a>
+</div>
+
+    <script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"1","bdSize":"32"},"share":{"bdCustomStyle":"bdshare:"}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
+
+</div>
+
+
+
+
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" ></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"isming"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2017 Sam
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    <script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3Fc22f102f5fbaa79cf43b93add1805f4f' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/mobile.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+
+<! -- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+
+  </div>
+</body>
+</html>
