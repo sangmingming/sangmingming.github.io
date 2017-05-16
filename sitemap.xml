@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>http://blog.isming.me/2014/10/21/creating-app-with-material-design-two-list/</loc>
+    <loc>http://blog.isming.me/2014/11/03/creating-app-with-material-design-four-drawables/</loc>
     
     <lastmod>2017-05-16T02:31:11.000Z</lastmod>
     
@@ -23,14 +23,14 @@
   </url>
   
   <url>
-    <loc>http://blog.isming.me/2014/03/15/jie-jue-ubuntuxia-sublime-text-3zhong-wen-shu-ru-de-wen-ti/</loc>
+    <loc>http://blog.isming.me/2013/07/28/javazhong-hashmaphe-hashtablede-qu-bie/</loc>
     
     <lastmod>2017-05-16T02:31:11.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://blog.isming.me/2013/07/28/javazhong-hashmaphe-hashtablede-qu-bie/</loc>
+    <loc>http://blog.isming.me/2014/03/15/jie-jue-ubuntuxia-sublime-text-3zhong-wen-shu-ru-de-wen-ti/</loc>
     
     <lastmod>2017-05-16T02:31:11.000Z</lastmod>
     
@@ -65,14 +65,7 @@
   </url>
   
   <url>
-    <loc>http://blog.isming.me/2014/04/02/android-message-loop-analyze/</loc>
-    
-    <lastmod>2017-05-16T02:31:11.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://blog.isming.me/2014/05/09/change-ubuntu-to-mac/</loc>
+    <loc>http://blog.isming.me/2014/04/09/use-git-rsync-site/</loc>
     
     <lastmod>2017-05-16T02:31:11.000Z</lastmod>
     
@@ -86,7 +79,14 @@
   </url>
   
   <url>
-    <loc>http://blog.isming.me/2014/04/09/use-git-rsync-site/</loc>
+    <loc>http://blog.isming.me/2014/05/11/use-network-in-android/</loc>
+    
+    <lastmod>2017-05-16T02:31:11.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.isming.me/2014/05/09/change-ubuntu-to-mac/</loc>
     
     <lastmod>2017-05-16T02:31:11.000Z</lastmod>
     
@@ -100,7 +100,7 @@
   </url>
   
   <url>
-    <loc>http://blog.isming.me/2014/05/11/use-network-in-android/</loc>
+    <loc>http://blog.isming.me/2014/04/02/android-message-loop-analyze/</loc>
     
     <lastmod>2017-05-16T02:31:11.000Z</lastmod>
     
@@ -108,13 +108,6 @@
   
   <url>
     <loc>http://blog.isming.me/2014/05/20/android4gradle/</loc>
-    
-    <lastmod>2017-05-16T02:31:11.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://blog.isming.me/2014/05/31/use-proguard/</loc>
     
     <lastmod>2017-05-16T02:31:11.000Z</lastmod>
     
@@ -135,7 +128,21 @@
   </url>
   
   <url>
+    <loc>http://blog.isming.me/2014/05/31/use-proguard/</loc>
+    
+    <lastmod>2017-05-16T02:31:11.000Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://blog.isming.me/2014/06/22/my-soft-in-ubuntu/</loc>
+    
+    <lastmod>2017-05-16T02:31:11.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.isming.me/2014/06/28/install-android-in-ubuntu/</loc>
     
     <lastmod>2017-05-16T02:31:11.000Z</lastmod>
     
@@ -170,14 +177,7 @@
   </url>
   
   <url>
-    <loc>http://blog.isming.me/2014/09/19/draw-circle-image-in-android/</loc>
-    
-    <lastmod>2017-05-16T02:31:11.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://blog.isming.me/2014/09/26/git-rebase-merge/</loc>
+    <loc>http://blog.isming.me/2014/10/18/creating-android-app-with-material-design-one-theme/</loc>
     
     <lastmod>2017-05-16T02:31:11.000Z</lastmod>
     
@@ -191,14 +191,14 @@
   </url>
   
   <url>
-    <loc>http://blog.isming.me/2014/10/18/creating-android-app-with-material-design-one-theme/</loc>
+    <loc>http://blog.isming.me/2014/09/26/git-rebase-merge/</loc>
     
     <lastmod>2017-05-16T02:31:11.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://blog.isming.me/2014/10/26/creating-app-with-material-design-three-shadows/</loc>
+    <loc>http://blog.isming.me/2014/09/19/draw-circle-image-in-android/</loc>
     
     <lastmod>2017-05-16T02:31:11.000Z</lastmod>
     
@@ -212,21 +212,14 @@
   </url>
   
   <url>
-    <loc>http://blog.isming.me/2014/11/03/creating-app-with-material-design-four-drawables/</loc>
+    <loc>http://blog.isming.me/2014/10/21/creating-app-with-material-design-two-list/</loc>
     
     <lastmod>2017-05-16T02:31:11.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://blog.isming.me/2014/11/13/creating-app-with-material-design-five-animations/</loc>
-    
-    <lastmod>2017-05-16T02:31:11.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://blog.isming.me/2014/06/28/install-android-in-ubuntu/</loc>
+    <loc>http://blog.isming.me/2014/10/26/creating-app-with-material-design-three-shadows/</loc>
     
     <lastmod>2017-05-16T02:31:11.000Z</lastmod>
     
@@ -234,13 +227,6 @@
   
   <url>
     <loc>http://blog.isming.me/2014/10/27/google-java-style/</loc>
-    
-    <lastmod>2017-05-16T02:31:11.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://blog.isming.me/2014/11/17/material-design-for-pre-lollipop-android/</loc>
     
     <lastmod>2017-05-16T02:31:11.000Z</lastmod>
     
@@ -261,14 +247,21 @@
   </url>
   
   <url>
-    <loc>http://blog.isming.me/2015/01/05/2014-review/</loc>
+    <loc>http://blog.isming.me/2014/11/13/creating-app-with-material-design-five-animations/</loc>
     
     <lastmod>2017-05-16T02:31:11.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://blog.isming.me/2015/01/11/android-decompile-tools/</loc>
+    <loc>http://blog.isming.me/2014/11/17/material-design-for-pre-lollipop-android/</loc>
+    
+    <lastmod>2017-05-16T02:31:11.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.isming.me/2015/01/18/android-anti-decompile/</loc>
     
     <lastmod>2017-05-16T02:31:11.000Z</lastmod>
     
@@ -282,7 +275,14 @@
   </url>
   
   <url>
-    <loc>http://blog.isming.me/2015/01/18/android-anti-decompile/</loc>
+    <loc>http://blog.isming.me/2015/01/11/android-decompile-tools/</loc>
+    
+    <lastmod>2017-05-16T02:31:11.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.isming.me/2015/01/05/2014-review/</loc>
     
     <lastmod>2017-05-16T02:31:11.000Z</lastmod>
     
@@ -317,13 +317,6 @@
   </url>
   
   <url>
-    <loc>http://blog.isming.me/2015/05/01/android-multi-dex/</loc>
-    
-    <lastmod>2017-05-16T02:31:11.000Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://blog.isming.me/2015/05/10/sticker-view/</loc>
     
     <lastmod>2017-05-16T02:31:11.000Z</lastmod>
@@ -345,7 +338,7 @@
   </url>
   
   <url>
-    <loc>http://blog.isming.me/2015/08/31/modify-alert-style/</loc>
+    <loc>http://blog.isming.me/2015/05/01/android-multi-dex/</loc>
     
     <lastmod>2017-05-16T02:31:11.000Z</lastmod>
     
@@ -353,6 +346,13 @@
   
   <url>
     <loc>http://blog.isming.me/2015/10/18/webview-use/</loc>
+    
+    <lastmod>2017-05-16T02:31:11.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.isming.me/2015/08/31/modify-alert-style/</loc>
     
     <lastmod>2017-05-16T02:31:11.000Z</lastmod>
     
