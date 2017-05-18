@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://blog.isming.me/"/>
-  <updated>2017-05-18T12:32:38.000Z</updated>
+  <updated>2017-05-18T12:39:44.000Z</updated>
   <id>http://blog.isming.me/</id>
   
   <author>
@@ -16,18 +16,16 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>简聊Android Architecture Componets</title>
+    <title>简单聊聊Android Architecture Componets</title>
     <link href="http://blog.isming.me/2017/05/18/android-architecture-components-guide/"/>
     <id>http://blog.isming.me/2017/05/18/android-architecture-components-guide/</id>
     <published>2017-05-18T12:01:38.000Z</published>
-    <updated>2017-05-18T12:32:38.000Z</updated>
+    <updated>2017-05-18T12:39:44.000Z</updated>
     
     <content type="html"><![CDATA[<p>Google IO大会进行中，本次大会Android最大的新闻当属Android O以及Kotlin被官方认可。我发现了原来还有发布官方的架构库，以及推荐使用指南，分享给大家。</p>
 <h2 id="架构原则"><a href="#架构原则" class="headerlink" title="架构原则"></a>架构原则</h2><ul>
-<li><p>关注分离  </p>
-</li>
-<li><p>模型驱动UI,优先持久化模型  </p>
-</li>
+<li>关注分离  </li>
+<li>模型驱动UI,优先持久化模型  </li>
 </ul>
 <a id="more"></a>
 <h2 id="新架构"><a href="#新架构" class="headerlink" title="新架构"></a>新架构</h2><p><img src="http://isming.qiniudn.com/imgac_architecture.png" alt="架构图"></p>
@@ -46,31 +44,25 @@
 <h2 id="谷歌的新玩具"><a href="#谷歌的新玩具" class="headerlink" title="谷歌的新玩具"></a>谷歌的新玩具</h2><p>本地IO大会谷歌提供了新的类库来实现这个功能，小标题我写新玩具是因为这个库目前还在alpha1版本，官方只建议在个人小项目中使用。</p>
 <p>这个类库包含如下一些东西：</p>
 <ul>
-<li>Lifecycle</li>
-</ul>
-<p>​    Android声明周期的回调，帮助我们将原先需要在onStart()等生命周期回调的代码可以分离到Activity或者Fragment之外。</p>
-<ul>
-<li>LiveData</li>
-</ul>
-<p>​    一个数据持有类，持有数据并且这个数据可以被观察被监听，和其他Observer不同的是，它和Lifecycle是绑定的。</p>
-<ul>
-<li><p>ViewModel  </p>
-<p> 用于实现架构中的ViewModel，同时是与Lifecycle绑定的，使用者无需担心生命周期。方便在多个Fragment之前分享数据，比如旋转屏幕后Activity会重新create，这时候使用ViewModel可以方便使用之前的数据，不需要再次请求网络数据。</p>
+<li><p>Lifecycle<br>​    Android声明周期的回调，帮助我们将原先需要在onStart()等生命周期回调的代码可以分离到Activity或者Fragment之外。</p>
 </li>
-<li><p>Room  </p>
+<li><p>LiveData<br>​    一个数据持有类，持有数据并且这个数据可以被观察被监听，和其他Observer不同的是，它和Lifecycle是绑定的。</p>
+</li>
+<li><p>ViewModel<br> 用于实现架构中的ViewModel，同时是与Lifecycle绑定的，使用者无需担心生命周期。方便在多个Fragment之前分享数据，比如旋转屏幕后Activity会重新create，这时候使用ViewModel可以方便使用之前的数据，不需要再次请求网络数据。</p>
+</li>
+<li><p>Room<br>​    谷歌推出的一个Sqlite ORM库，不过使用起来还不错，使用注解，极大简化数据库的操作。</p>
 </li>
 </ul>
-<p>​    谷歌推出的一个Sqlite ORM库，不过使用起来还不错，使用注解，极大简化数据库的操作。</p>
 <h2 id="框架补充"><a href="#框架补充" class="headerlink" title="框架补充"></a>框架补充</h2><p>​    工具库帮助我们进行开发，如果不满足官方的库其实可以自己实现。比如LiveData在某些情况下可使用RxJava代替。</p>
 <p>​    数据层官方推荐使用Room或者Realm或者其他Sqlite ORM等都可以，同时从某些方面看Room风格很像Retrofit。网络请求也被推荐使用Retrofit。</p>
 <p>​    各层之间的耦合推荐使用服务发现(Service Locator)或者依赖注入(DI)，会上推荐了Dagger。</p>
 <h2 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h2><p>​    各层之间的合理分层，为测试提供极大的方便。</p>
 <ul>
-<li>UI层测试</li>
+<li>UI层测试   </li>
 </ul>
 <p>​    使用Android Instrumentation Test，借助Espresso库进行，借助Mock的ViewModel，可以专注于测试UI</p>
 <ul>
-<li>ViewModel 测试</li>
+<li>ViewModel 测试    </li>
 </ul>
 <p>​    使用Mock的Repository来提供数据，使用JUnit测试，因为不涉及UI，运行速度会快很多。</p>
 <ul>
@@ -86,7 +78,7 @@
 <p><img src="http://isming.qiniudn.com/imgac_profilefragment.png" alt="示例"></p>
 <p>再补一个会议时的项目结构图，以一个用户信息页面为例。</p>
 <h2 id="最后的话"><a href="#最后的话" class="headerlink" title="最后的话"></a>最后的话</h2><p>​    目前这个库还不完善，api可能随时会变，公司项目不建议使用，个人项目可以尝鲜。另外对于已经有的项目，也不建议更换到现在的架构。不过这个项目的好的思想可以借鉴到我们自己的项目中来，同时这个库的方式我们其实可以借助其他的开源库来实现。</p>
-<h3 id="本文不再贴相关代码，具体各个库的使用请查看官方文档https-developer-android-com-topic-libraries-architecture-guide-html。"><a href="#本文不再贴相关代码，具体各个库的使用请查看官方文档https-developer-android-com-topic-libraries-architecture-guide-html。" class="headerlink" title="本文不再贴相关代码，具体各个库的使用请查看官方文档https://developer.android.com/topic/libraries/architecture/guide.html。"></a>本文不再贴相关代码，具体各个库的使用请查看官方文档<a href="https://developer.android.com/topic/libraries/architecture/guide.html" target="_blank" rel="external">https://developer.android.com/topic/libraries/architecture/guide.html</a>。</h3><h3 id="附上官方的DEMO项目-https-github-com-googlesamples-android-architecture-components"><a href="#附上官方的DEMO项目-https-github-com-googlesamples-android-architecture-components" class="headerlink" title="附上官方的DEMO项目:https://github.com/googlesamples/android-architecture-components"></a>附上官方的DEMO项目:<a href="https://github.com/googlesamples/android-architecture-components" target="_blank" rel="external">https://github.com/googlesamples/android-architecture-components</a></h3><h3 id="这次的视频-https-www-youtube-com-watch-v-FrteWKKVyzI"><a href="#这次的视频-https-www-youtube-com-watch-v-FrteWKKVyzI" class="headerlink" title="这次的视频:https://www.youtube.com/watch?v=FrteWKKVyzI"></a>这次的视频:<a href="https://www.youtube.com/watch?v=FrteWKKVyzI" target="_blank" rel="external">https://www.youtube.com/watch?v=FrteWKKVyzI</a></h3><p>文中如果错误，欢迎指正.</p>
+<h4 id="本文不再贴相关代码，具体各个库的使用请查看官方文档https-developer-android-com-topic-libraries-architecture-guide-html。"><a href="#本文不再贴相关代码，具体各个库的使用请查看官方文档https-developer-android-com-topic-libraries-architecture-guide-html。" class="headerlink" title="本文不再贴相关代码，具体各个库的使用请查看官方文档https://developer.android.com/topic/libraries/architecture/guide.html。"></a>本文不再贴相关代码，具体各个库的使用请查看官方文档<a href="https://developer.android.com/topic/libraries/architecture/guide.html" target="_blank" rel="external">https://developer.android.com/topic/libraries/architecture/guide.html</a>。</h4><h4 id="附上官方的DEMO项目-https-github-com-googlesamples-android-architecture-components"><a href="#附上官方的DEMO项目-https-github-com-googlesamples-android-architecture-components" class="headerlink" title="附上官方的DEMO项目:https://github.com/googlesamples/android-architecture-components"></a>附上官方的DEMO项目:<a href="https://github.com/googlesamples/android-architecture-components" target="_blank" rel="external">https://github.com/googlesamples/android-architecture-components</a></h4><h4 id="这次的视频-https-www-youtube-com-watch-v-FrteWKKVyzI"><a href="#这次的视频-https-www-youtube-com-watch-v-FrteWKKVyzI" class="headerlink" title="这次的视频:https://www.youtube.com/watch?v=FrteWKKVyzI"></a>这次的视频:<a href="https://www.youtube.com/watch?v=FrteWKKVyzI" target="_blank" rel="external">https://www.youtube.com/watch?v=FrteWKKVyzI</a></h4><p>文中如果错误，欢迎指正.</p>
 <blockquote>
 <p>原文地址：<a href="http://blog.isming.me//2017/05/18/android-architecture-components-guide/">http://blog.isming.me/2017/05/18/android-architecture-components-guide/</a>，转载请注明出处。</p>
 </blockquote>
@@ -97,10 +89,8 @@
     
       &lt;p&gt;Google IO大会进行中，本次大会Android最大的新闻当属Android O以及Kotlin被官方认可。我发现了原来还有发布官方的架构库，以及推荐使用指南，分享给大家。&lt;/p&gt;
 &lt;h2 id=&quot;架构原则&quot;&gt;&lt;a href=&quot;#架构原则&quot; class=&quot;headerlink&quot; title=&quot;架构原则&quot;&gt;&lt;/a&gt;架构原则&lt;/h2&gt;&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;关注分离  &lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;模型驱动UI,优先持久化模型  &lt;/p&gt;
-&lt;/li&gt;
+&lt;li&gt;关注分离  &lt;/li&gt;
+&lt;li&gt;模型驱动UI,优先持久化模型  &lt;/li&gt;
 &lt;/ul&gt;
     
     </summary>
@@ -714,9 +704,9 @@
     </summary>
     
     
-      <category term="java" scheme="http://blog.isming.me/tags/java/"/>
-    
       <category term="android" scheme="http://blog.isming.me/tags/android/"/>
+    
+      <category term="java" scheme="http://blog.isming.me/tags/java/"/>
     
   </entry>
   
