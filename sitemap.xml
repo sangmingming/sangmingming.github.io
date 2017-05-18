@@ -4,12 +4,12 @@
   <url>
     <loc>http://blog.isming.me/2017/05/18/android-architecture-components-guide/</loc>
     
-    <lastmod>2017-05-18T12:39:44.000Z</lastmod>
+    <lastmod>2017-05-18T12:40:51.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://blog.isming.me/2014/11/17/material-design-for-pre-lollipop-android/</loc>
+    <loc>http://blog.isming.me/2014/10/26/creating-app-with-material-design-three-shadows/</loc>
     
     <lastmod>2017-05-16T02:31:11.000Z</lastmod>
     
@@ -30,6 +30,13 @@
   </url>
   
   <url>
+    <loc>http://blog.isming.me/2014/03/15/jie-jue-ubuntuxia-sublime-text-3zhong-wen-shu-ru-de-wen-ti/</loc>
+    
+    <lastmod>2017-05-16T02:31:11.000Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://blog.isming.me/2014/03/16/androidyi-bu-cao-zuo-zong-jie/</loc>
     
     <lastmod>2017-05-16T02:31:11.000Z</lastmod>
@@ -44,21 +51,7 @@
   </url>
   
   <url>
-    <loc>http://blog.isming.me/2014/03/15/jie-jue-ubuntuxia-sublime-text-3zhong-wen-shu-ru-de-wen-ti/</loc>
-    
-    <lastmod>2017-05-16T02:31:11.000Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://blog.isming.me/2014/03/22/toast-use/</loc>
-    
-    <lastmod>2017-05-16T02:31:11.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://blog.isming.me/2014/04/09/use-git-rsync-site/</loc>
     
     <lastmod>2017-05-16T02:31:11.000Z</lastmod>
     
@@ -72,13 +65,6 @@
   </url>
   
   <url>
-    <loc>http://blog.isming.me/2014/05/09/change-ubuntu-to-mac/</loc>
-    
-    <lastmod>2017-05-16T02:31:11.000Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://blog.isming.me/2014/04/02/android-message-loop-analyze/</loc>
     
     <lastmod>2017-05-16T02:31:11.000Z</lastmod>
@@ -86,7 +72,21 @@
   </url>
   
   <url>
-    <loc>http://blog.isming.me/2014/05/11/read-android-source-use-idea/</loc>
+    <loc>http://blog.isming.me/2014/04/09/use-git-rsync-site/</loc>
+    
+    <lastmod>2017-05-16T02:31:11.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.isming.me/2014/04/27/use-mysql-in-python/</loc>
+    
+    <lastmod>2017-05-16T02:31:11.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.isming.me/2014/05/09/change-ubuntu-to-mac/</loc>
     
     <lastmod>2017-05-16T02:31:11.000Z</lastmod>
     
@@ -100,7 +100,14 @@
   </url>
   
   <url>
-    <loc>http://blog.isming.me/2014/04/27/use-mysql-in-python/</loc>
+    <loc>http://blog.isming.me/2014/05/11/read-android-source-use-idea/</loc>
+    
+    <lastmod>2017-05-16T02:31:11.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.isming.me/2014/05/20/android4gradle/</loc>
     
     <lastmod>2017-05-16T02:31:11.000Z</lastmod>
     
@@ -121,7 +128,14 @@
   </url>
   
   <url>
-    <loc>http://blog.isming.me/2014/05/20/android4gradle/</loc>
+    <loc>http://blog.isming.me/2014/06/15/use-intent-start-component/</loc>
+    
+    <lastmod>2017-05-16T02:31:11.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.isming.me/2014/06/22/my-soft-in-ubuntu/</loc>
     
     <lastmod>2017-05-16T02:31:11.000Z</lastmod>
     
@@ -136,13 +150,6 @@
   
   <url>
     <loc>http://blog.isming.me/2014/06/28/install-android-in-ubuntu/</loc>
-    
-    <lastmod>2017-05-16T02:31:11.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://blog.isming.me/2014/06/22/my-soft-in-ubuntu/</loc>
     
     <lastmod>2017-05-16T02:31:11.000Z</lastmod>
     
@@ -184,13 +191,6 @@
   </url>
   
   <url>
-    <loc>http://blog.isming.me/2014/10/18/creating-android-app-with-material-design-one-theme/</loc>
-    
-    <lastmod>2017-05-16T02:31:11.000Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://blog.isming.me/2014/10/13/good-database-use/</loc>
     
     <lastmod>2017-05-16T02:31:11.000Z</lastmod>
@@ -198,7 +198,7 @@
   </url>
   
   <url>
-    <loc>http://blog.isming.me/2014/10/26/creating-app-with-material-design-three-shadows/</loc>
+    <loc>http://blog.isming.me/2014/10/18/creating-android-app-with-material-design-one-theme/</loc>
     
     <lastmod>2017-05-16T02:31:11.000Z</lastmod>
     
@@ -219,13 +219,6 @@
   </url>
   
   <url>
-    <loc>http://blog.isming.me/2014/11/03/creating-app-with-material-design-four-drawables/</loc>
-    
-    <lastmod>2017-05-16T02:31:11.000Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://blog.isming.me/2014/10/27/google-java-style/</loc>
     
     <lastmod>2017-05-16T02:31:11.000Z</lastmod>
@@ -233,21 +226,7 @@
   </url>
   
   <url>
-    <loc>http://blog.isming.me/2014/11/21/use-gradle-new/</loc>
-    
-    <lastmod>2017-05-16T02:31:11.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://blog.isming.me/2015/01/11/android-decompile-tools/</loc>
-    
-    <lastmod>2017-05-16T02:31:11.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://blog.isming.me/2015/01/05/2014-review/</loc>
+    <loc>http://blog.isming.me/2014/11/03/creating-app-with-material-design-four-drawables/</loc>
     
     <lastmod>2017-05-16T02:31:11.000Z</lastmod>
     
@@ -261,6 +240,20 @@
   </url>
   
   <url>
+    <loc>http://blog.isming.me/2014/11/17/material-design-for-pre-lollipop-android/</loc>
+    
+    <lastmod>2017-05-16T02:31:11.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.isming.me/2014/11/21/use-gradle-new/</loc>
+    
+    <lastmod>2017-05-16T02:31:11.000Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://blog.isming.me/2014/12/12/import-library-to-android-studio/</loc>
     
     <lastmod>2017-05-16T02:31:11.000Z</lastmod>
@@ -268,7 +261,21 @@
   </url>
   
   <url>
-    <loc>http://blog.isming.me/2015/01/28/android-frame-animation/</loc>
+    <loc>http://blog.isming.me/2015/01/05/2014-review/</loc>
+    
+    <lastmod>2017-05-16T02:31:11.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.isming.me/2015/01/11/android-decompile-tools/</loc>
+    
+    <lastmod>2017-05-16T02:31:11.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.isming.me/2015/01/14/android-decompile-smali/</loc>
     
     <lastmod>2017-05-16T02:31:11.000Z</lastmod>
     
@@ -282,14 +289,14 @@
   </url>
   
   <url>
-    <loc>http://blog.isming.me/2015/02/01/android-view-animation/</loc>
+    <loc>http://blog.isming.me/2015/01/28/android-frame-animation/</loc>
     
     <lastmod>2017-05-16T02:31:11.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://blog.isming.me/2015/03/18/android-build-speed-up/</loc>
+    <loc>http://blog.isming.me/2015/02/01/android-view-animation/</loc>
     
     <lastmod>2017-05-16T02:31:11.000Z</lastmod>
     
@@ -303,6 +310,13 @@
   </url>
   
   <url>
+    <loc>http://blog.isming.me/2015/03/18/android-build-speed-up/</loc>
+    
+    <lastmod>2017-05-16T02:31:11.000Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://blog.isming.me/2015/05/01/android-multi-dex/</loc>
     
     <lastmod>2017-05-16T02:31:11.000Z</lastmod>
@@ -310,14 +324,14 @@
   </url>
   
   <url>
-    <loc>http://blog.isming.me/2015/07/07/android-custom-font/</loc>
+    <loc>http://blog.isming.me/2015/05/10/sticker-view/</loc>
     
     <lastmod>2017-05-16T02:31:11.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://blog.isming.me/2015/05/10/sticker-view/</loc>
+    <loc>http://blog.isming.me/2015/07/07/android-custom-font/</loc>
     
     <lastmod>2017-05-16T02:31:11.000Z</lastmod>
     
@@ -345,13 +359,6 @@
   </url>
   
   <url>
-    <loc>http://blog.isming.me/2016/01/09/chang-android-statusbar-text-color/</loc>
-    
-    <lastmod>2017-05-16T02:31:11.000Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://blog.isming.me/2015/12/21/android-webview-upload-file/</loc>
     
     <lastmod>2017-05-16T02:31:11.000Z</lastmod>
@@ -359,14 +366,14 @@
   </url>
   
   <url>
-    <loc>http://blog.isming.me/2016/06/07/path-property-animation/</loc>
+    <loc>http://blog.isming.me/2016/01/09/chang-android-statusbar-text-color/</loc>
     
     <lastmod>2017-05-16T02:31:11.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://blog.isming.me/2013/07/12/linuxxia-svnde-shi-yong/</loc>
+    <loc>http://blog.isming.me/2016/06/07/path-property-animation/</loc>
     
     <lastmod>2017-05-16T02:31:11.000Z</lastmod>
     
@@ -387,21 +394,7 @@
   </url>
   
   <url>
-    <loc>http://blog.isming.me/2014/06/15/use-intent-start-component/</loc>
-    
-    <lastmod>2017-05-16T02:31:11.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://blog.isming.me/2015/01/14/android-decompile-smali/</loc>
-    
-    <lastmod>2017-05-16T02:31:11.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://blog.isming.me/resume/index.html</loc>
+    <loc>http://blog.isming.me/2013/07/12/linuxxia-svnde-shi-yong/</loc>
     
     <lastmod>2017-05-16T02:31:11.000Z</lastmod>
     
@@ -416,6 +409,13 @@
   
   <url>
     <loc>http://blog.isming.me/links/index.html</loc>
+    
+    <lastmod>2017-05-16T02:31:11.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.isming.me/resume/index.html</loc>
     
     <lastmod>2017-05-16T02:31:11.000Z</lastmod>
     
