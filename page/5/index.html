@@ -129,6 +129,66 @@
 </nav>
       <div class="body-wrap">
   
+    <article id="post-use-proguard" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2014/05/31/use-proguard/" class="article-date">
+  	<time datetime="2014-05-31T02:24:38.000Z" itemprop="datePublished">2014年5月31日</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2014/05/31/use-proguard/">使用proguard混淆android代码</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>当前是有些工具比如apktool，dextojar等是可以对我们android安装包进行反编译，获得源码的。为了减少被别人破解，导致源码泄露，程序被别人盗取代码，等等。我们需要对代码进行混淆，android的sdk中为我们提供了ProGrard这个工具，可以对代码进行混淆（一般是用无意义的名字来重命名），以及去除没有使用到的代码，对程序进行优化和压缩，这样可以增加你想的难度。最近我做的项目，是我去配置的混淆配置，因此研究了一下，这里分享一下。</p>
+<h2 id="如何启用ProGuard"><a href="#如何启用ProGuard" class="headerlink" title="如何启用ProGuard"></a>如何启用ProGuard</h2><h4 id="ant项目和eclipse项目启用方法"><a href="#ant项目和eclipse项目启用方法" class="headerlink" title="ant项目和eclipse项目启用方法"></a>ant项目和eclipse项目启用方法</h4><p>在项目的<em>project.properties</em>文件中添加一下代码       </p>
+<blockquote>
+<p>proguard.config=proguard.cfg  //proguard.cfg为proguard的配置文件<br>proguard.config=/path/to/proguard.cfg //路径不在项目根目录时，填写实际路径    </p>
+</blockquote>
+<p>填写这句配置后，在<em>release</em>打包时就会按照我们的配置进行混淆，注意，在我们平时的debug时是不会进行混淆的。<br>
+        <hr/>
+        <p class="article-more-link">
+          <a  href="/2014/05/31/use-proguard/#more">more >></a>
+        </p>
+      
+    </div>
+    
+    <div class="article-info">
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android/">android</a></li></ul>
+	</div>
+
+      
+
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+  
     <article id="post-android4gradle" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -622,68 +682,6 @@
         <hr/>
         <p class="article-more-link">
           <a  href="/2014/03/22/toast-use/#more">more >></a>
-        </p>
-      
-    </div>
-    
-    <div class="article-info">
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android/">android</a></li></ul>
-	</div>
-
-      
-
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-  
-    <article id="post-androidyi-bu-cao-zuo-zong-jie" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2014/03/16/androidyi-bu-cao-zuo-zong-jie/" class="article-date">
-  	<time datetime="2014-03-16T08:18:25.000Z" itemprop="datePublished">2014年3月16日</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2014/03/16/androidyi-bu-cao-zuo-zong-jie/">android异步操作总结</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>Android中经常会有一些操作比如网络请求，文件读写，数据库操作，比较耗时，我们需要将其放在非UI线程去处理，此时，我们需要处理任务前后UI的变化和交互。我们需要通过类似js中异步请求处理，这里总结我所了解到的，方便自己记忆，也方便别人的浏览。</p>
-<ol>
-<li>AsyncTask</li>
-</ol>
-<blockquote>
-<p>new AysncTask().execute();</p>
-</blockquote>
-<p>AsyncTask会按照流程执行在UI线程和一个耗时的任务线程。</p>
-        <hr/>
-        <p class="article-more-link">
-          <a  href="/2014/03/16/androidyi-bu-cao-zuo-zong-jie/#more">more >></a>
         </p>
       
     </div>

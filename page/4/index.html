@@ -129,6 +129,62 @@
 </nav>
       <div class="body-wrap">
   
+    <article id="post-git-rebase-merge" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2014/09/26/git-rebase-merge/" class="article-date">
+  	<time datetime="2014-09-26T14:19:45.000Z" itemprop="datePublished">2014年9月26日</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2014/09/26/git-rebase-merge/">git中merge和rebase的区别</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>最开始实习的时候是使用svn，之后正式工作就一直在使用git，这样算起来，使用git也有两年的时间了。以前带我的同事，让我在拉代码的时候要我使用<code>git pull --rebase</code>，一直很纳闷为什么要那样做，后来遇到拉代码的时候有许多冲突要解决，然后去查找资料，才了解到其中的一些事情。今天分享一下，顺便自己也梳理一下。</p>
+<h3 id="git-pull"><a href="#git-pull" class="headerlink" title="git pull"></a>git pull</h3><p>git pull 是　git fetch + git merge FETCH_HEAD 的缩写。所以，默认情况下，git pull就是先fetch，然后执行merge 操作，如果加<em>–rebase</em> 参数，就是使用git rebase 代替git merge。</p>
+        <hr/>
+        <p class="article-more-link">
+          <a  href="/2014/09/26/git-rebase-merge/#more">more >></a>
+        </p>
+      
+    </div>
+    
+    <div class="article-info">
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/git/">git</a></li></ul>
+	</div>
+
+      
+
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+  
     <article id="post-draw-circle-image-in-android" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -641,66 +697,6 @@
       
 	<div class="article-tag tagcloud">
 		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android/">android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/json/">json</a></li></ul>
-	</div>
-
-      
-
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-  
-    <article id="post-use-proguard" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2014/05/31/use-proguard/" class="article-date">
-  	<time datetime="2014-05-31T02:24:38.000Z" itemprop="datePublished">2014年5月31日</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2014/05/31/use-proguard/">使用proguard混淆android代码</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>当前是有些工具比如apktool，dextojar等是可以对我们android安装包进行反编译，获得源码的。为了减少被别人破解，导致源码泄露，程序被别人盗取代码，等等。我们需要对代码进行混淆，android的sdk中为我们提供了ProGrard这个工具，可以对代码进行混淆（一般是用无意义的名字来重命名），以及去除没有使用到的代码，对程序进行优化和压缩，这样可以增加你想的难度。最近我做的项目，是我去配置的混淆配置，因此研究了一下，这里分享一下。</p>
-<h2 id="如何启用ProGuard"><a href="#如何启用ProGuard" class="headerlink" title="如何启用ProGuard"></a>如何启用ProGuard</h2><h4 id="ant项目和eclipse项目启用方法"><a href="#ant项目和eclipse项目启用方法" class="headerlink" title="ant项目和eclipse项目启用方法"></a>ant项目和eclipse项目启用方法</h4><p>在项目的<em>project.properties</em>文件中添加一下代码       </p>
-<blockquote>
-<p>proguard.config=proguard.cfg  //proguard.cfg为proguard的配置文件<br>proguard.config=/path/to/proguard.cfg //路径不在项目根目录时，填写实际路径    </p>
-</blockquote>
-<p>填写这句配置后，在<em>release</em>打包时就会按照我们的配置进行混淆，注意，在我们平时的debug时是不会进行混淆的。<br>
-        <hr/>
-        <p class="article-more-link">
-          <a  href="/2014/05/31/use-proguard/#more">more >></a>
-        </p>
-      
-    </div>
-    
-    <div class="article-info">
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android/">android</a></li></ul>
 	</div>
 
       
