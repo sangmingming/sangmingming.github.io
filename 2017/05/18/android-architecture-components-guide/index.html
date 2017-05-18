@@ -6,19 +6,19 @@
   
   <title>简聊Android Architecture Componets | 码农明明桑</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Google IO大会进行中，本次大会Android最大的新闻当属Android O以及Kotlin被官方认可。我发现了原来还有发布官方的架构库，以及推荐使用指南，分享给大家。 架构原则 关注分离  模型驱动UI,优先持久化模型   新架构 如上图所示，为新的架构模式： Activity/FragmentUI层，通常是Activity/Fragment等 监听ViewModel，当VIewMode">
+  <meta name="description" content="Google IO大会进行中，本次大会Android最大的新闻当属Android O以及Kotlin被官方认可。我发现了原来还有发布官方的架构库，以及推荐使用指南，分享给大家。 架构原则 关注分离    模型驱动UI,优先持久化模型">
 <meta name="keywords" content="Android,架构">
 <meta property="og:type" content="article">
 <meta property="og:title" content="简聊Android Architecture Componets">
 <meta property="og:url" content="http://blog.isming.me/2017/05/18/android-architecture-components-guide/index.html">
 <meta property="og:site_name" content="码农明明桑">
-<meta property="og:description" content="Google IO大会进行中，本次大会Android最大的新闻当属Android O以及Kotlin被官方认可。我发现了原来还有发布官方的架构库，以及推荐使用指南，分享给大家。 架构原则 关注分离  模型驱动UI,优先持久化模型   新架构 如上图所示，为新的架构模式： Activity/FragmentUI层，通常是Activity/Fragment等 监听ViewModel，当VIewMode">
+<meta property="og:description" content="Google IO大会进行中，本次大会Android最大的新闻当属Android O以及Kotlin被官方认可。我发现了原来还有发布官方的架构库，以及推荐使用指南，分享给大家。 架构原则 关注分离    模型驱动UI,优先持久化模型">
 <meta property="og:image" content="http://isming.qiniudn.com/imgac_architecture.png">
 <meta property="og:image" content="http://isming.qiniudn.com/imgac_profilefragment.png">
-<meta property="og:updated_time" content="2017-05-18T12:28:38.000Z">
+<meta property="og:updated_time" content="2017-05-18T12:32:38.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="简聊Android Architecture Componets">
-<meta name="twitter:description" content="Google IO大会进行中，本次大会Android最大的新闻当属Android O以及Kotlin被官方认可。我发现了原来还有发布官方的架构库，以及推荐使用指南，分享给大家。 架构原则 关注分离  模型驱动UI,优先持久化模型   新架构 如上图所示，为新的架构模式： Activity/FragmentUI层，通常是Activity/Fragment等 监听ViewModel，当VIewMode">
+<meta name="twitter:description" content="Google IO大会进行中，本次大会Android最大的新闻当属Android O以及Kotlin被官方认可。我发现了原来还有发布官方的架构库，以及推荐使用指南，分享给大家。 架构原则 关注分离    模型驱动UI,优先持久化模型">
 <meta name="twitter:image" content="http://isming.qiniudn.com/imgac_architecture.png">
   
   
@@ -171,11 +171,12 @@
       
         <p>Google IO大会进行中，本次大会Android最大的新闻当属Android O以及Kotlin被官方认可。我发现了原来还有发布官方的架构库，以及推荐使用指南，分享给大家。</p>
 <h2 id="架构原则"><a href="#架构原则" class="headerlink" title="架构原则"></a>架构原则</h2><ul>
-<li><p>关注分离</p>
+<li><p>关注分离  </p>
 </li>
-<li><p>模型驱动UI,优先持久化模型</p>
+<li><p>模型驱动UI,优先持久化模型  </p>
 </li>
 </ul>
+<a id="more"></a>
 <h2 id="新架构"><a href="#新架构" class="headerlink" title="新架构"></a>新架构</h2><p><img src="http://isming.qiniudn.com/imgac_architecture.png" alt="架构图"></p>
 <p>如上图所示，为新的架构模式：</p>
 <h3 id="Activity-Fragment"><a href="#Activity-Fragment" class="headerlink" title="Activity/Fragment"></a>Activity/Fragment</h3><p>UI层，通常是Activity/Fragment等</p>
@@ -200,10 +201,10 @@
 </ul>
 <p>​    一个数据持有类，持有数据并且这个数据可以被观察被监听，和其他Observer不同的是，它和Lifecycle是绑定的。</p>
 <ul>
-<li><p>ViewModel</p>
+<li><p>ViewModel  </p>
 <p> 用于实现架构中的ViewModel，同时是与Lifecycle绑定的，使用者无需担心生命周期。方便在多个Fragment之前分享数据，比如旋转屏幕后Activity会重新create，这时候使用ViewModel可以方便使用之前的数据，不需要再次请求网络数据。</p>
 </li>
-<li><p>Room</p>
+<li><p>Room  </p>
 </li>
 </ul>
 <p>​    谷歌推出的一个Sqlite ORM库，不过使用起来还不错，使用注解，极大简化数据库的操作。</p>
