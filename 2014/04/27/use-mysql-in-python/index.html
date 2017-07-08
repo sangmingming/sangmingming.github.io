@@ -39,7 +39,7 @@
 </ol>
 <h3 id="常用操作API"><a href="#常用操作API" class="headerlink" title="常用操作API"></a>常用操作API</h3><p>对事务操作的支持,标准的方法 commit() 提交<br>rollback() 回滚<br>cursor用来执行命令的方法:<br>callproc(self, procname, args):用来执行存储过程,接收的参数为存储过程名和参数列表,返回值为受影响的行数<br>execute(self, query, args):执行单条sql语句,接收的参数为sql语句本身和使用的参数列表,返回值为受影响的行数<br>executemany(self, query, args):执行单挑sql语句,但是重复执行参数列表里的参数,返回值为受影响的行数 nextset(self):移动到下一个结果集<br>cursor用来接收返回值的方法:<br>fetchall(self):接收全部的返回结果行.<br>fetchmany(self, size=None):接收size条返回结果行.如果size的值大于返回的结果行的数量,则会返回cursor.arraysize条数据.<br>fetchone(self):返回一条结果行.<br>scroll(self, value, mode=‘relative’):移动指针到某一行.如果mode=‘relative’,则表示从当前所在行移动value条,如果 mode=‘absolute’,则表示从结果集的第一行移动value条. </p>
 <h3 id="最后插一句"><a href="#最后插一句" class="headerlink" title="最后插一句"></a>最后插一句</h3><p>电脑升级到ubuntu14.04重新装的，之前的博客仓库没了，重新从github上面拉回来，中间出了点差错，我删除文件，这篇文章差点没有了，不过还好现在能看到这篇文章。哈哈～～</p>
-</div></article></div></main><footer><div class="paginator"><a href="/2014/05/09/change-ubuntu-to-mac/" class="prev">上一篇</a><a href="/2014/04/09/use-git-rsync-site/" class="next">下一篇</a></div><div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div><script src="https://img1.cache.netease.com/f2e/tie/yun/sdk/loader.js"></script><script>var cloudTieConfig = {
+</div></article></div></main><footer><div class="paginator"><a href="/2014/05/09/change-ubuntu-to-mac/" class="prev">PREV</a><a href="/2014/04/09/use-git-rsync-site/" class="next">NEXT</a></div><div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div><script src="https://img1.cache.netease.com/f2e/tie/yun/sdk/loader.js"></script><script>var cloudTieConfig = {
     url: document.location.href,
     sourceId: "2014/04/27/use-mysql-in-python/",
     productKey: "a094f65b0cf3436d922737584f8a4bb2",

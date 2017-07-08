@@ -48,127 +48,42 @@
 <li>Instrumentation test runner   测试用的instrumentation实例</li>
 </ul>
 <p>例如：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line">android &#123;</div><div class="line">    compileSdkVersion 19</div><div class="line">    buildToolsVersion &quot;19.0.0&quot;</div><div class="line"></div><div class="line">    defaultConfig &#123;</div><div class="line">        versionCode 12</div><div class="line">        versionName &quot;2.0&quot;</div><div class="line">        minSdkVersion 16</div><div class="line">        targetSdkVersion 16</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line">``` </div><div class="line"></div><div class="line">### 目录配置</div><div class="line">默认情况下项目目录是这样的</div><div class="line">有两个组件source sets，一个main，一个test，对应下面两个文件夹。</div><div class="line">src/main/</div><div class="line">src/androidTest/</div><div class="line"></div><div class="line">然后对于每个组件目录都有两个目录，分别存储java代码和资源文件</div><div class="line">java/</div><div class="line">resources/</div><div class="line"></div><div class="line">对于android项目中呢，对应的目录和文件是</div><div class="line">AndroidManifest.xml  //该文件src/androidTest/目录下不需要，程序执行时会自动构建</div><div class="line">res/</div><div class="line">assets/</div><div class="line">aidl/</div><div class="line">rs/</div><div class="line">jni/</div><div class="line"></div><div class="line">如果需要上面这些文件，但是不是在上面所说的目录，则需要设置。</div></pre></td></tr></table></figure>
-<p>sourceSets {<br>    main {<br>        java {<br>            srcDir ‘src/java’<br>        }<br>        resources {<br>            srcDir ‘src/resources’<br>        }<br>    }<br>}<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">可以给main或者test设置根目录，如</div></pre></td></tr></table></figure></p>
-<p> sourceSets {<br>        androidTest.setRoot(‘tests’)<br>    }<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">可以指定每种文件的存储路径</div></pre></td></tr></table></figure></p>
-<p>sourceSets {<br>        main {<br>            manifest.srcFile ‘AndroidManifest.xml’<br>            java.srcDirs = [‘src’]<br>            resources.srcDirs = [‘src’]<br>            aidl.srcDirs = [‘src’]<br>            renderscript.srcDirs = [‘src’]<br>            res.srcDirs = [‘res’]<br>            assets.srcDirs = [‘assets’]<br>        }<br>    }<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">特别是我们的ndk生成的.so文件，通常我们不是放到jni目录中的，我们需要设置一下</div></pre></td></tr></table></figure></p>
-<p>sourceSets {<br>        main {<br>            jniLibs.srcDirs = [‘libs’]<br>        }<br>    }<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">### 签名配置</div><div class="line">可以给不同类型进行不同的配置，先看示例：</div></pre></td></tr></table></figure></p>
-<p>android {<br>    signingConfigs {<br>        debug {<br>            storeFile file(“debug.keystore”)<br>        }</p>
-<pre><code>    myConfig {
-        storeFile file(&quot;other.keystore&quot;)
-        storePassword &quot;android&quot;
-        keyAlias &quot;androiddebugkey&quot;
-        keyPassword &quot;android&quot;
-    }
-}
-
-buildTypes {
-    foo {
-        debuggable true
-        jniDebugBuild true
-        signingConfig signingConfigs.myConfig
-    }
-}
-</code></pre><p>}<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">上面的配置文件配置两个类型，一个时debug类型，一个时自己的自定义类型。两个分别使用了不同的签名，同时对于生成密钥，要填写设置的密码。</div><div class="line"></div><div class="line">### 代码混淆设置</div><div class="line">直接看代码：</div></pre></td></tr></table></figure></p>
-<p>android {<br>    buildTypes {<br>        release {<br>            runProguard true<br>            proguardFile getDefaultProguardFile(‘proguard-android.txt’)<br>        }<br>    }<br>}<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">以上是使用默认的proguard文件去进行混淆，也可以使用自己编写的规则进行混淆，`proguardFile &apos;some-other-rules.txt&apos;`</div><div class="line"></div><div class="line">### 依赖配置</div><div class="line"></div><div class="line">程序中会依赖别的包，或者程序，需要引入别的类库。前面也说到了，支持maven。</div><div class="line">对于本地的类库，可以这样引入:</div></pre></td></tr></table></figure></p>
-<p>dependencies {<br>    compile files(‘libs/foo.jar’)   //单个文件<br>    compile fileTree(dir: ‘libs’, include: [‘*.jar’])  //多个文件<br>}</p>
-<p>android {<br>    …<br>}<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">对于maven仓库文件：</div></pre></td></tr></table></figure></p>
-<p>repositories {<br>    mavenCentral()<br>}</p>
-<p>dependencies {<br>    compile ‘com.google.guava:guava:11.0.2’<br>}</p>
-<p>android {<br>    …<br>}<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"></div><div class="line">### 输出不同配置的应用</div><div class="line"></div><div class="line">看代码：</div></pre></td></tr></table></figure></p>
-<p>android {<br>    …</p>
-<pre><code>defaultConfig {
-    minSdkVersion 8
-    versionCode 10
-}
-
-productFlavors {
-    flavor1 {
-        packageName &quot;com.example.flavor1&quot;
-        versionCode 20
-    }
-
-    flavor2 {
-        packageName &quot;com.example.flavor2&quot;
-        minSdkVersion 14
-    }
-}
-</code></pre><p>}<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">通过以上设置，我们可以输出不同的保命不同的版本号，以及最小sdk的程序包。当然我们可以根据自己的需求去做其他的不同</div><div class="line"></div><div class="line">### 生成多个渠道包（以Umeng为例）</div><div class="line">我的完整配置文件</div></pre></td></tr></table></figure></p>
-<p>buildscript {<br>    repositories {<br>        mavenCentral()<br>    }<br>    dependencies {<br>        classpath ‘com.android.tools.build:gradle:0.9.+’<br>    }<br>}<br>apply plugin: ‘android’</p>
-<p>repositories {<br>        mavenCentral()<br>}</p>
-<p>android {<br>    compileSdkVersion 19<br>    buildToolsVersion “19.0.3”</p>
-<pre><code>defaultConfig {
-    minSdkVersion 8
-    targetSdkVersion 19
-    versionCode 1
-    versionName &quot;1.0&quot;
-}
-
-sourceSets {
-    main {
-        jniLibs.srcDirs = [&apos;libs&apos;]
-    }
-}
-
-lintOptions {
-    abortOnError false
-}
-</code></pre><p>//签名<br>    signingConfigs {<br>        //你自己的keystore信息<br>        release {<br>            storeFile file(“×.keystore”)<br>            storePassword “×××”<br>            keyAlias “××××”<br>            keyPassword “×××”<br>        }<br>    }</p>
-<pre><code>buildTypes {
-
-    debug {
-        signingConfig signingConfigs.release
-    }
-
-    release {
-        signingConfig signingConfigs.release
-        runProguard false
-        proguardFiles getDefaultProguardFile(&apos;proguard-android.txt&apos;), &apos;proguard-rules.txt&apos;
-    }
-}
-
-//渠道Flavors，我这里写了一些常用的，你们自己改
-productFlavors {
-    //GooglePlay{}
-    //Store360{}
-    //QQ{}
-    //Taobao{}
-    //WanDouJia{}
-    //AnZhuo{}
-    //AnZhi{}
-    //BaiDu{}
-    //Store163{}
-    //GFeng{}
-    //AppChina{}
-    //EoeMarket{}
-    //Store91{}
-    //NDuo{}
-    xiaomi{}
-    umeng{}
-}
-</code></pre><p>}</p>
-<p>//替换AndroidManifest.xml的UMENG_CHANNEL_VALUE字符串为渠道名称<br>android.applicationVariants.all{ variant -&gt;<br>    variant.processManifest.doLast{</p>
-<pre><code>    //之前这里用的copy{}，我换成了文件操作，这样可以在v1.11版本正常运行，并保持文件夹整洁
-    //${buildDir}是指./build文件夹
-    //${variant.dirName}是flavor/buildtype，例如GooglePlay/release，运行时会自动生成
-    //下面的路径是类似这样：./build/manifests/GooglePlay/release/AndroidManifest.xml
-    def manifestFile = &quot;${buildDir}/manifests/${variant.dirName}/AndroidManifest.xml&quot;
-
-    //将字符串UMENG_CHANNEL_VALUE替换成flavor的名字
-    def updatedContent = new File(manifestFile).getText(&apos;UTF-8&apos;).replaceAll(&quot;UMENG_CHANNEL_VALUE&quot;, &quot;${variant.productFlavors[0].name}&quot;)
-    new File(manifestFile).write(updatedContent, &apos;UTF-8&apos;)
-
-    //将此次flavor的AndroidManifest.xml文件指定为我们修改过的这个文件
-    variant.processResources.manifestFile = file(&quot;${buildDir}/manifests/${variant.dirName}/AndroidManifest.xml&quot;)
-}
-</code></pre><p>}<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">以上的功能就是替换我的Manifest中的umeng渠道标示，同时去生成不同的apk包。</div><div class="line"></div><div class="line"></div><div class="line">## 最后说明</div><div class="line">程序在buid的时候，会执行lint检查，有任何的错误或者警告提示，都会终止构建，我们可以将其关掉。</div></pre></td></tr></table></figure></p>
-<p>lintOptions {<br>        abortOnError false<br>    }<br>```</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">android &#123;</div><div class="line">    compileSdkVersion <span class="number">19</span></div><div class="line">    buildToolsVersion <span class="string">"19.0.0"</span></div><div class="line"></div><div class="line">    defaultConfig &#123;</div><div class="line">        versionCode <span class="number">12</span></div><div class="line">        versionName <span class="string">"2.0"</span></div><div class="line">        minSdkVersion <span class="number">16</span></div><div class="line">        targetSdkVersion <span class="number">16</span></div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="目录配置"><a href="#目录配置" class="headerlink" title="目录配置"></a>目录配置</h3><p>默认情况下项目目录是这样的<br>有两个组件source sets，一个main，一个test，对应下面两个文件夹。<br>src/main/<br>src/androidTest/</p>
+<p>然后对于每个组件目录都有两个目录，分别存储java代码和资源文件<br>java/<br>resources/</p>
+<p>对于android项目中呢，对应的目录和文件是<br>AndroidManifest.xml  //该文件src/androidTest/目录下不需要，程序执行时会自动构建<br>res/<br>assets/<br>aidl/<br>rs/<br>jni/</p>
+<p>如果需要上面这些文件，但是不是在上面所说的目录，则需要设置。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">sourceSets &#123;</div><div class="line">    main &#123;</div><div class="line">        java &#123;</div><div class="line">            srcDir &apos;src/java&apos;</div><div class="line">        &#125;</div><div class="line">        resources &#123;</div><div class="line">            srcDir &apos;src/resources&apos;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>可以给main或者test设置根目录，如</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">sourceSets &#123;</div><div class="line">       androidTest.setRoot(&apos;tests&apos;)</div><div class="line">   &#125;</div></pre></td></tr></table></figure>
+<p>可以指定每种文件的存储路径</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">sourceSets &#123;</div><div class="line">        main &#123;</div><div class="line">            manifest.srcFile &apos;AndroidManifest.xml&apos;</div><div class="line">            java.srcDirs = [&apos;src&apos;]</div><div class="line">            resources.srcDirs = [&apos;src&apos;]</div><div class="line">            aidl.srcDirs = [&apos;src&apos;]</div><div class="line">            renderscript.srcDirs = [&apos;src&apos;]</div><div class="line">            res.srcDirs = [&apos;res&apos;]</div><div class="line">            assets.srcDirs = [&apos;assets&apos;]</div><div class="line">        &#125;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<p>特别是我们的ndk生成的.so文件，通常我们不是放到jni目录中的，我们需要设置一下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">sourceSets &#123;</div><div class="line">        main &#123;</div><div class="line">            jniLibs.srcDirs = [&apos;libs&apos;]</div><div class="line">        &#125;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<h3 id="签名配置"><a href="#签名配置" class="headerlink" title="签名配置"></a>签名配置</h3><p>可以给不同类型进行不同的配置，先看示例：  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">android &#123;</div><div class="line">    signingConfigs &#123;</div><div class="line">        debug &#123;</div><div class="line">            storeFile file(&quot;debug.keystore&quot;)</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        myConfig &#123;</div><div class="line">            storeFile file(&quot;other.keystore&quot;)</div><div class="line">            storePassword &quot;android&quot;</div><div class="line">            keyAlias &quot;androiddebugkey&quot;</div><div class="line">            keyPassword &quot;android&quot;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    buildTypes &#123;</div><div class="line">        foo &#123;</div><div class="line">            debuggable true</div><div class="line">            jniDebugBuild true</div><div class="line">            signingConfig signingConfigs.myConfig</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>上面的配置文件配置两个类型，一个时debug类型，一个时自己的自定义类型。两个分别使用了不同的签名，同时对于生成密钥，要填写设置的密码。</p>
+<h3 id="代码混淆设置"><a href="#代码混淆设置" class="headerlink" title="代码混淆设置"></a>代码混淆设置</h3><p>直接看代码：  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">android &#123;</div><div class="line">    buildTypes &#123;</div><div class="line">        release &#123;</div><div class="line">            runProguard true</div><div class="line">            proguardFile getDefaultProguardFile(&apos;proguard-android.txt&apos;)</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>以上是使用默认的proguard文件去进行混淆，也可以使用自己编写的规则进行混淆，<code>proguardFile &#39;some-other-rules.txt&#39;</code></p>
+<h3 id="依赖配置"><a href="#依赖配置" class="headerlink" title="依赖配置"></a>依赖配置</h3><p>程序中会依赖别的包，或者程序，需要引入别的类库。前面也说到了，支持maven。<br>对于本地的类库，可以这样引入:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">dependencies &#123;</div><div class="line">    compile files(&apos;libs/foo.jar&apos;)   //单个文件</div><div class="line">    compile fileTree(dir: &apos;libs&apos;, include: [&apos;*.jar&apos;])  //多个文件</div><div class="line">&#125;</div><div class="line"></div><div class="line">android &#123;</div><div class="line">    ...</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>对于maven仓库文件：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">repositories &#123;</div><div class="line">    mavenCentral()</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line">dependencies &#123;</div><div class="line">    compile &apos;com.google.guava:guava:11.0.2&apos;</div><div class="line">&#125;</div><div class="line"></div><div class="line">android &#123;</div><div class="line">    ...</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="输出不同配置的应用"><a href="#输出不同配置的应用" class="headerlink" title="输出不同配置的应用"></a>输出不同配置的应用</h3><p>看代码：  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">android &#123;</div><div class="line">    ...</div><div class="line"></div><div class="line">    defaultConfig &#123;</div><div class="line">        minSdkVersion 8</div><div class="line">        versionCode 10</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    productFlavors &#123;</div><div class="line">        flavor1 &#123;</div><div class="line">            packageName &quot;com.example.flavor1&quot;</div><div class="line">            versionCode 20</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        flavor2 &#123;</div><div class="line">            packageName &quot;com.example.flavor2&quot;</div><div class="line">            minSdkVersion 14</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>通过以上设置，我们可以输出不同的保命不同的版本号，以及最小sdk的程序包。当然我们可以根据自己的需求去做其他的不同</p>
+<h3 id="生成多个渠道包（以Umeng为例）"><a href="#生成多个渠道包（以Umeng为例）" class="headerlink" title="生成多个渠道包（以Umeng为例）"></a>生成多个渠道包（以Umeng为例）</h3><p>我的完整配置文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div></pre></td><td class="code"><pre><div class="line">buildscript &#123;</div><div class="line">    repositories &#123;</div><div class="line">        mavenCentral()</div><div class="line">    &#125;</div><div class="line">    dependencies &#123;</div><div class="line">        classpath &apos;com.android.tools.build:gradle:0.9.+&apos;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line">apply plugin: &apos;android&apos;</div><div class="line"></div><div class="line">repositories &#123;</div><div class="line">        mavenCentral()</div><div class="line">&#125;</div><div class="line"></div><div class="line">android &#123;</div><div class="line">    compileSdkVersion 19</div><div class="line">    buildToolsVersion &quot;19.0.3&quot;</div><div class="line"></div><div class="line">    defaultConfig &#123;</div><div class="line">        minSdkVersion 8</div><div class="line">        targetSdkVersion 19</div><div class="line">        versionCode 1</div><div class="line">        versionName &quot;1.0&quot;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    sourceSets &#123;</div><div class="line">        main &#123;</div><div class="line">            jniLibs.srcDirs = [&apos;libs&apos;]</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    lintOptions &#123;</div><div class="line">        abortOnError false</div><div class="line">    &#125;</div><div class="line"></div><div class="line"></div><div class="line">//签名</div><div class="line">    signingConfigs &#123;</div><div class="line">        //你自己的keystore信息</div><div class="line">        release &#123;</div><div class="line">            storeFile file(&quot;×.keystore&quot;)</div><div class="line">            storePassword &quot;×××&quot;</div><div class="line">            keyAlias &quot;××××&quot;</div><div class="line">            keyPassword &quot;×××&quot;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    buildTypes &#123;</div><div class="line"></div><div class="line">        debug &#123;</div><div class="line">            signingConfig signingConfigs.release</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        release &#123;</div><div class="line">            signingConfig signingConfigs.release</div><div class="line">            runProguard false</div><div class="line">            proguardFiles getDefaultProguardFile(&apos;proguard-android.txt&apos;), &apos;proguard-rules.txt&apos;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    //渠道Flavors，我这里写了一些常用的，你们自己改</div><div class="line">    productFlavors &#123;</div><div class="line">        //GooglePlay&#123;&#125;</div><div class="line">        //Store360&#123;&#125;</div><div class="line">        //QQ&#123;&#125;</div><div class="line">        //Taobao&#123;&#125;</div><div class="line">        //WanDouJia&#123;&#125;</div><div class="line">        //AnZhuo&#123;&#125;</div><div class="line">        //AnZhi&#123;&#125;</div><div class="line">        //BaiDu&#123;&#125;</div><div class="line">        //Store163&#123;&#125;</div><div class="line">        //GFeng&#123;&#125;</div><div class="line">        //AppChina&#123;&#125;</div><div class="line">        //EoeMarket&#123;&#125;</div><div class="line">        //Store91&#123;&#125;</div><div class="line">        //NDuo&#123;&#125;</div><div class="line">        xiaomi&#123;&#125;</div><div class="line">        umeng&#123;&#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line">//替换AndroidManifest.xml的UMENG_CHANNEL_VALUE字符串为渠道名称</div><div class="line">android.applicationVariants.all&#123; variant -&gt;</div><div class="line">    variant.processManifest.doLast&#123;</div><div class="line"></div><div class="line">        //之前这里用的copy&#123;&#125;，我换成了文件操作，这样可以在v1.11版本正常运行，并保持文件夹整洁</div><div class="line">        //$&#123;buildDir&#125;是指./build文件夹</div><div class="line">        //$&#123;variant.dirName&#125;是flavor/buildtype，例如GooglePlay/release，运行时会自动生成</div><div class="line">        //下面的路径是类似这样：./build/manifests/GooglePlay/release/AndroidManifest.xml</div><div class="line">        def manifestFile = &quot;$&#123;buildDir&#125;/manifests/$&#123;variant.dirName&#125;/AndroidManifest.xml&quot;</div><div class="line"></div><div class="line">        //将字符串UMENG_CHANNEL_VALUE替换成flavor的名字</div><div class="line">        def updatedContent = new File(manifestFile).getText(&apos;UTF-8&apos;).replaceAll(&quot;UMENG_CHANNEL_VALUE&quot;, &quot;$&#123;variant.productFlavors[0].name&#125;&quot;)</div><div class="line">        new File(manifestFile).write(updatedContent, &apos;UTF-8&apos;)</div><div class="line"></div><div class="line">        //将此次flavor的AndroidManifest.xml文件指定为我们修改过的这个文件</div><div class="line">        variant.processResources.manifestFile = file(&quot;$&#123;buildDir&#125;/manifests/$&#123;variant.dirName&#125;/AndroidManifest.xml&quot;)</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>以上的功能就是替换我的Manifest中的umeng渠道标示，同时去生成不同的apk包。</p>
+<h2 id="最后说明"><a href="#最后说明" class="headerlink" title="最后说明"></a>最后说明</h2><p>程序在buid的时候，会执行lint检查，有任何的错误或者警告提示，都会终止构建，我们可以将其关掉。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">lintOptions &#123;</div><div class="line">        abortOnError false</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
 <h4 id="最后PS一下"><a href="#最后PS一下" class="headerlink" title="最后PS一下"></a>最后PS一下</h4><p>本人使用gradle确实方便很多，虽然电脑配置低，build的时候比较慢。<br>内容呢，主要时参考谷歌官方的文档。<br>关于怎么安装，没有讲到，可以参考这篇文章：<a href="http://stormzhang.github.io/android/2014/02/28/android-gradle/" target="_blank" rel="external">http://stormzhang.github.io/android/2014/02/28/android-gradle/</a></p>
 <p>附上我参考的文档，没看懂的可以去看看。<a href="http://tools.android.com/tech-docs/new-build-system/user-guide" target="_blank" rel="external">http://tools.android.com/tech-docs/new-build-system/user-guide</a>  </p>
 <blockquote>
 <p>gradle升级了，我又写了一篇，地址这里:<a href="http://blog.isming.me/2014/11/21/use-gradle-new/">http://blog.isming.me/2014/11/21/use-gradle-new/</a></p>
 </blockquote>
-</div></article></div></main><footer><div class="paginator"><a href="/2014/05/31/use-proguard/" class="prev">上一篇</a><a href="/2014/05/11/read-android-source-use-idea/" class="next">下一篇</a></div><div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div><script src="https://img1.cache.netease.com/f2e/tie/yun/sdk/loader.js"></script><script>var cloudTieConfig = {
+</div></article></div></main><footer><div class="paginator"><a href="/2014/05/31/use-proguard/" class="prev">PREV</a><a href="/2014/05/11/read-android-source-use-idea/" class="next">NEXT</a></div><div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div><script src="https://img1.cache.netease.com/f2e/tie/yun/sdk/loader.js"></script><script>var cloudTieConfig = {
     url: document.location.href,
     sourceId: "2014/05/20/android4gradle/",
     productKey: "a094f65b0cf3436d922737584f8a4bb2",
