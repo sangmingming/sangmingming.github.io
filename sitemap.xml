@@ -72,21 +72,7 @@
   </url>
   
   <url>
-    <loc>http://blog.isming.me/2014/03/25/manage-activityde-lifecycle/</loc>
-    
-    <lastmod>2017-05-16T02:31:11.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://blog.isming.me/2014/05/09/change-ubuntu-to-mac/</loc>
-    
-    <lastmod>2017-05-16T02:31:11.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://blog.isming.me/2014/05/11/read-android-source-use-idea/</loc>
+    <loc>http://blog.isming.me/2014/04/09/use-git-rsync-site/</loc>
     
     <lastmod>2017-05-16T02:31:11.000Z</lastmod>
     
@@ -100,7 +86,28 @@
   </url>
   
   <url>
+    <loc>http://blog.isming.me/2014/05/09/change-ubuntu-to-mac/</loc>
+    
+    <lastmod>2017-05-16T02:31:11.000Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://blog.isming.me/2014/05/11/use-network-in-android/</loc>
+    
+    <lastmod>2017-05-16T02:31:11.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.isming.me/2014/05/11/read-android-source-use-idea/</loc>
+    
+    <lastmod>2017-05-16T02:31:11.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.isming.me/2013/07/12/linuxxia-svnde-shi-yong/</loc>
     
     <lastmod>2017-05-16T02:31:11.000Z</lastmod>
     
@@ -115,13 +122,6 @@
   
   <url>
     <loc>http://blog.isming.me/2014/06/04/parse-json-in-android/</loc>
-    
-    <lastmod>2017-05-16T02:31:11.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://blog.isming.me/2013/07/12/linuxxia-svnde-shi-yong/</loc>
     
     <lastmod>2017-05-16T02:31:11.000Z</lastmod>
     
@@ -163,14 +163,14 @@
   </url>
   
   <url>
-    <loc>http://blog.isming.me/2014/09/16/intents-filters/</loc>
+    <loc>http://blog.isming.me/2014/08/26/adb-use/</loc>
     
     <lastmod>2017-05-16T02:31:11.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://blog.isming.me/2014/08/26/adb-use/</loc>
+    <loc>http://blog.isming.me/2014/09/16/intents-filters/</loc>
     
     <lastmod>2017-05-16T02:31:11.000Z</lastmod>
     
@@ -191,13 +191,6 @@
   </url>
   
   <url>
-    <loc>http://blog.isming.me/2014/10/18/creating-android-app-with-material-design-one-theme/</loc>
-    
-    <lastmod>2017-05-16T02:31:11.000Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://blog.isming.me/2014/10/13/good-database-use/</loc>
     
     <lastmod>2017-05-16T02:31:11.000Z</lastmod>
@@ -205,21 +198,14 @@
   </url>
   
   <url>
+    <loc>http://blog.isming.me/2014/10/18/creating-android-app-with-material-design-one-theme/</loc>
+    
+    <lastmod>2017-05-16T02:31:11.000Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://blog.isming.me/2014/10/21/creating-app-with-material-design-two-list/</loc>
-    
-    <lastmod>2017-05-16T02:31:11.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://blog.isming.me/2013/07/23/javazhong-collectionhe-collectionsde-qu-bie/</loc>
-    
-    <lastmod>2017-05-16T02:31:11.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://blog.isming.me/2013/07/28/javazhong-hashmaphe-hashtablede-qu-bie/</loc>
     
     <lastmod>2017-05-16T02:31:11.000Z</lastmod>
     
@@ -240,21 +226,28 @@
   </url>
   
   <url>
+    <loc>http://blog.isming.me/2013/07/23/javazhong-collectionhe-collectionsde-qu-bie/</loc>
+    
+    <lastmod>2017-05-16T02:31:11.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.isming.me/2013/07/28/javazhong-hashmaphe-hashtablede-qu-bie/</loc>
+    
+    <lastmod>2017-05-16T02:31:11.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.isming.me/2014/03/15/jie-jue-ubuntuxia-sublime-text-3zhong-wen-shu-ru-de-wen-ti/</loc>
+    
+    <lastmod>2017-05-16T02:31:11.000Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://blog.isming.me/2014/03/16/androidyi-bu-cao-zuo-zong-jie/</loc>
-    
-    <lastmod>2017-05-16T02:31:11.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://blog.isming.me/2013/11/18/git-use-skill/</loc>
-    
-    <lastmod>2017-05-16T02:31:11.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://blog.isming.me/2015/01/05/2014-review/</loc>
     
     <lastmod>2017-05-16T02:31:11.000Z</lastmod>
     
@@ -268,7 +261,21 @@
   </url>
   
   <url>
+    <loc>http://blog.isming.me/2015/01/05/2014-review/</loc>
+    
+    <lastmod>2017-05-16T02:31:11.000Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://blog.isming.me/2015/01/11/android-decompile-tools/</loc>
+    
+    <lastmod>2017-05-16T02:31:11.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.isming.me/2015/01/14/android-decompile-smali/</loc>
     
     <lastmod>2017-05-16T02:31:11.000Z</lastmod>
     
@@ -283,13 +290,6 @@
   
   <url>
     <loc>http://blog.isming.me/2015/01/28/android-frame-animation/</loc>
-    
-    <lastmod>2017-05-16T02:31:11.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://blog.isming.me/2015/01/14/android-decompile-smali/</loc>
     
     <lastmod>2017-05-16T02:31:11.000Z</lastmod>
     
@@ -317,13 +317,6 @@
   </url>
   
   <url>
-    <loc>http://blog.isming.me/2015/05/10/sticker-view/</loc>
-    
-    <lastmod>2017-05-16T02:31:11.000Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://blog.isming.me/2015/03/18/android-build-speed-up/</loc>
     
     <lastmod>2017-05-16T02:31:11.000Z</lastmod>
@@ -331,7 +324,7 @@
   </url>
   
   <url>
-    <loc>http://blog.isming.me/2015/08/01/gradle-fir-plugin/</loc>
+    <loc>http://blog.isming.me/2015/05/10/sticker-view/</loc>
     
     <lastmod>2017-05-16T02:31:11.000Z</lastmod>
     
@@ -345,7 +338,14 @@
   </url>
   
   <url>
-    <loc>http://blog.isming.me/2014/03/22/toast-use/</loc>
+    <loc>http://blog.isming.me/2015/08/01/gradle-fir-plugin/</loc>
+    
+    <lastmod>2017-05-16T02:31:11.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.isming.me/2013/11/18/git-use-skill/</loc>
     
     <lastmod>2017-05-16T02:31:11.000Z</lastmod>
     
@@ -359,27 +359,6 @@
   </url>
   
   <url>
-    <loc>http://blog.isming.me/2016/01/09/chang-android-statusbar-text-color/</loc>
-    
-    <lastmod>2017-05-16T02:31:11.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://blog.isming.me/2014/04/09/use-git-rsync-site/</loc>
-    
-    <lastmod>2017-05-16T02:31:11.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://blog.isming.me/2014/03/15/jie-jue-ubuntuxia-sublime-text-3zhong-wen-shu-ru-de-wen-ti/</loc>
-    
-    <lastmod>2017-05-16T02:31:11.000Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://blog.isming.me/2015/12/21/android-webview-upload-file/</loc>
     
     <lastmod>2017-05-16T02:31:11.000Z</lastmod>
@@ -387,7 +366,7 @@
   </url>
   
   <url>
-    <loc>http://blog.isming.me/2016/09/13/android-lambda/</loc>
+    <loc>http://blog.isming.me/2016/01/09/chang-android-statusbar-text-color/</loc>
     
     <lastmod>2017-05-16T02:31:11.000Z</lastmod>
     
@@ -401,6 +380,27 @@
   </url>
   
   <url>
+    <loc>http://blog.isming.me/2014/03/22/toast-use/</loc>
+    
+    <lastmod>2017-05-16T02:31:11.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.isming.me/2016/09/13/android-lambda/</loc>
+    
+    <lastmod>2017-05-16T02:31:11.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://blog.isming.me/2014/03/25/manage-activityde-lifecycle/</loc>
+    
+    <lastmod>2017-05-16T02:31:11.000Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://blog.isming.me/about/index.html</loc>
     
     <lastmod>2017-05-16T02:31:11.000Z</lastmod>
@@ -408,14 +408,14 @@
   </url>
   
   <url>
-    <loc>http://blog.isming.me/resume/index.html</loc>
+    <loc>http://blog.isming.me/links/index.html</loc>
     
     <lastmod>2017-05-16T02:31:11.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://blog.isming.me/links/index.html</loc>
+    <loc>http://blog.isming.me/resume/index.html</loc>
     
     <lastmod>2017-05-16T02:31:11.000Z</lastmod>
     
