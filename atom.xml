@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://blog.isming.me/"/>
-  <updated>2017-05-18T12:51:17.000Z</updated>
+  <updated>2017-07-16T05:56:26.000Z</updated>
   <id>http://blog.isming.me/</id>
   
   <author>
@@ -20,7 +20,7 @@
     <link href="http://blog.isming.me/2017/05/18/android-architecture-components-guide/"/>
     <id>http://blog.isming.me/2017/05/18/android-architecture-components-guide/</id>
     <published>2017-05-18T12:01:38.000Z</published>
-    <updated>2017-05-18T12:51:17.000Z</updated>
+    <updated>2017-07-16T05:56:26.000Z</updated>
     
     <content type="html"><![CDATA[<p>Google IO大会进行中，本次大会Android最大的新闻当属Android O以及Kotlin被官方认可。我发现了原来还有发布官方的架构库，以及推荐使用指南，分享给大家。</p>
 <h2 id="架构原则"><a href="#架构原则" class="headerlink" title="架构原则"></a>架构原则</h2><ul>
@@ -28,7 +28,7 @@
 <li>模型驱动UI,优先持久化模型  </li>
 </ul>
 <a id="more"></a>
-<h2 id="新架构"><a href="#新架构" class="headerlink" title="新架构"></a>新架构</h2><p><img src="http://isming.qiniudn.com/imgac_architecture.png" alt="架构图"></p>
+<h2 id="新架构"><a href="#新架构" class="headerlink" title="新架构"></a>新架构</h2><p><img src="/image/imgac_architecture.png" alt="架构图"></p>
 <p>如上图所示，为新的架构模式：</p>
 <h3 id="Activity-Fragment"><a href="#Activity-Fragment" class="headerlink" title="Activity/Fragment"></a>Activity/Fragment</h3><p>UI层，通常是Activity/Fragment等</p>
 <p>监听ViewModel，当VIewModel数据更新时刷新UI</p>
@@ -81,7 +81,7 @@
 <p>​    使用JUnit测试</p>
 <p>​    数据库，使用Room的话官方提供了测试支持，在测试时候创建内存数据库即可。</p>
 <p>​    网络请求，使用MockWebServer来提供假的服务端即可。</p>
-<p><img src="http://isming.qiniudn.com/imgac_profilefragment.png" alt="示例"></p>
+<p><img src="/image/imgac_profilefragment.png" alt="示例"></p>
 <p>再补一个会议时的项目结构图，以一个用户信息页面为例。</p>
 <h2 id="最后的话"><a href="#最后的话" class="headerlink" title="最后的话"></a>最后的话</h2><p>​    目前这个库还不完善，api可能随时会变，公司项目不建议使用，个人项目可以尝鲜。另外对于已经有的项目，也不建议更换到现在的架构。不过这个项目的好的思想可以借鉴到我们自己的项目中来，同时这个库的方式我们其实可以借助其他的开源库来实现。</p>
 <h4 id="本文不再贴相关代码，具体各个库的使用请查看官方文档https-developer-android-com-topic-libraries-architecture-guide-html。"><a href="#本文不再贴相关代码，具体各个库的使用请查看官方文档https-developer-android-com-topic-libraries-architecture-guide-html。" class="headerlink" title="本文不再贴相关代码，具体各个库的使用请查看官方文档https://developer.android.com/topic/libraries/architecture/guide.html。"></a>本文不再贴相关代码，具体各个库的使用请查看官方文档<a href="https://developer.android.com/topic/libraries/architecture/guide.html" target="_blank" rel="external">https://developer.android.com/topic/libraries/architecture/guide.html</a>。</h4><h4 id="附上官方的DEMO项目-https-github-com-googlesamples-android-architecture-components"><a href="#附上官方的DEMO项目-https-github-com-googlesamples-android-architecture-components" class="headerlink" title="附上官方的DEMO项目:https://github.com/googlesamples/android-architecture-components"></a>附上官方的DEMO项目:<a href="https://github.com/googlesamples/android-architecture-components" target="_blank" rel="external">https://github.com/googlesamples/android-architecture-components</a></h4><h4 id="这次的视频-https-www-youtube-com-watch-v-FrteWKKVyzI"><a href="#这次的视频-https-www-youtube-com-watch-v-FrteWKKVyzI" class="headerlink" title="这次的视频:https://www.youtube.com/watch?v=FrteWKKVyzI"></a>这次的视频:<a href="https://www.youtube.com/watch?v=FrteWKKVyzI" target="_blank" rel="external">https://www.youtube.com/watch?v=FrteWKKVyzI</a></h4><p>文中如果错误，欢迎指正.</p>
@@ -167,17 +167,17 @@
     <link href="http://blog.isming.me/2016/08/08/red-android-evolution/"/>
     <id>http://blog.isming.me/2016/08/08/red-android-evolution/</id>
     <published>2016-08-08T11:13:00.000Z</published>
-    <updated>2017-05-16T02:31:11.000Z</updated>
+    <updated>2017-07-16T05:57:52.000Z</updated>
     
     <content type="html"><![CDATA[<p>小红书Android客户端第一个版本于2014年8月8日发布，转眼到了2016年8月8日，小红书Android版本发版两周年。趁机回顾一下小红书的Android版本，两年中我们踩过很多坑，收获很多经验，分享出来与大家共勉。<br>小红书从最初1.0到现在目前4.7版本，历经两年，安装包从原先的5M发展到现在的17M，产品模块也从原先的只有社区模块发展到了具有社区和电商两个大模块。App包含社区、电商、支付、推送、直播、统计等各种功能和模块，那么开始吧。</p>
-<p><img src="http://isming.qiniudn.com/xingin_banner1.png" alt=""></p>
+<p><img src="/image/xingin_banner1.png" alt=""></p>
 <a id="more"></a>
 <h3 id="功能演进"><a href="#功能演进" class="headerlink" title="功能演进"></a>功能演进</h3><p>两年的时间，30多个版本的迭代，许多功能都有了翻天覆地的变化。我们的新人欢迎页也是从最初的比较炫的效果发展到目前比较稳定的简洁版本。当初钟大侠花了无数个日日夜夜，苦心做出来了多个欢迎页动画，虽然现在已经不再使用，但是我们也学习到了一些新技术。后来，钟大侠还是将其贡献到了github开源社区中。<br><img src="https://raw.githubusercontent.com/w446108264/XhsParallaxWelcome/master/output/show.gif" alt="欢迎页第一版"></p>
 <p>下载地址:<a href="https://github.com/w446108264/XhsParallaxWelcome" target="_blank" rel="external">https://github.com/w446108264/XhsParallaxWelcome</a></p>
-<p><img src="http://isming.qiniudn.com/show_two_img.gif" alt="欢迎页第二版"></p>
+<p><img src="/image/show_two_img.gif" alt="欢迎页第二版"></p>
 <p>下载地址: <a href="https://github.com/w446108264/XhsWelcomeAnim" target="_blank" rel="external">https://github.com/w446108264/XhsWelcomeAnim</a></p>
 <p>社区是小红书的核心价值之一，笔记是小红书社区的核心体现，毋庸置疑，笔记发布是小红书App的核心功能之一，我们一直在产品和技术上，优化我们的笔记发布流程和功能，包括我们将只支持分享单张图片，扩展到现在支持多张图片同时发布。同时支持更丰富的图片编辑效果，更加便捷的发布笔记。</p>
-<p>小红书的笔记展现形式和大多数其他的图片社交App类似，我们也支持图上标签功能。最初小红书图上标签是同其他App类似的黑色的标签。不过在3.0之后，小红书创造了独特的树状标签，给用户带来焕然一新的体验，同时也被其他App竞相模仿。新的标签给技术也带了很多的挑战，我们重新定义了标签的结构，以及标签的生成和展示。可以查看我以前的博客，来看看我是怎样做标签的动画的。（<a href="http://blog.isming.me/2016/06/07/path-property-animation/">http://blog.isming.me/2016/06/07/path-property-animation/</a> ）</p>
+<p>小红书的笔记展现形式和大多数其他的图片社交App类似，我们也支持图上标签功能。最初小红书图上标签是同其他App类似的黑色的标签。不过在3.0之后，小红书创造了独特的树状标签，给用户带来焕然一新的体验，同时也被其他App竞相模仿。新的标签给技术也带了很多的挑战，我们重新定义了标签的结构，以及标签的生成和展示。可以查看我以前的博客，来看看我是怎样做标签的动画的。（<a href="/2016/06/07/path-property-animation/">https://blog.isming.me/2016/06/07/path-property-animation/</a> ）</p>
 <p>UI的改版，功能上的改动还有很多，这里不再一一提起。小红书Android整体上的风格和iOS保持一致，不过我们在15年初开始，对于App内的细节进行Material Design 适配，包括一些按钮风格、点击效果、字体规范、对话框等等，希望为Android用户带来更好的使用体验。</p>
 <h3 id="技术选型进化"><a href="#技术选型进化" class="headerlink" title="技术选型进化"></a>技术选型进化</h3><p>在技术选型上，这里主要讲一下网络层的框架选型升级和图片加载库的升级。</p>
 <h4 id="网络框架的演进"><a href="#网络框架的演进" class="headerlink" title="网络框架的演进"></a>网络框架的演进</h4><p>App的最初框架是由钟大侠一人花了10来天完成，包括基本的网络请求框架、App大体的架构以及一些主要的功能。最初时候选择框架的原则就是选择自己最熟悉的，因此我们采用了<code>async-http</code>这套框架作为我们底层的网络请求框架，框架完成了网络的异步请求与回调，能够满足当时的需求。</p>
@@ -194,15 +194,15 @@
 <p>App中的状态同步，早期使用使用数据库缓存部分数据，或者使用LocalBroadcast进行广播通讯，前者有很多的限制，后者使用起来较为复杂。近期我们改用EventBus进行状态同步，同时这样也使得各个页面之间的耦合也低。</p>
 <p>App中占比很大的部分是从网络请求数据，获得数据后进行展示，还是以MVC为主。在一些模块的部分地方，做一些databinding，MVP等的测试。后面有机会会更多大范围的重构。</p>
 <h3 id="其他周边进化"><a href="#其他周边进化" class="headerlink" title="其他周边进化"></a>其他周边进化</h3><p>我们的开发最初是使用Eclipse进行开发的，但是Eclipse仅仅存在了不到一个月。在我苦口婆心的劝说下，钟大侠和我一起切换到了Android Studio。而这导致我们的项目目录一直都是使用Eclipse时代的目录格式，直到今年年初才切换到Android Studio推荐的目录格式，切换完目录为我们做debug和release差异化提供了极大的便利。</p>
-<p>APK最初大约只有5M，历史最高峰达到了23M，在App减肥上我们也做了一些努力，主要是使用tinypng压缩图片，so只保留arm的支持。项目的复杂也使得每次编译都变得很慢，关于这个可以看下我以前的gradle加速<a href="http://blog.isming.me/2015/03/18/android-build-speed-up/">http://blog.isming.me/2015/03/18/android-build-speed-up/</a>。</p>
+<p>APK最初大约只有5M，历史最高峰达到了23M，在App减肥上我们也做了一些努力，主要是使用tinypng压缩图片，so只保留arm的支持。项目的复杂也使得每次编译都变得很慢，关于这个可以看下我以前的gradle加速<a href="https://blog.isming.me/2015/03/18/android-build-speed-up/">https://blog.isming.me/2015/03/18/android-build-speed-up/</a>。</p>
 <p>现在持续集成还是蛮火的，自然我们也在用。最初的时候，我们每天需要手动打包，打完包之后打开fir的网站，将apk传上去，然后在公司的微信群吼一声，告诉大家我们发包了。经历一段时间后，我们编写了一个Gradle插件帮助我们自动上传到fir，在之后我们搭建了Jenkins自动完成这一系列步骤，并通过邮件告知大家，然后就可以愉快的玩耍了。</p>
-<p><img src="http://isming.qiniudn.com/jenkins_ci.jpg" alt="Jenkins"></p>
+<p><img src="/image/jenkins_ci.jpg" alt="Jenkins"></p>
 <h3 id="未完待续"><a href="#未完待续" class="headerlink" title="未完待续"></a>未完待续</h3><p>本文介绍了我们两年来的一些大的变化，通过一篇文章可能很多东西还是说不清楚，暂时就写这么多。目前项目的组织架构还没有特别大的变化，我们目前已经在做一些小范围的测试，后面将对继续不断的进化和演进。</p>
 <p>现在我们的Android还有坑位，如果你有兴趣，就赶紧发送简历来占坑吧，我的邮箱是: <code>msang#xiaohongshu.com</code> (请手动替换#为@)</p>
 <blockquote>
 <p>本文同步发布于小红书技术微信公众号<code>REDHacker</code>,可如下扫描二维码或搜索id： <code>red-hacker</code>进行关注。</p>
 </blockquote>
-<p><img src="http://isming.qiniudn.com/redhacker.jpg" alt="REDHacker"></p>
+<p><img src="/image/redhacker.jpg" alt="REDHacker"></p>
 <blockquote>
 <p>原文地址：<a href="http://blog.isming.me/2016/08/08/red-android-evolution/">http://blog.isming.me/2016/08/08/red-android-evolution/</a>，转载请注明出处。</p>
 </blockquote>
@@ -211,7 +211,7 @@
     <summary type="html">
     
       &lt;p&gt;小红书Android客户端第一个版本于2014年8月8日发布，转眼到了2016年8月8日，小红书Android版本发版两周年。趁机回顾一下小红书的Android版本，两年中我们踩过很多坑，收获很多经验，分享出来与大家共勉。&lt;br&gt;小红书从最初1.0到现在目前4.7版本，历经两年，安装包从原先的5M发展到现在的17M，产品模块也从原先的只有社区模块发展到了具有社区和电商两个大模块。App包含社区、电商、支付、推送、直播、统计等各种功能和模块，那么开始吧。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;http://isming.qiniudn.com/xingin_banner1.png&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/image/xingin_banner1.png&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
     
     </summary>
     
@@ -227,10 +227,10 @@
     <link href="http://blog.isming.me/2016/06/07/path-property-animation/"/>
     <id>http://blog.isming.me/2016/06/07/path-property-animation/</id>
     <published>2016-06-07T06:03:39.000Z</published>
-    <updated>2017-05-16T02:31:11.000Z</updated>
+    <updated>2017-07-16T05:58:31.000Z</updated>
     
     <content type="html"><![CDATA[<p>之前做过一个图上标签但是动画样式不太好看，经过查找资料发现了一种全新的思路来实现动画，流畅的让标签的线显示和隐藏，示例如下，就在这里说一说。本文会涉及到Path，Property Animation, PathEffect, PathMeasure。我们开始一一道来。</p>
-<p><img src="http://isming.qiniudn.com/blog/tag_animation.gif" alt="示例"></p>
+<p><img src="/image/tag_animation.gif" alt="示例"></p>
 <a id="more"></a>
 <h3 id="使用Path绘制曲线"><a href="#使用Path绘制曲线" class="headerlink" title="使用Path绘制曲线"></a>使用Path绘制曲线</h3><p>当我们需要画曲线的时候，可能会直接使用drawLine来画，不太复杂的话还比较好实现，如果需要画曲线，或者拐弯的线的时候使用drawLine就比较复杂了。这时候，我们可以借助<code>Path</code>来drawPath。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">Paint paint = <span class="keyword">new</span> Paint();</div><div class="line">paint.setColor(Color.BLACK);</div><div class="line">paint.setStyle(Paint.Style.STROKE); <span class="comment">//一定要设置为画线条</span></div><div class="line">Path path = <span class="keyword">new</span> Path();</div><div class="line">path.moveTo(<span class="number">100</span>, <span class="number">100</span>);   <span class="comment">//定位path的起点</span></div><div class="line">path.lineTo(<span class="number">100</span>, <span class="number">200</span>);</div><div class="line">path.lineTo(<span class="number">200</span>, <span class="number">150</span>);</div><div class="line">path.close();</div><div class="line">canvas.drawPath(path, paint);</div></pre></td></tr></table></figure>
@@ -256,7 +256,7 @@
     <summary type="html">
     
       &lt;p&gt;之前做过一个图上标签但是动画样式不太好看，经过查找资料发现了一种全新的思路来实现动画，流畅的让标签的线显示和隐藏，示例如下，就在这里说一说。本文会涉及到Path，Property Animation, PathEffect, PathMeasure。我们开始一一道来。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;http://isming.qiniudn.com/blog/tag_animation.gif&quot; alt=&quot;示例&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/image/tag_animation.gif&quot; alt=&quot;示例&quot;&gt;&lt;/p&gt;
     
     </summary>
     
@@ -387,14 +387,14 @@
     <link href="http://blog.isming.me/2015/08/31/modify-alert-style/"/>
     <id>http://blog.isming.me/2015/08/31/modify-alert-style/</id>
     <published>2015-08-31T11:57:15.000Z</published>
-    <updated>2017-05-16T02:31:11.000Z</updated>
+    <updated>2017-07-16T05:58:59.000Z</updated>
     
     <content type="html"><![CDATA[<p>android最近的support库提供了AlertDialog，可以让我们在低于5.0的系统使用到跟5.0系统一样的Material Design风格的对话框，但是使用了一段时间想到一些办法去改变对话框按钮字体的颜色，都不生效。</p>
 <p>最近在网上找到了改变的方法，首先来说一下。</p>
 <a id="more"></a>
 <h3 id="改变AlertDialog的样式"><a href="#改变AlertDialog的样式" class="headerlink" title="改变AlertDialog的样式"></a>改变AlertDialog的样式</h3><p>在xml中定义一个主题：<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">style</span> <span class="attr">name</span>=<span class="string">"MyAlertDialogStyle"</span> <span class="attr">parent</span>=<span class="string">"Theme.AppCompat.Light.Dialog.Alert"</span>&gt;</span><span class="xml"></span></div><div class="line">    <span class="comment">&lt;!-- Used for the buttons --&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">item</span> <span class="attr">name</span>=<span class="string">"colorAccent"</span>&gt;</span>#FFC107<span class="tag">&lt;/<span class="name">item</span>&gt;</span></div><div class="line">    <span class="comment">&lt;!-- Used for the title and text --&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">item</span> <span class="attr">name</span>=<span class="string">"android:textColorPrimary"</span>&gt;</span>#FFFFFF<span class="tag">&lt;/<span class="name">item</span>&gt;</span></div><div class="line">    <span class="comment">&lt;!-- Used for the background --&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">item</span> <span class="attr">name</span>=<span class="string">"android:background"</span>&gt;</span>#4CAF50<span class="tag">&lt;/<span class="name">item</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">style</span>&gt;</span></div></pre></td></tr></table></figure></p>
 <p>样式如下图所示：</p>
-<p><img src="http://7mj53c.com1.z0.glb.clouddn.com/2015/modify_dialog_style.jpg" alt=""></p>
+<p><img src="/image/modify_dialog_style.jpg" alt=""></p>
 <p>在创建的对话框的时候，这样创建就可以了。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">AlertDialog.Builder builder = <span class="keyword">new</span> AlertDialog.Builder(<span class="keyword">this</span>, R.style.MyAlertDialogStyle);</div><div class="line">builder.setTitle(<span class="string">"AppCompatDialog"</span>);</div><div class="line">builder.setMessage(<span class="string">"Lorem ipsum dolor..."</span>);</div><div class="line">builder.setPositiveButton(<span class="string">"OK"</span>, <span class="keyword">null</span>);</div><div class="line">builder.setNegativeButton(<span class="string">"Cancel"</span>, <span class="keyword">null</span>);</div><div class="line">builder.show();</div></pre></td></tr></table></figure></p>
 <p>这样的方法是每个地方使用的时候，都要在构造函数传我们的这个Dialog的Theme，我们也可以全局的定义对话框的样式。</p>
 <figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">style</span> <span class="attr">name</span>=<span class="string">"MyTheme"</span> <span class="attr">parent</span>=<span class="string">"Base.Theme.AppCompat.Light"</span>&gt;</span><span class="xml"></span></div><div class="line">    <span class="tag">&lt;<span class="name">item</span> <span class="attr">name</span>=<span class="string">"alertDialogTheme"</span>&gt;</span>@style/MyAlertDialogStyle<span class="tag">&lt;/<span class="name">item</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">item</span> <span class="attr">name</span>=<span class="string">"colorAccent"</span>&gt;</span>@color/accent<span class="tag">&lt;/<span class="name">item</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">style</span>&gt;</span></div></pre></td></tr></table></figure>
@@ -710,9 +710,9 @@
     </summary>
     
     
-      <category term="java" scheme="http://blog.isming.me/tags/java/"/>
-    
       <category term="android" scheme="http://blog.isming.me/tags/android/"/>
+    
+      <category term="java" scheme="http://blog.isming.me/tags/java/"/>
     
   </entry>
   
